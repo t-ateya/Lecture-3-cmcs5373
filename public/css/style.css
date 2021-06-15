@@ -31,3 +31,10 @@ input {
 .my-error{
     color: red;
 }
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+
+    
+}
