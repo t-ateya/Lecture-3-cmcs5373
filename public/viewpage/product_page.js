@@ -9,13 +9,20 @@ let imageFile2Upload
 export function addEventListeners(){
     Element.menuProducts.addEventListener('click', async() =>{
         history.pushState(null, null, Route.routePathname.PRODUCTS);
+        const button = Element.menuProducts;
+        const label = Util.disableButton(button);
         await product_page();
+        //await Util.sleep(1000);
+       Util.enableButton(button, label);
     });
 
     Element.formAddProduct.form.addEventListener('submit', async e=>{
         e.preventDefault();
+        const button = e.target.getElementsByTagName('button')[0];
+        const label = Util.disableButton(button);
        await  addNewProduct(e.target);
        await product_page();
+       Util.enableButton(button, label);
 
     });
 
@@ -60,6 +67,9 @@ export async function product_page(){
 
 document.getElementById('button-add-product').addEventListener('click', () =>{
 
+        Element.formAddProduct.form.reset();
+        Element.formAddProduct.imageTag.src = '';
+        imageFile2Upload = null;
         Element.modalAddProduct.show();
     });
 

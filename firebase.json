@@ -18,6 +18,7 @@
       "port": 5001
     },
     "hosting": {
+      "site": "assing2part1ckectechstartateya",
       "port": 5000
     },
     "ui": {
