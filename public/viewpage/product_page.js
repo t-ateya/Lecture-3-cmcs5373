@@ -1,16 +1,21 @@
 import { Product } from '../model/product.js';
 import * as Element from './element.js'
-
+import * as FirebaseController from '../controller/firebase_controller.js'
+import * as Constant from '../model/constant.js'
+import * as Util from './util.js'
+import * as Route from '../controller/routes.js'
 let imageFile2Upload
 
 export function addEventListeners(){
     Element.menuProducts.addEventListener('click', async() =>{
+        history.pushState(null, null, Route.routePathname.PRODUCTS);
         await product_page();
     });
 
-    Element.formAddProduct.form.addEventListener('submit', e=>{
+    Element.formAddProduct.form.addEventListener('submit', async e=>{
         e.preventDefault();
-        addNewProduct(e.target);
+       await  addNewProduct(e.target);
+       await product_page();
 
     });
 
@@ -34,6 +39,22 @@ export async function product_page(){
         </div>
     
     `;
+   
+    let products;
+    try {
+        products = await FirebaseController.getProductList();
+    } catch (e) {
+        if (Constant.DEV)console.log(e);
+        Util.info('Cannot get product list', JSON.stringify(e));
+        return;
+    } 
+
+    //render products
+    
+    products.forEach(p =>{
+        html += buildProductCard(p);
+
+    }); 
 
     Element.root.innerHTML = html;
 
@@ -44,7 +65,7 @@ document.getElementById('button-add-product').addEventListener('click', () =>{
 
 }
 
-function addNewProduct(form){
+async function addNewProduct(form){
     const name = form.name.value;
     const price = form.price.value;
     const summary = form.summary.value;
@@ -63,6 +84,28 @@ function addNewProduct(form){
     //save the product object in Firebase
       //  1. upload the image into Cloud storage => image name, url
       //  2. Store product info to Firebase with image info
+    
+      try {
+        const {imageName, imageURL} =  await FirebaseController.uploadImage(imageFile2Upload);
+        product.imageName = imageName;
+        product.imageURL = imageURL;
+        await FirebaseController.addProduct(product.serialize());
+        Util.info('Success!', `${product.name} added!`, Element.modalAddProduct);
+      } catch (e) {
+          if (Constant.DEV) console.log(e);
+          Util.info('Add Product failed', JSON.stringify(e), Element.modalAddProduct)
+      }
         
 
+}
+
+function buildProductCard(product){
+    return `
+    <div class="card" style="width: 18rem; display: inline-block">
+        <img src="${product.imageURL}" class="card-img-top">
+        <div class="card-body"><h5 class="card-title">${product.name}</h5>
+        <p class="card-text">$ ${product.price}<br>${product.summary}</p>
+        </div>
+    </div>
+    `;
 }

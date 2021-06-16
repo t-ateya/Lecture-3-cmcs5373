@@ -2,13 +2,14 @@ import * as Element from '../viewpage/element.js'
 import * as FirebaseController from './firebase_controller.js'
 import * as Constant from '../model/constant.js'
 import * as Util from '../viewpage/util.js'
+import * as Route from './routes.js';
 
 export let currentUser
 
 
 export function addEventListeners(){
     Element.formSignin.addEventListener('submit', async e => {
-        e.preventDefault; //prevent refresh
+        e.preventDefault(); //prevent refresh
         const email = e.target.email.value;
         const password = e.target.password.value;
 
@@ -47,6 +48,10 @@ export function addEventListeners(){
             for (let i =0; i < elements.length; i++)
                 elements[i].style.display = 'block';
 
+            const pathname = window.location.pathname;
+            const hash = window.location.hash;
+            Route.routing(pathname, hash);
+
         }else {
         //someone signed out
             currentUser = null;
@@ -56,6 +61,8 @@ export function addEventListeners(){
             elements= document.getElementsByClassName('modal-post-auth');
             for (let i =0; i < elements.length; i++)
                 elements[i].style.display = 'none';
+
+            history.pushState(null, null, Route.routePathname.HOME);
         }
     })
 }

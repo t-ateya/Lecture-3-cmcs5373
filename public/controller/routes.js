@@ -12,7 +12,7 @@ export const routePathname ={
 export const routes = [
     {pathname: routePathname.HOME, page: Home.home_page},
     {pathname: routePathname.PRODUCTS, page: Product.product_page},
-    {pathname: routePathname.USERS, page: User.user_page},
+    {pathname: routePathname.USERS, page: User.users_page},
 ]
 
 export function routing(pathname, hash){
