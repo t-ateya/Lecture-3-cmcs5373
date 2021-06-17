@@ -17,6 +17,33 @@ function isAdmin(email){
   return Constant.adminEmails.includes(email)
 }
 
+//NB:Cloud function always takes two parameters
+//@data ==> document (product)id
+async function getElementById(data, context){
+  if (!isAdmin(context.auth.token.email)){
+    if(Constant.DEV) console.log('not admin', context.auth.token.email);
+    throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+  }
+
+  try {
+        const doc = await admin.firestore().collection(Constant.collectionNames.PRODUCT)
+                      .doc(data).get();
+        if (doc.exists){
+          const {name, summary, price, imageName, imageURL} = doc.data();
+          const p = {name, summary, price, imageName, imageURL} //NB: Cloud function returns javascript object
+          p.docId = doc.id
+          return p; //Cloud function returns js object
+        }else {
+          return null; //no doc exists
+        }
+    
+  } catch (e) {
+      if (Constant.DEV) console.log(e)
+      throw new functions.https.HttpsError('internal', 'getProductById failed')
+  }
+
+}
+
 async function getProductList(data, context){
   if (!isAdmin(context.auth.token.email)){
     if(Constant.DEV) console.log('not admin', context.auth.token.email);

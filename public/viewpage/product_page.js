@@ -4,6 +4,9 @@ import * as FirebaseController from "../controller/firebase_controller.js";
 import * as Constant from "../model/constant.js";
 import * as Util from "./util.js";
 import * as Route from "../controller/routes.js";
+import * as Edit from '../controller/edit_product.js';
+
+
 let imageFile2Upload;
 
 export function addEventListeners() {
@@ -71,6 +74,17 @@ export async function product_page() {
       imageFile2Upload = null;
       Element.modalAddProduct.show();
     });
+    const editForms = document.getElementsByClassName('form-edit-product');
+    for (let i =0; i < editForms.length; i++){
+        editForms[i].addEventListener('submit', async e =>{
+          e.preventDefault(); //prevents form reload when the form submits
+          const button = e.target.getElementsByTagName('button')[0]; //N.B: The target is the form
+          const label = Util.disableButton(button);
+         await  Edit.edit_product(e.target.docId.value)
+         Util.enableButton(button, label);
+        });
+    }
+
 }
 
 async function addNewProduct(form) {
@@ -121,6 +135,15 @@ function buildProductCard(product) {
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">$ ${product.price}<br>${product.summary}</p>
         </div>
+        <form class="form-edit-product float-start" method="post">
+            <input type="hidden" name="docId" value=${product.docId}">
+            <button class="btn btn-outline-primary" type="submit">Edit</button>
+        <form/>
+        <form class="form-delete-product float-end" method="post">
+            <input type="hidden" name="docId" value=${product.docId}">
+            <input type="hidden" name="imageName" value=${product.imageName}">
+            <button class="btn btn-outline-danger" type="submit">Delete</button>
+        <form/>
     </div>
     `;
 }
