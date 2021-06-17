@@ -36,3 +36,15 @@ export async function getProductList(){
     return products;
 }
 
+const cf_getProductById = firebase.functions().httpsCallable('cf_getProductById') //Receives the function from the firebase
+export async function getProductById(docId){
+    const result = await cf_getProductById(docId); //infor retrieved as js object
+    if (result.data){
+        const product = new Product (result.data); //return value is js object
+        product.docId = result.data.docId;
+        return product;
+
+    }else {
+        return null;
+    }
+}

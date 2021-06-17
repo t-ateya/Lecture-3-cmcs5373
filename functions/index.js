@@ -12,6 +12,7 @@ const Constant = require('./constant.js')
 //cf==cloud function
 exports.cf_addProduct = functions.https.onCall(addProduct);
 exports.cf_getProductList = functions.https.onCall(getProductList);
+exports.cf_getProductById = functions.https.onCall(getProductById); //export cloud function to the client end
 
 function isAdmin(email){
   return Constant.adminEmails.includes(email)
@@ -19,7 +20,7 @@ function isAdmin(email){
 
 //NB:Cloud function always takes two parameters
 //@data ==> document (product)id
-async function getElementById(data, context){
+async function getProductById(data, context){
   if (!isAdmin(context.auth.token.email)){
     if(Constant.DEV) console.log('not admin', context.auth.token.email);
     throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')

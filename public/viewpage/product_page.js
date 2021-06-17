@@ -64,7 +64,7 @@ export async function product_page() {
     html += buildProductCard(p);
   });
 
-  Element.root.innerHTML = html;
+  Element.root.innerHTML = html; //rendering products on the web-browser(root element)
 
   document
     .getElementById("button-add-product")
@@ -74,13 +74,13 @@ export async function product_page() {
       imageFile2Upload = null;
       Element.modalAddProduct.show();
     });
-    const editForms = document.getElementsByClassName('form-edit-product');
+    const editForms = document.getElementsByClassName('form-edit-product'); //get all the forms for product
     for (let i =0; i < editForms.length; i++){
         editForms[i].addEventListener('submit', async e =>{
           e.preventDefault(); //prevents form reload when the form submits
-          const button = e.target.getElementsByTagName('button')[0]; //N.B: The target is the form
+          const button = e.target.getElementsByTagName('button')[0] //N.B: The target is the form
           const label = Util.disableButton(button);
-         await  Edit.edit_product(e.target.docId.value)
+         await  Edit.edit_product(e.target.docId.value)// e.target===form
          Util.enableButton(button, label);
         });
     }
@@ -136,12 +136,12 @@ function buildProductCard(product) {
             <p class="card-text">$ ${product.price}<br>${product.summary}</p>
         </div>
         <form class="form-edit-product float-start" method="post">
-            <input type="hidden" name="docId" value=${product.docId}">
+            <input type="hidden" name="docId" value="${product.docId}">
             <button class="btn btn-outline-primary" type="submit">Edit</button>
         <form/>
         <form class="form-delete-product float-end" method="post">
-            <input type="hidden" name="docId" value=${product.docId}">
-            <input type="hidden" name="imageName" value=${product.imageName}">
+            <input type="hidden" name="docId" value="${product.docId}">
+            <input type="hidden" name="imageName" value="${product.imageName}">
             <button class="btn btn-outline-danger" type="submit">Delete</button>
         <form/>
     </div>
