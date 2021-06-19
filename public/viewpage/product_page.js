@@ -84,6 +84,20 @@ export async function product_page() {
          Util.enableButton(button, label);
         });
     }
+    const deleteForms = document.getElementsByClassName('form-delete-product');
+    for (let i = 0; i<deleteForms.length; i++){
+      deleteForms[i].addEventListener('submit', async e=>{
+          e.preventDefault();
+          if (!window.confirm("Press OK to delete")) return; //cancel button pressed
+          const button = e.target.getElementsByTagName('button')[0];
+          const label = Util.disableButton(button);
+
+          Util.enableButton(button, label);
+          await Edit.delete_product(e.target.docId.value, e.target.imageName.value);
+
+
+      })
+    }
 
 }
 
@@ -129,7 +143,7 @@ async function addNewProduct(form) {
 
 function buildProductCard(product) {
   return `
-    <div class="card" style="width: 18rem; display: inline-block">
+    <div id="card-${product.docId}" class="card" style="width: 18rem; display: inline-block">
         <img src="${product.imageURL}" class="card-img-top">
         <div class="card-body">
             <h5 class="card-title">${product.name}</h5>

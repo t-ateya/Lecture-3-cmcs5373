@@ -7,7 +7,7 @@ import { Product } from "../model/product.js";
 let imageFile2Upload;
 
 export function addEventListeners(){
-    Element.formEditProduct.imageButton.addEventListener('change', e=>{
+    Element.formEditProduct.imageButton.addEventListener('change', async e=>{
         imageFile2Upload = e.target.files[0];
         if (!imageFile2Upload){
             Element.formEditProduct.imageTag.src = null;
@@ -30,6 +30,42 @@ export function addEventListeners(){
             price: e.target.summary.value,
         });
         p.docId = e.target.docId.value;
+        const errors = p.validate(true); //bypass image file check
+        Element.formEditProduct.errorName.innerHTML = errors.name ? errors.name: ''; //show error if it exists otherwise set error to an empty string
+        Element.formEditProduct.errorPrice.innerHTML = errors.price ? errors.price: '';
+        Element.formEditProduct.errorSummary.innerHTML = errors.summary ? errors.summary: '';
+
+        if (Object.keys(errors).length !=0){
+            Util.enableButton(button, label);
+            return;
+        }
+        
+        try {
+              if (imageFile2Upload){
+                const imageInfo = await FirebaseController.uploadImage(imageFile2Upload, e.target.imageName.value); 
+                p.imageURL = imageInfo.imageURL;
+              }
+
+            // update Firestore
+              await FirebaseController.updateProduct(p);
+            //update web browser currently displaying the products
+            const cardTag = document.getElementById('card-'+p.docId);
+            if (imageFile2Upload){
+                cardTag.getElementsByTagName('img')[0].src = p.imageURL;
+            }
+            cardTag.getElementsByClassName('card-title')[0].innerHTML = p.name;
+            cardTag.getElementsByClassName('card-text')[0].innerHTML = `$ ${p.price}<br>${p.summary}`;
+
+            Util.info('Update!', `${p.name} is updated successfully`, Element.modalEditProduct);
+
+
+        } catch (e) {
+            if (Constant.DEV) console.log(e);
+            Util.info('Update product error', JSON.stringify(e), Element.modalEditProduct);
+            
+        }
+
+        Util.enableButton(button, label);
 
     });
 }
@@ -61,8 +97,26 @@ export async function edit_product(docId){
     Element.formEditProduct.form.summary.value = product.summary;
     Element.formEditProduct.imageTag.src = product.imageURL;
     Element.formEditProduct.errorImage.innerHTML = '';
+    imageFile2Upload = null;
+    Element.formEditProduct.imageButton.value = null;
 
     Element.modalEditProduct.show();
 
     
+}
+
+export async function delete_product(docId, imageName){
+    //console.log(docId, imageName);
+    try {
+        await FirebaseController.deleteProduct(docId, imageName);
+        //update browser
+        const cardTag = document.getElementById('card-' + docId);
+        cardTag.remove();
+        Util.info('Deleted!', `${docId} has been deleted`)
+    } catch (error) {
+        if (Constant.DEV) console.log(e);
+        Util.info('Delete product error', JSON.stringify(e));
+
+    }
+
 }

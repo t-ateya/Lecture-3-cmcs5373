@@ -13,10 +13,70 @@ const Constant = require('./constant.js')
 exports.cf_addProduct = functions.https.onCall(addProduct);
 exports.cf_getProductList = functions.https.onCall(getProductList);
 exports.cf_getProductById = functions.https.onCall(getProductById); //export cloud function to the client end
+exports.cf_updateProduct = functions.https.onCall(updateProduct);
+exports.cf_deleteProduct = functions.https.onCall(deleteProduct);
+
 
 function isAdmin(email){
   return Constant.adminEmails.includes(email)
 }
+async function updateProduct(productInfo, context){
+  //productInfo = {docId, data}
+  if (!isAdmin(context.auth.token.email)){
+    if(Constant.DEV) console.log('not admin', context.auth.token.email);
+    throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+  }
+
+  try {
+       await admin.firestore().collection(Constant.collectionNames.PRODUCT)
+                .doc(productInfo.docId).update(productInfo.data);
+  } catch (e) {
+    if (Constant.DEV)console.log(e)
+    throw new functions.https.HttpsError('internal', 'updateProduct failed');
+  }
+
+}
+
+async function deleteProduct(docId, context){
+  if (!isAdmin(context.auth.token.email)){
+    if(Constant.DEV) console.log('not admin', context.auth.token.email);
+    throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+  }
+
+  try {
+    await admin.firestore().collection(Constant.collectionNames.PRODUCT)
+              .doc(docId).delete();
+  } catch (e) {
+     if (Constant.DEV) console.log(e)
+     throw new functions.https.HttpsError('internal', 'deleteProduct failed')
+  }
+}
+
+async function getUserList(data, context){
+  if (!isAdmin(context.auth.token.email)){
+    if(Constant.DEV) console.log('not admin', context.auth.token.email);
+    throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+ }
+    const userList=[];
+    const MAXRESULTS = 2;
+ try {
+      let result = await admin.auth().listUsers(MAXRESULTS);
+      userList.push(...result.users); //spread operator
+      let nextPageToken = result.pageToken;
+      while (nextPageToken){
+        result = await admin.auth().listUsers(MAXRESULTS, nextPageToken);
+        userList.push(...result.users);
+        nextPageToken=result.pageToken;
+      }
+      return userList;
+
+ } catch (e) {
+   if (Constant.DEV) console.log(e)
+     throw new functions.https.HttpsError('internal', 'getUserList failed')
+ }
+
+}
+
 
 //NB:Cloud function always takes two parameters
 //@data ==> document (product)id

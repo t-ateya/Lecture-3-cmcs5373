@@ -48,3 +48,20 @@ export async function getProductById(docId){
         return null;
     }
 }
+
+const cf_updateProduct = firebase.functions().httpsCallable('cf_updateProduct');
+export async function updateProduct(product){
+    const docId = product.docId;
+    const data = product.serializeForUpdate();
+    await cf_updateProduct({docId, data})
+    //call cf
+}
+
+const cf_deleteProduct = firebase.functions().httpsCallable('cf_deleteProduct');
+export async function deleteProduct(docId, imageName){
+    await cf_deleteProduct(docId); //del product info in the firestore document
+    const ref = firebase.storage().ref()
+                    .child(Constant.storageFolderNames.PRODUCT_IMAGES + imageName);
+    await ref.delete();
+
+}

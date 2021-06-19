@@ -40,4 +40,4 @@ export const modalSignin = new bootstrap.Modal(document.getElementById('modal-si
 
 export const modalAddProduct = new bootstrap.Modal(document.getElementById('modal-add-product'), {backdrop: 'static'});
 
-export const modalEditProduct = new bootstrap.Modal(document.ge)
+export const modalEditProduct = new bootstrap.Modal(document.getElementById('modal-edit-product'), {backdrop: 'static'});
