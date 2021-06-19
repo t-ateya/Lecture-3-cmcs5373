@@ -71,6 +71,47 @@
       </div>
     </nav>
 
+  
+<!-- Modal: Edit Product -->
+<div class="modal fade" id="modal-edit-product" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-edit-product-title">Edit Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form id="form-edit-product" method="post">
+            <input type="hidden" name="docId" />
+            <input type="hidden" name="imageName" />
+            <div>
+              Name: <input type="text" name="name" />
+              <p id="form-edit-product-error-name" class="my-error"></p>
+            </div>
+            <div>
+              Price: <input type="text" name="price" />
+              <p id="form-edit-product-error-price" class="my-error"></p>
+            </div>
+            <div>
+              summary:<br><textarea name="summary"></textarea>
+              <p id="form-edit-product-error-summary" class="my-error"></p>
+            </div>
+            <div>
+              <img id="form-edit-product-image-tag" style="display: block;">
+              <p id="form-edit-product-error-image" class="my-error"></p>
+              <input type="file" id="form-edit-product-image-button" value="upload" />
+            </div>
+              <button type="submit" class="btn btn-outline-primary" >Update</button>
+            <div>
+
+            </div>
+          </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
     <!-- Modal: Add new product -->
     <div
       class="modal fade"
