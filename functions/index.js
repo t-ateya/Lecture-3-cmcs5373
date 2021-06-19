@@ -15,6 +15,7 @@ exports.cf_getProductList = functions.https.onCall(getProductList);
 exports.cf_getProductById = functions.https.onCall(getProductById); //export cloud function to the client end
 exports.cf_updateProduct = functions.https.onCall(updateProduct);
 exports.cf_deleteProduct = functions.https.onCall(deleteProduct);
+exports.cf_getUserList = functions.https.onCall(getUserList);
 
 
 function isAdmin(email){

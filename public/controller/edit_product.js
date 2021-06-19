@@ -19,7 +19,7 @@ export function addEventListeners(){
         reader.readAsDataURL(imageFile2Upload);
         reader.onload = ()=>Element.formEditProduct.imageTag.src = reader.result;
     })
-    Element.formEditProduct.form.addEventListener('submit', e=> {
+    Element.formEditProduct.form.addEventListener('submit', async e=> {
         e.preventDefault();
         const button = e.target.getElementByTagName('button')[0];
         const label = Util.disableButton(button);
