@@ -3,6 +3,7 @@ import * as Route from '../controller/routes.js'
 import * as Constant from '../model/constant.js'
 import * as Util from './util.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
+import * as Auth from '../controller/auth.js'
 
 export function addEventListeners(){
 
@@ -14,6 +15,7 @@ export function addEventListeners(){
 }
 
 export async function users_page(){
+    if (!Auth.currentUser) return;
 
     let html= `
         <h1>Welcome to User Management Page</h1>
@@ -74,9 +76,33 @@ export async function users_page(){
 
 }
 
+const deleteForms = document.getElementsByClassName('form-delete-user');
+for (let i=0; i<deleteForms.length; i++){
+    deleteForms[i].addEventListener('submit', async e =>{
+        e.preventDefault();
+        //confirm
+        if (!window.confirm('Are you sure to delete the user?')) return;
+
+        const button = e.target.getElementsByTagName('button')[0]
+        Util.disableButton(button)
+
+        const uid = e.target.uid.value;
+        try {
+            await FirebaseController.deleteUser(uid);
+            document.getElementById(`user-row-${uid}`).remove();
+            Util.info('Deleted!', `User deleted: uid=${uid}`);
+        } catch (e) {
+            if (Constant.DEV) console.log(e);
+            Util.info('Delete User in Error', JSON.stringify(e));
+
+            
+        }
+    })
+}
+
 function buildUserRow(user){
     return `
-        <tr>
+        <tr id="user-row-${user.uid}>
             <td>${user.email}</td>
             <td id="user-status-${user.uid}">${user.disabled? 'Disabled' : 'Active'}</td>
             <td>

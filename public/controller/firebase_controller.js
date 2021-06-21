@@ -71,3 +71,8 @@ export async function getUserList(){
     const result = await cf_getUserList();
     return result.data;
 }
+
+const cf_deleteUser = firebase.functions().httpsCallable('cf_deleteUser');
+export async function deleteUser(uid){
+	await cf_deleteUser(uid);
+}
