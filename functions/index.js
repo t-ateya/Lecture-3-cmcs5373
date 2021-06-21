@@ -17,10 +17,25 @@ exports.cf_updateProduct = functions.https.onCall(updateProduct);
 exports.cf_deleteProduct = functions.https.onCall(deleteProduct);
 exports.cf_getUserList = functions.https.onCall(getUserList);
 exports.cf_updateUser  = functions.https.onCall(updateUser);
+exports.cf_deleteUser = functions.https.onCall(deleteUser);
 
 
 function isAdmin(email){
   return Constant.adminEmails.includes(email)
+}
+
+async function deleteUser(data, context){
+  //we assume data==> uid is given
+  if (!isAdmin(context.auth.token.email)){
+    if(Constant.DEV) console.log('not admin', context.auth.token.email);
+    throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+  }
+  try {
+      await admin.auth().deleteUser(data);
+  } catch (e) {
+    if (Constant.DEV)console.log(e)
+    throw new functions.https.HttpsError('internal', 'deleteUser failed');
+  }
 }
 
 async function updateUser(data, context){
