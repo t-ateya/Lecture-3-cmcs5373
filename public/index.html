@@ -38,7 +38,9 @@
             <li class="nav-item">
               <button
                 id="menu-signin"
-                class="btn btn-outline-danger modal-pre-auth " data-bs-toggle="modal" data-bs-target="#modal-signin"
+                class="btn btn-outline-danger modal-pre-auth"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-signin"
               >
                 Sign In/Up
               </button>
@@ -94,7 +96,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modal-signin-label">Sign In, Please!</h5>
+            <h5 class="modal-title" id="modal-signin-label">
+              Sign In, Please!
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -105,15 +109,58 @@
           <div class="modal-body">
             <form id="form-signin" method="post">
               <div>
-                <input type="email" name="email" placeholder="email address">
+                <input type="email" name="email" placeholder="email address" />
               </div>
               <div>
-                <input type="password" name="password" placeholder="enter password">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="enter password"
+                />
               </div>
               <div>
-                <button type="submit" class="btn btn-outline-primary">Sign In</button>
+                <button type="submit" class="btn btn-outline-primary">
+                  Sign In
+                </button>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+
+    <!-- Modal: Info box -->
+    <div
+      class="modal fade"
+      id="modal-info"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="modal-info-title"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-info-title">Modal title</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="modal-info-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>

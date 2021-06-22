@@ -11,3 +11,6 @@ export const formSignin = document.getElementById('form-signin');
 
 //modals
 export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin'), {backdrop: 'static'});
+export const modalInfo = new bootstrap.Modal(document.getElementById('modal-info'), {backdrop: 'static'} );
+export const modalInfoTitle = document.getElementById('modal-info-title');
+export const modalInfoBody = document.getElementById('modal-info-body');
