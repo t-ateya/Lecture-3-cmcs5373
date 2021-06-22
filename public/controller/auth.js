@@ -23,6 +23,16 @@ export function addEventListeners(){
 
     })
 
+    Element.menuSignOut.addEventListener('click', async()=>{
+        try {
+            await FirebaseController.signOut();
+        } catch (e) {
+            if (Constant.DeV) console.log(e);
+            Util.info('Sign Out Error', JSON.stringify(e));
+            
+        }
+    })
+
     firebase.auth().onAuthStateChanged(async user =>{
         if (user){
             currentUser = user; //use just signed in
@@ -36,7 +46,7 @@ export function addEventListeners(){
             }
         }else {
             currentUser = null; //user just signed out
-            elements = document.getElementsByClassName('modal-pre-auth');
+            let elements = document.getElementsByClassName('modal-pre-auth');
             for (let i = 0; i<elements.length; i++){
                 elements[i].style.display = 'block';
             }
