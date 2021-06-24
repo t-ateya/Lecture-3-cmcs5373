@@ -13,7 +13,8 @@ export function addEventListeners(){
     });
 }
 
-let cart;
+export let cart;
+
 export async function home_page(){
    let html = '<h1> Enjoy Shopping! </h1>'
 
