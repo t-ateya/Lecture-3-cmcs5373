@@ -74,6 +74,8 @@ export async function cart_page(){
 
     const checkoutButton = document.getElementById('button-checkout');
     checkoutButton.addEventListener('click',   async ()=>{
+        const label = Util.disableButton(checkoutButton);
+       // await Util.sleep(1000);
 
         //save cart info as purchase history to Firestore-will be done later
 
@@ -83,6 +85,8 @@ export async function cart_page(){
         cart.empty();
         Element.shoppingCartCount.innerHTML = '0'; //set shopping cart count to 0
         history.pushState(null, null, Route.routePathnames.HOME);
-        Home.home_page();
+       await Home.home_page();
+       Util.enableButton(checkoutButton, label);
+
     });
 }

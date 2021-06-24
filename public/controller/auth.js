@@ -4,6 +4,7 @@ import * as Util from '../viewpage/util.js'
 import * as Constant from '../model/constant.js'
 import * as Route from './route.js'
 import * as Home from '../viewpage/home_page.js'
+
 export let currentUser;
 
 export function addEventListeners(){
@@ -11,6 +12,8 @@ export function addEventListeners(){
         e.preventDefault(); //preventing page reloading
         const email = e.target.email.value;
         const password = e.target.password.value;
+        const button = e.target.getElementsByTagName('button')[0];
+        const label = Util.disabledButton(button);
         //Next, we call a function in the firebase
         try {
             await FirebaseController.signIn(email, password);
@@ -19,8 +22,8 @@ export function addEventListeners(){
         } catch (error) {
             if (Constant.DeV)console.log(e);
             Util.info('Sign In Error', JSON.stringify(e), Element.modalSignIn)
-
         }
+        Util.enableButton(button, label);
 
     })
 
