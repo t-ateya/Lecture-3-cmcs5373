@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "l1aundvswimrbateyal1",
     "public": "public",
     "ignore": [
       "firebase.json",
