@@ -97,8 +97,7 @@ function buildProductView(product, index){
 }
 
 export function initShoppingCart(){
-    let cartString = window.localStorage.getItem('cart-' + Auth.currentUser.uid);
-    cartString ='{"uid", "jalaienks"';
+    const cartString = window.localStorage.getItem('cart-' + Auth.currentUser.uid);
     cart = ShoppingCart.parse(cartString);
     if (!cart || !cart.isValid() || cart.uid != Auth.currentUser.uid){
         window.localStorage.removeItem('cart-' + Auth.currentUser.uid);

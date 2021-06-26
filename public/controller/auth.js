@@ -13,7 +13,7 @@ export function addEventListeners(){
         const email = e.target.email.value;
         const password = e.target.password.value;
         const button = e.target.getElementsByTagName('button')[0];
-        const label = Util.disabledButton(button);
+        const label = Util.disableButton(button);
         //Next, we call a function in the firebase
         try {
             await FirebaseController.signIn(email, password);
