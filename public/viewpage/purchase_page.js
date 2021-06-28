@@ -8,7 +8,10 @@ import * as Util from "./util.js";
 export function addEventListeners() {
   Element.menuPurchases.addEventListener("click", async () => {
     history.pushState(null, null, Route.routePathnames.PURCHASE);
+    const label = Util.disableButton(Element.menuPurchases)
     await purchase_page();
+    Util.enableButton(Element.menuPurchases, label);
+
   });
 }
 
@@ -50,7 +53,11 @@ export async function purchase_page() {
     html += `
             <tr>
                 <td>
-                    <button class = "btn btn-outline-primary">Details</button>
+                    <form class="form-purchase-history" method="post">
+                        <input type="hidden" name="index" value="${i}">
+                        <button type="submit" class = "btn btn-outline-primary">Details</button>
+                    </form>
+
                 </td>
                 <td>
                     ${carts[i].getTotalQty()}
@@ -67,4 +74,52 @@ export async function purchase_page() {
   html += "</tbody></table>";
 
   Element.root.innerHTML = html;
+
+  //add event listeners to form
+  const historyForms = document.getElementsByClassName('form-purchase-history');
+  for (let i = 0; i<historyForms.length; i++){
+      historyForms[i].addEventListener('submit', e=>{
+          e.preventDefault();
+          const index = e.target.index.value;
+         // console.log('index', index);
+         Element.modalTransactionTitle.innerHTML = `Purchased At: ${new Date(carts[index].timestamp).toString()}`;
+         Element.modalTransactionBody.innerHTML = buildTransactionView(carts[index]);
+         Element.modalTransactionView.show();
+      })
+  }
+}
+
+function buildTransactionView(cart){
+    let html = `
+    <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Image</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Qnty</th>
+        <th scope="col">Sub-Total</th>
+        <th scope="col" width="50%">Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+    `
+    
+    cart.items.forEach(item =>{
+        html += `
+            <tr>
+                <td><img src="${item.imageURL}" width="150px"></td>
+                <td>${item.name}"</td>
+                <td>${Util.currency(item.price)}"</td>
+                <td>${item.qty}"</td>
+                <td>${Util.currency(item.qty * item.price)}"</td>
+                <td>${item.summary}"</td>
+            </tr>
+        `
+    })
+
+    html += '</tbody></table>'
+    html += `<div style="font-size: 150%">Total Price: ${Util.currency(cart.getTotalPrice())}</div>`;
+
+    return html;
 }

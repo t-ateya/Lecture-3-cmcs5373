@@ -69,4 +69,35 @@ export function addEventListeners(){
         }
     });
 
+    Element.buttonSignup.addEventListener('click', ()=>{
+        //show sign up modal
+        Element.modalSignIn.hide();
+        Element.formSignup.reset();
+        Element.formSignupPasswordError.innerHTML ='';
+        Element.modalSignup.show();
+
+    });
+
+    Element.formSignup.addEventListener('submit', async e =>{
+        e.preventDefault();
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        const passwordConfirm = e.target.passwordConfirm.value;
+
+        Element.formSignupPasswordError.innerHTML = ''
+        if (password != passwordConfirm){
+            Element.formSignupPasswordError.innerHTML = 'Two passwords do not match';
+            return;
+        }
+
+        try {
+            await FirebaseController.createUser(email, password);
+            Util.info('Account Created!', `You are now signed in as ${email}`, Element.modalSignup); 
+        } catch (error) {
+            if (Constant.DeV) console.log(error);
+            ////Element.modalSignup===dismiss modal signup
+            Util.info('Failed to create new account', JSON.stringify(e), Element.modalSignup);
+            
+        }
+    })
 }
