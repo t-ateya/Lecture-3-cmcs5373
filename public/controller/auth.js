@@ -4,6 +4,7 @@ import * as Util from '../viewpage/util.js'
 import * as Constant from '../model/constant.js'
 import * as Route from './route.js'
 import * as Home from '../viewpage/home_page.js'
+import * as Profile from '../viewpage/profile_page.js'
 
 export let currentUser;
 
@@ -40,6 +41,7 @@ export function addEventListeners(){
     firebase.auth().onAuthStateChanged(async user =>{
         if (user){
             currentUser = user; //use just signed in
+            Profile.getAccountInfo(user);
 
             //Initialize the shopping cart
             Home.initShoppingCart();
