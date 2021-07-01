@@ -2,16 +2,15 @@
     width: 100%;
     font-size: 200%;
     text-align: center;
-    color:white;
+    color: white;
     background-color: navy;
 }
 
 li {
     padding-right: 15px;
-
 }
 
-.modal-pre-auth{
+.modal-pre-auth {
     display: block;
 }
 
@@ -23,6 +22,15 @@ input {
     display: block;
     margin: 8px 0;
     padding: 8px 2px;
-    border-width:0 0 2px 0;
+    border-width: 0 0 2px 0;
     width: 100%;
+}
+
+.my-error {
+    color: red;
+}
+
+textarea {
+    width: 100%;
+    min-height: 150px;
 }
