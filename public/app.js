@@ -8,12 +8,6 @@ import * as ProductPage from './viewpage/product_page.js';
 import * as User from './viewpage/user_page.js';
 import * as Edit from './controller/edit_product.js';
 
-Auth.addEventListeners();
-Home.addEventListeners();
-Purchase.addEventListeners();
-Cart.addEventListeners();
-Profile.addEventListeners();
-
 //attach a function to be called when a web browser loads a page
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -41,3 +35,6 @@ ProductPage.addEventListeners();
 Home.addEventListeners();
 User.addEventListeners();
 Edit.addEventListeners();
+Purchase.addEventListeners();
+Cart.addEventListeners();
+Profile.addEventListeners();

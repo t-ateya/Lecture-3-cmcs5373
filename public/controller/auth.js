@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 import * as Element from '../viewpage/element.js';
 import * as FirebaseController from './firebase_controller.js';
 import * as Util from '../viewpage/util.js';
@@ -22,22 +22,21 @@ export function addEventListeners() {
             //Next, we dismiss the signin modal
             Element.modalSignIn.hide();
         } catch (error) {
-            if (Constant.DeV) console.log(e);
-            Util.info('Sign In Error', JSON.stringify(e), Element.modalSignIn)
+            if (Constant.DEV) console.log(e);
+            Util.info('Sign In Error', JSON.stringify(e), Element.modalSignIn);
         }
         Util.enableButton(button, label);
-
-    })
+    });
 
     Element.menuSignOut.addEventListener('click', async() => {
         try {
             await FirebaseController.signOut();
         } catch (e) {
-            if (Constant.DeV) console.log(e);
+            if (Constant.DEV) console.log(e);
             Util.info('Sign Out Error', JSON.stringify(e));
 
         }
-    })
+    });
 
     firebase.auth().onAuthStateChanged(async user => {
         if (user) {
@@ -47,10 +46,13 @@ export function addEventListeners() {
             //Initialize the shopping cart
             Home.initShoppingCart();
 
-            let elements = document.getElementsByClassName('modal-pre-auth');
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].style.display = 'none';
-            }
+            let elements = Array.from(document.getElementsByClassName('modal-pre-auth'));
+            // for (let i = 0; i < elements.length; i++) {
+            //     elements[i].style.display = 'none';
+            // }
+            elements.forEach(element => element.style.display = 'none');
+
+
             elements = document.getElementsByClassName('modal-post-auth');
             for (let i = 0; i < elements.length; i++) {
                 elements[i].style.display = 'block';
@@ -87,7 +89,7 @@ export function addEventListeners() {
         const password = e.target.password.value;
         const passwordConfirm = e.target.passwordConfirm.value;
 
-        Element.formSignupPasswordError.innerHTML = ''
+        Element.formSignupPasswordError.innerHTML = '';
         if (password != passwordConfirm) {
             Element.formSignupPasswordError.innerHTML = 'Two passwords do not match';
             return;
@@ -97,9 +99,9 @@ export function addEventListeners() {
             await FirebaseController.createUser(email, password);
             Util.info('Account Created!', `You are now signed in as ${email}`, Element.modalSignup);
         } catch (error) {
-            if (Constant.DeV) console.log(error);
+            if (Constant.DEV) console.log(error);
             Util.info('Failed to create new account', JSON.stringify(e), Element.modalSignup);
 
         }
-    })
+    });
 }

@@ -58,6 +58,7 @@ export const modalTransactionBody = document.getElementById('modal-transaction-b
 export const modalSignup = new bootstrap.Modal(document.getElementById('modal-signup'), {
     backdrop: 'static'
 });
+
 export const modalAddProduct = new bootstrap.Modal(document.getElementById('modal-add-product'), {
     backdrop: 'static'
 });

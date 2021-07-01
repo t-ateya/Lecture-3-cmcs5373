@@ -1,15 +1,16 @@
+// @ts-nocheck
 const functions = require("firebase-functions");
-
 const admin = require("firebase-admin");
-
 const serviceAccount = require("./account_key.json");
+const Constant = require('./constant.js');
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://cmsc5373-terencea.firebaseio.com'
 });
 
-const Constant = require('./constant.js')
-    //cf==cloud function
+
+//cf==cloud function
 exports.cf_addProduct = functions.https.onCall(addProduct);
 exports.cf_getProductList = functions.https.onCall(getProductList);
 exports.cf_getProductById = functions.https.onCall(getProductById); //export cloud function to the client end
@@ -21,19 +22,19 @@ exports.cf_deleteUser = functions.https.onCall(deleteUser);
 
 
 function isAdmin(email) {
-    return Constant.adminEmails.includes(email)
+    return Constant.adminEmails.includes(email);
 }
 
 async function deleteUser(data, context) {
     //we assume data==> uid is given
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
     try {
         await admin.auth().deleteUser(data);
     } catch (e) {
-        if (Constant.DEV) console.log(e)
+        if (Constant.DEV) console.log(e);
         throw new functions.https.HttpsError('internal', 'deleteUser failed');
     }
 }
@@ -42,7 +43,7 @@ async function updateUser(data, context) {
     // data =>{uid, update} ===> update = {key: value}
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
 
     try {
@@ -51,7 +52,7 @@ async function updateUser(data, context) {
         await admin.auth().updateUser(uid, update);
 
     } catch (error) {
-        if (Constant.DEV) console.log(e)
+        if (Constant.DEV) console.log(e);
         throw new functions.https.HttpsError('internal', 'updateUser failed');
     }
 
@@ -61,14 +62,14 @@ async function updateProduct(productInfo, context) {
     //productInfo = {docId, data}
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
 
     try {
         await admin.firestore().collection(Constant.collectionNames.PRODUCT)
             .doc(productInfo.docId).update(productInfo.data);
     } catch (e) {
-        if (Constant.DEV) console.log(e)
+        if (Constant.DEV) console.log(e);
         throw new functions.https.HttpsError('internal', 'updateProduct failed');
     }
 
@@ -77,22 +78,22 @@ async function updateProduct(productInfo, context) {
 async function deleteProduct(docId, context) {
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
 
     try {
         await admin.firestore().collection(Constant.collectionNames.PRODUCT)
             .doc(docId).delete();
     } catch (e) {
-        if (Constant.DEV) console.log(e)
-        throw new functions.https.HttpsError('internal', 'deleteProduct failed')
+        if (Constant.DEV) console.log(e);
+        throw new functions.https.HttpsError('internal', 'deleteProduct failed');
     }
 }
 
 async function getUserList(data, context) {
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
     const userList = [];
     const MAXRESULTS = 2;
@@ -108,8 +109,8 @@ async function getUserList(data, context) {
         return userList;
 
     } catch (e) {
-        if (Constant.DEV) console.log(e)
-        throw new functions.https.HttpsError('internal', 'getUserList failed')
+        if (Constant.DEV) console.log(e);
+        throw new functions.https.HttpsError('internal', 'getUserList failed');
     }
 
 }
@@ -120,7 +121,7 @@ async function getUserList(data, context) {
 async function getProductById(data, context) {
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
 
     try {
@@ -135,21 +136,21 @@ async function getProductById(data, context) {
                 imageURL
             } = doc.data();
             const p = {
-                    name,
-                    summary,
-                    price,
-                    imageName,
-                    imageURL
-                } //NB: Cloud function returns javascript object
-            p.docId = doc.id
+                name,
+                summary,
+                price,
+                imageName,
+                imageURL
+            }; //NB: Cloud function returns javascript object
+            p.docId = doc.id;
             return p; //Cloud function returns js object
         } else {
             return null; //no doc exists
         }
 
     } catch (e) {
-        if (Constant.DEV) console.log(e)
-        throw new functions.https.HttpsError('internal', 'getProductById failed')
+        if (Constant.DEV) console.log(e);
+        throw new functions.https.HttpsError('internal', 'getProductById failed');
     }
 
 }
@@ -157,7 +158,7 @@ async function getProductById(data, context) {
 async function getProductList(data, context) {
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
 
     try {
@@ -179,28 +180,28 @@ async function getProductList(data, context) {
                 summary,
                 imageName,
                 imageURL
-            }
+            };
             p.docId = doc.id;
             products.push(p);
         });
         return products;
     } catch (e) {
-        if (Constant.DEV) console.log(e)
-        throw new functions.https.HttpsError('internal', 'getProduct failed')
+        if (Constant.DEV) console.log(e);
+        throw new functions.https.HttpsError('internal', 'getProduct failed');
     }
 }
 
 async function addProduct(data, context) {
     if (!isAdmin(context.auth.token.email)) {
         if (Constant.DEV) console.log('not admin', context.auth.token.email);
-        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function')
+        throw new functions.https.HttpsError('unauthenticated', 'Only admin may invoke this function');
     }
     //data: serialized product object
     try {
         await admin.firestore().collection(Constant.collectionNames.PRODUCT)
             .add(data);
     } catch (e) {
-        if (Constant.DEV) console.log(e)
-        throw new functions.https.HttpsError('internal', 'addProduct failed')
+        if (Constant.DEV) console.log(e);
+        throw new functions.https.HttpsError('internal', 'addProduct failed');
     }
 }

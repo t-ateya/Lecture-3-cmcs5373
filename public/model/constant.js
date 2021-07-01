@@ -1,4 +1,4 @@
-export const DeV = true; //Developer's mode
+export const DEV = true; //DEVeloper's mode
 
 export const collectionNames = {
     PRODUCTS: 'products',
