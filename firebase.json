@@ -1,5 +1,6 @@
 {
     "hosting": {
+        "site": "a3p2techstartateyaarrey",
         "public": "public",
         "ignore": [
             "firebase.json",
