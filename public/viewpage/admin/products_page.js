@@ -110,7 +110,7 @@ export async function products_page() {
             e.preventDefault();
             const button = e.target.getElementsByTagName("button")[0];
             const label = Util.disableButton(button);
-            await Edit.edit_product(e.target.docId.value);
+            await ProductsController.edit_product(e.target.docId.value);
             Util.enableButton(button, label);
         });
     }
