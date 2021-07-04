@@ -1,13 +1,15 @@
-import * as Element from './element.js'
-import * as Route from '../controller/route.js'
-import * as FirebaseController from '../controller/firebase_controller.js'
-import * as Constant from '../model/constant.js'
-import * as Util from './util.js'
-import * as Auth from '../controller/auth.js'
-import { ShoppingCart } from '../model/ShoppingCart.js'
+import * as Element from './element.js';
+import * as Route from '../controller/route.js';
+import * as FirebaseController from '../controller/firebase_controller.js';
+import * as Constant from '../model/constant.js';
+import * as Util from './util.js';
+import * as Auth from '../controller/auth.js';
+import {
+    ShoppingCart
+} from '../model/ShoppingCart.js';
 
-export function addEventListeners(){
-    Element.menuHome.addEventListener('click', async()=>{
+export function addEventListeners() {
+    Element.menuHome.addEventListener('click', async() => {
         history.pushState(null, null, Route.routePathnames.HOME);
         const label = Util.disableButton(Element.menuHome);
         await home_page();
@@ -17,46 +19,46 @@ export function addEventListeners(){
 
 export let cart;
 
-export async function home_page(){
-   let html = '<h1> Enjoy Shopping! </h1>'
+export async function home_page() {
+    let html = '<h1> Enjoy Shopping! </h1>';
 
     let products;
     try {
         products = await FirebaseController.getProductList();
-        if (cart){
-            cart.items.forEach(item =>{
-                const product = products.find(p =>item.docId == p.docId)
+        if (cart) {
+            cart.items.forEach(item => {
+                const product = products.find(p => item.docId == p.docId);
                 product.qty = item.qty;
-            })
+            });
         }
     } catch (e) {
         if (Constant.DeV) console.log(e);
         Util.info('Cannot get product info', JSON.stringify(e));
     }
 
-    for (let i = 0; i<products.length; i++){
+    for (let i = 0; i < products.length; i++) {
         html += buildProductView(products[i], i);
     }
 
     Element.root.innerHTML = html;
 
     const decForms = document.getElementsByClassName('form-dec-qty');
-    for (let i = 0; i<decForms.length; i++){
-        decForms[i].addEventListener('submit', e =>{
+    for (let i = 0; i < decForms.length; i++) {
+        decForms[i].addEventListener('submit', e => {
             e.preventDefault();
             const p = products[e.target.index.value];
             //dec(remove) p to shoppingcart
             cart.removeItem(p);
-            document.getElementById('qty-' + p.docId).innerHTML = 
-                (p.qty == null || p.qty == 0)? 'Add' : p.qty;
+            document.getElementById('qty-' + p.docId).innerHTML =
+                (p.qty == null || p.qty == 0) ? 'Add' : p.qty;
             Element.shoppingCartCount.innerHTML = cart.getTotalQty();
 
         })
     }
 
     const incForms = document.getElementsByClassName('form-inc-qty');
-    for (let i = 0; i<incForms.length; i++){
-        incForms[i].addEventListener('submit', e =>{
+    for (let i = 0; i < incForms.length; i++) {
+        incForms[i].addEventListener('submit', e => {
             e.preventDefault();
             const p = products[e.target.index.value];
             //add p to shoppingcart
@@ -64,11 +66,11 @@ export async function home_page(){
             document.getElementById('qty-' + p.docId).innerHTML = p.qty;
             Element.shoppingCartCount.innerHTML = cart.getTotalQty();
 
-        })
+        });
     }
 }
 
-function buildProductView(product, index){
+function buildProductView(product, index) {
     return `
     <div class="card" style="width: 18rem; display: inline-block;">
         <img src="${product.imageURL}" class="card-img-top">
@@ -96,15 +98,13 @@ function buildProductView(product, index){
     `;
 }
 
-export function initShoppingCart(){
+export function initShoppingCart() {
     const cartString = window.localStorage.getItem('cart-' + Auth.currentUser.uid);
     cart = ShoppingCart.parse(cartString);
-    if (!cart || !cart.isValid() || cart.uid != Auth.currentUser.uid){
+    if (!cart || !cart.isValid() || cart.uid != Auth.currentUser.uid) {
         window.localStorage.removeItem('cart-' + Auth.currentUser.uid);
-        cart = new ShoppingCart(Auth.currentUser.uid)
+        cart = new ShoppingCart(Auth.currentUser.uid);
     }
-    
-    Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-    
 
+    Element.shoppingCartCount.innerHTML = cart.getTotalQty();
 }

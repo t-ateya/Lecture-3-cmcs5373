@@ -2,16 +2,15 @@
     width: 100%;
     font-size: 200%;
     text-align: center;
-    color:white;
+    color: white;
     background-color: navy;
 }
 
-li {
+li:not(.dropdown-menu li) {
     padding-right: 15px;
-
 }
 
-.modal-pre-auth{
+.modal-pre-auth {
     display: block;
 }
 
@@ -23,6 +22,33 @@ input {
     display: block;
     margin: 8px 0;
     padding: 8px 2px;
-    border-width:0 0 2px 0;
+    border-width: 0 0 2px 0;
     width: 100%;
+}
+
+.nav-link-active {
+    position: relative;
+    color: tomato !important;
+}
+
+.nav-link-active::before {
+    --size: 10px;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-radius: 50%;
+    display: inline-block;
+    width: var(--size);
+    height: var(--size);
+    background-color: tomato;
+}
+
+.nav-link-active:hover {
+    color: tomato !important;
+    opacity: .95;
+}
+
+.nav-link-active:active {
+    transform: scale(.95);
 }
