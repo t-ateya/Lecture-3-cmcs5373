@@ -113,22 +113,39 @@
                 </div>
                 <div class="modal-body">
                     <form id="form-add-product">
-                        <div>
-                            <input type="text" name="name" placeholder="product name">
+                        <div class="form-group">
+                            <label class="d-block">
+                                Product name <br />
+                                <input type="text" name="name" class="mt-2 form-control form-control-sm"
+                                    placeholder="product name">
+                            </label>
                             <p id="form-add-product-error-name" class="my-error"></p>
                         </div>
-                        <div>
-                            <input type="text" name="price" placeholder="price ($)">
+                        <div class="form-group">
+                            <label class="d-block">
+                                Price <br />
+                                <div class="mt-2 mb-3 input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" name="price" class="form-control form-control-sm"
+                                        placeholder="price ($)">
+                                </div>
+
+                            </label>
+
                             <p id="form-add-product-error-price" class="my-error"></p>
                         </div>
-                        <div>
-                            Summary<br />
-                            <textarea name="summary"></textarea>
+                        <div class="form-group">
+                            <label class="d-block">
+                                Summary<br />
+                                <textarea name="summary" class="mt-2 form-control form-control-sm" cols="30"
+                                    rows="5"></textarea>
+                            </label>
+
                             <p id="form-add-product-error-summary" class="my-error"></p>
                         </div>
-                        <div>
-                            <img id="form-add-product-image-tag" style="display: block;" />
-                            <input id="form-add-product-image-button" type="file" value="upload" />
+                        <div class="form-group">
+                            <img id="form-add-product-image-tag" class="img-fluid" />
+                            <input id="form-add-product-image-button" type="file" class="mt-2 form-control form-file" value="upload" />
                             <p id="form-add-product-error-image" class="my-error"></p>
                         </div>
                         <div>
@@ -153,26 +170,41 @@
                     <form id="form-edit-product">
                         <input type="hidden" name="docId">
                         <input type="hidden" name="imageName">
-                        <div>
-                            Name: <input type="text" name="name">
+                        <div class="form-group">
+                            <label class="d-block">
+                                Product name<br />
+                                <input type="text" class="mt-2 form-control form-control-sm" name="name">
+                            </label>
+
                             <p id="form-edit-product-error-name" class="my-error"></p>
                         </div>
-                        <div>
-                            Price: <input type="text" name="price">
+                        <div class="form-group">
+                            <label class="d-block">
+                                Price <br />
+                                <div class="mt-2 mb-3 input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" name="price" class="form-control form-control-sm"
+                                        placeholder="price ($)">
+                                </div>
+                            </label>
                             <p id="form-edit-product-error-price" class="my-error"></p>
                         </div>
-                        <div>
-                            Summary<br />
-                            <textarea name="summary"></textarea>
+                        <div class="form-group">
+                            <label class="d-block">
+                                Summary<br />
+                                <textarea name="summary" class="mt-2 form-control form-control-sm" cols="30"
+                                    rows="5"></textarea>
+                            </label>
                             <p id="form-edit-product-error-summary" class="my-error"></p>
                         </div>
-                        <div>
-                            <img id="form-edit-product-image-tag" style="display: block;" class="img-fluid" />
-                            <input id="form-edit-product-image-button" type="file" value="upload" />
+                        <div class="form-group">
+                            <img id="form-edit-product-image-tag" class="img-fluid" />
+                            <input id="form-edit-product-image-button" class="mt-2 form-control form-file" type="file" value="upload" />
                             <p id="form-edit-product-error-image" class="my-error"></p>
                         </div>
-                        <div>
-                            <button type="submit" class="btn btn-outline-primary">Update</button>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-sm btn-success"><i class="bx bx-check"></i>
+                                Update</button>
                         </div>
                     </form>
                 </div>
@@ -271,6 +303,49 @@
                     <h5 class="modal-title" id="modal-transaction-title"></h5>
                 </div>
                 <div class="modal-body" id="modal-transaction-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: create new user -->
+    <div class="modal fade" id="modal-user" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-info-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-user-title">Create new user</h5>
+                </div>
+                <div id="modal-user-body" class="modal-body modal-user-body">
+                    <form action="#" id="user-form" method="POST" data-edit-mode="create">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control form-control-sm" name="firstName" id="firstName" placeholder="John">
+                                    <label for="firstName">First name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control form-control-sm" name="lastName" id="lastName" placeholder="Doe">
+                                    <label for="lastName">Last name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="email" class="form-control form-control-sm" name="email" id="email" placeholder="name@example.com">
+                            <label for="email">Email address</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input type="password" class="form-control form-control-sm" name="password" id="floatingPassword" placeholder="Password">
+                            <label for="floatingPassword">Password</label>
+                        </div>
+                        <button class="btn btn-primary" id="form-user-submit-btn">save</button>
+                    </form>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         Close

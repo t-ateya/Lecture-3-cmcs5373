@@ -1,5 +1,6 @@
 import * as Element from "../element.js";
 import * as Util from "../util.js";
+import * as Route from "../../controller/route.js";
 import * as FirebaseController from '../../controller/firebase_controller.js';
 import {
     users_page
@@ -58,10 +59,11 @@ function handleSignOut() {
 }
 
 function handleUsers() {
-    Element.adminUsers.addEventListener('click', e => {
+    Element.adminUsers.addEventListener('click', async e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
-        users_page();
+        history.pushState(null, null, Route.routePathnames.USERS);
+        await users_page();
     });
 }
 
@@ -69,6 +71,7 @@ function handleDashboard() {
     Element.adminDashboard.addEventListener('click', e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
+        history.pushState(null, null, Route.routePathnames.DASHBOARD);
         dashboard_page();
     });
 }
@@ -77,6 +80,7 @@ function handleProducts() {
     Element.adminProducts.addEventListener('click', e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
+        history.pushState(null, null, Route.routePathnames.PRODUCTS);
         products_page();
     });
 }

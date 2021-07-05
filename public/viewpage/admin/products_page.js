@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as Element from "../element.js";
 import * as Constant from "../../model/constant.js";
 import * as Util from "../util.js";
@@ -68,9 +69,7 @@ export async function products_page() {
 
     Element.root.innerHTML = html;
 
-    // handle product events
-    handleAddProductEvents();
-    handleProductEditEvents();
+
 
     document
         .getElementById("button-add-product")
@@ -81,35 +80,17 @@ export async function products_page() {
             Element.modalAddProduct.show();
         });
 
-    const editForms = Array.from(document.querySelectorAll(".form-edit-product"));
-    editForms.forEach(form => {
-        form.addEventListener("submit", async(e) => {
-            e.preventDefault();
-            const button = e.target.querySelector("button");
-            const label = Util.disableButton(button);
-            await edit_product(e.target.docId.value);
-            Util.enableButton(button, label);
-        });
-    });
-
-    const deleteForms = Array.from(document.querySelectorAll(".form-delete-product"));
-    deleteForms.forEach(form => {
-        form.addEventListener("submit", async(e) => {
-            e.preventDefault();
-            if (!window.confirm("Press OK to delete")) {
-                return;
-            }
-            const button = e.target.querySelector("button");
-            const label = Util.disableButton(button);
-            await delete_product(
-                e.target.docId.value,
-                e.target.imageName.value
-            );
-            Util.enableButton(button, label);
-        });
-    });
+    // handle product events
+    handleAddProductEvents();
+    handleProductEditEvents();
+    handleEditforms();
+    handleDeleteforms();
 
     // handle filter form
+    handleFilterForm();
+}
+
+function handleFilterForm() {
     document.querySelector('#filter-product-form').addEventListener("submit", async(e) => {
         e.preventDefault();
         const filterAttribute = e.target.filterBy.value;
@@ -127,12 +108,50 @@ export async function products_page() {
             const filteredProductList = shuffleProducts(filteredProducts, options);
 
             // empty the product list table tbody
+            productTableBody.innerHTML = '';
+
+            // load the filtered products in the table.
             filteredProductList.forEach((product, index) => {
-                productTableBody.innerHTML = buildProductCard(product, index);
+                productTableBody.innerHTML += buildProductCard(product, index);
             });
+
+            handleEditforms();
+            handleDeleteforms();
         } catch (error) {
             console.log("Error: ", error);
         }
+    });
+}
+
+function handleEditforms() {
+    const editForms = Array.from(document.querySelectorAll(".form-edit-product"));
+    editForms.forEach(form => {
+        form.addEventListener("submit", async(e) => {
+            e.preventDefault();
+            const button = e.target.querySelector("button");
+            const label = Util.disableButton(button);
+            await edit_product(e.target.docId.value);
+            Util.enableButton(button, label);
+        });
+    });
+}
+
+function handleDeleteforms() {
+    const deleteForms = Array.from(document.querySelectorAll(".form-delete-product"));
+    deleteForms.forEach(form => {
+        form.addEventListener("submit", async(e) => {
+            e.preventDefault();
+            if (!window.confirm("Press OK to delete")) {
+                return;
+            }
+            const button = e.target.querySelector("button");
+            const label = Util.disableButton(button);
+            await delete_product(
+                e.target.docId.value,
+                e.target.imageName.value
+            );
+            Util.enableButton(button, label);
+        });
     });
 }
 
@@ -182,7 +201,7 @@ async function addNewProduct(form) {
             Element.modalAddProduct
         );
     } catch (e) {
-        if (Constant.DEV) console.log(e);
+        if (Constant.DeV) console.log(e);
         Util.info(
             "Add Product failed",
             JSON.stringify(e),
@@ -204,15 +223,15 @@ function buildProductCard(product, index) {
 		</td>
 		<td>$ ${product.price}</td>
 		<td>
-			<div class="d-inline-flex">
-				<form class="form-edit-product d-inline-block mr-2" method="post">
+			<div class="d-inline-flex" style="gap: 10px">
+				<form class="form-edit-product mr-2" method="post">
 					<input type="hidden" name="docId" value="${product.docId}" />
-					<button class="btn btn-outline-primary mr-2" id="edit-btn" type="submit">Edit</button>
+					<button class="btn btn-outline-primary mr-2" id="edit-btn" type="submit"><i class="bx bx-edit"></i> Edit</button>
 				</form>
 				<form class="form-delete-product" method="post">
 					<input type="hidden" name="docId" value="${product.docId}" />
 					<input type="hidden" name="imageName" value="${product.imageName}" />
-					<button class="btn btn-outline-danger" type="submit">Delete</button>
+					<button class="btn btn-outline-danger" type="submit"><i class="bx bx-trash"></i> Delete</button>
 				</form>
 			</div>
 		</td>
@@ -249,10 +268,10 @@ export function handleAddProductEvents() {
 
     Element.formAddProduct.form.addEventListener("submit", async(e) => {
         e.preventDefault();
-        const button = e.target.getElementsByTagName("button")[0];
+        const button = e.target.querySelector("button");
         const label = Util.disableButton(button);
         await addNewProduct(e.target);
-        await product_page();
+        await products_page();
         Util.enableButton(button, label);
     });
 

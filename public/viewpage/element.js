@@ -16,6 +16,8 @@ export const shoppingCartCount = document.getElementById('shoppingcart-count');
 export const formSignin = document.getElementById('form-signin');
 export const formSignup = document.getElementById('form-signup');
 export const formSignupPasswordError = document.getElementById('form-signup-password-error');
+export const userForm = document.getElementById('user-form');
+console.log('user form: ', userForm);
 
 export const buttonSignup = document.getElementById('button-signup');
 
@@ -36,6 +38,14 @@ export const modalTransactionBody = document.getElementById('modal-transaction-b
 export const modalSignup = new bootstrap.Modal(document.getElementById('modal-signup'), {
     backdrop: 'static'
 });
+
+export const userModal = {
+    modal: new bootstrap.Modal(document.getElementById('modal-user'), {
+        backdrop: 'static'
+    }),
+    title: document.querySelector('#modal-user-title'),
+    submitBtn: document.querySelector('#form-user-submit-btn')
+};
 
 
 /* Admin elements */

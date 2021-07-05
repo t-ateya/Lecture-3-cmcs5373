@@ -8,6 +8,7 @@ export const collectionNames = {
 
 export const storageFolderNames = {
     PROFILE_PHOTOS: 'profile_photos/',
+    PRODUCT_IMAGES: 'product_images/',
 };
 
 export const adminEmails = [
