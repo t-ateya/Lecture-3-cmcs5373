@@ -14,6 +14,7 @@ export async function products_page() {
     if (!Auth.currentUser) {
         return;
     }
+    console.log('Current user: ', Auth.currentUser.email);
     // new product and filter product list form
     let html = `
         <div class="d-flex justify-content-between align-items-center">
@@ -278,6 +279,7 @@ export function handleProductEditEvents() {
                 "Image change cancelled. The original image will be used";
             return;
         }
+
         Element.formEditProduct.errorImage.innerHTML = "";
         const reader = new FileReader();
         reader.readAsDataURL(imageFile2Upload);
@@ -296,6 +298,7 @@ export function handleProductEditEvents() {
             summary: e.target.summary.value,
         });
         p.docId = e.target.docId.value;
+
         const errors = p.validate(true); // bypass image file check
         Element.formEditProduct.errorName.innerHTML = errors.name ?
             errors.name :
@@ -322,6 +325,7 @@ export function handleProductEditEvents() {
             }
             // update firestore of the doc
             await ProductsController.updateProduct(p);
+
             // update web browser
             const cardTag = document.getElementById(`card-${p.docId}`);
             if (imageFile2Upload) {
