@@ -2,6 +2,9 @@ import {
     Product
 } from "../../model/product.js";
 import * as Constant from "../../model/constant.js";
+import {
+    adminDashboard
+} from "../../viewpage/element.js";
 // @ts-nocheck
 
 const cf_addProduct = firebase.functions().httpsCallable("cf_addProduct");
@@ -10,7 +13,9 @@ export async function addProduct(product) {
 }
 
 export async function uploadImage(imageFile, imageName) {
-    if (!imageName) imageName = Date.now() + imageFile.name;
+    if (!imageName) {
+        imageName = Date.now() + imageFile.name;
+    }
 
     const ref = firebase
         .storage()

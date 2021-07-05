@@ -26,4 +26,4 @@ window.addEventListener('popstate', e => {
     const pathname = e.target.location.pathname;
     const hash = e.target.location.hash;
     Route.routing(pathname, hash);
-})
+});

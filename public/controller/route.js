@@ -10,7 +10,10 @@ export const routePathnames = {
     PURCHASE: '/purchase',
     PROFILE: '/profile',
     CART: '/cart',
-    ADMIN_LOGIN: '/admin-login',
+    ADMIN_LOGIN: '/admin/login',
+    USERS: '/admin/users',
+    DASHBOARD: '/admin/dashboard',
+    PRODUCTS: '/admin/products'
 };
 
 //let's define a mapping b/n pathname and the corresponding function
