@@ -1,6 +1,7 @@
 import {
     Product
 } from "../../model/product.js";
+import * as Constant from "../../model/constant.js";
 // @ts-nocheck
 
 const cf_addProduct = firebase.functions().httpsCallable("cf_addProduct");
@@ -69,10 +70,4 @@ export async function deleteProduct(docId, imageName) {
         .ref()
         .child(Constant.storageFolderNames.PRODUCT_IMAGES + imageName);
     await ref.delete();
-}
-
-const cf_getUserList = firebase.functions().httpsCallable("cf_getUserList");
-export async function getUserList() {
-    const result = await cf_getUserList();
-    return result.data;
 }

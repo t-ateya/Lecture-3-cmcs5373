@@ -100,7 +100,7 @@ export async function products_page() {
             }
             const button = e.target.querySelector("button");
             const label = Util.disableButton(button);
-            await Edit.delete_product(
+            await delete_product(
                 e.target.docId.value,
                 e.target.imageName.value
             );
