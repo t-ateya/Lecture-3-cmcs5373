@@ -3,40 +3,12 @@ import * as Constant from "../../model/constant.js";
 import * as Util from "../util.js";
 import * as Auth from "../../controller/auth.js";
 import * as ProductsController from "../../controller/admin/products_controller.js";
+import {
+    Product
+} from "../../model/Product.js";
 
 let imageFile2Upload;
 
-export function addEventListeners() {
-    // Element.menuProducts.addEventListener("click", async () => {
-    //     history.pushState(null, null, Route.routePathname.PRODUCTS);
-    //     const button = Element.menuProducts;
-    //     const label = Util.disableButton(button);
-    //     await product_page();
-    //     //await Util.sleep(1000);
-    //     Util.enableButton(button, label);
-    // });
-
-    Element.formAddProduct.form.addEventListener("submit", async(e) => {
-        e.preventDefault();
-        const button = e.target.getElementsByTagName("button")[0];
-        const label = Util.disableButton(button);
-        await addNewProduct(e.target);
-        await product_page();
-        Util.enableButton(button, label);
-    });
-
-    Element.formAddProduct.imageButton.addEventListener("change", (e) => {
-        imageFile2Upload = e.target.files[0];
-        if (!imageFile2Upload) {
-            Element.formAddProduct.imageTag.src = null;
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = () =>
-            (Element.formAddProduct.imageTag.src = reader.result);
-        reader.readAsDataURL(imageFile2Upload);
-    });
-}
 
 export async function products_page() {
     if (!Auth.currentUser) {
@@ -95,6 +67,10 @@ export async function products_page() {
 
     Element.root.innerHTML = html;
 
+    // handle product events
+    handleAddProductEvents();
+    handleProductEditEvents();
+
     document
         .getElementById("button-add-product")
         .addEventListener("click", () => {
@@ -104,25 +80,25 @@ export async function products_page() {
             Element.modalAddProduct.show();
         });
 
-    const editForms = document.getElementsByClassName("form-edit-product");
-    for (let i = 0; i < editForms.length; i++) {
-        editForms[i].addEventListener("submit", async(e) => {
+    const editForms = Array.from(document.querySelectorAll(".form-edit-product"));
+    editForms.forEach(form => {
+        form.addEventListener("submit", async(e) => {
             e.preventDefault();
-            const button = e.target.getElementsByTagName("button")[0];
+            const button = e.target.querySelector("button");
             const label = Util.disableButton(button);
-            await ProductsController.edit_product(e.target.docId.value);
+            await edit_product(e.target.docId.value);
             Util.enableButton(button, label);
         });
-    }
+    });
 
-    const deleteForms = document.getElementsByClassName("form-delete-product");
-    for (let i = 0; i < deleteForms.length; i++) {
-        deleteForms[i].addEventListener("submit", async(e) => {
+    const deleteForms = Array.from(document.querySelectorAll(".form-delete-product"));
+    deleteForms.forEach(form => {
+        form.addEventListener("submit", async(e) => {
             e.preventDefault();
             if (!window.confirm("Press OK to delete")) {
                 return;
             }
-            const button = e.target.getElementsByTagName("button")[0];
+            const button = e.target.querySelector("button");
             const label = Util.disableButton(button);
             await Edit.delete_product(
                 e.target.docId.value,
@@ -130,7 +106,7 @@ export async function products_page() {
             );
             Util.enableButton(button, label);
         });
-    }
+    });
 
     // handle filter form
     document.querySelector('#filter-product-form').addEventListener("submit", async(e) => {
@@ -267,7 +243,33 @@ function shuffleProducts(products, options) {
     return result;
 }
 
-export function addEventListeners() {
+// product create events
+export function handleAddProductEvents() {
+
+    Element.formAddProduct.form.addEventListener("submit", async(e) => {
+        e.preventDefault();
+        const button = e.target.getElementsByTagName("button")[0];
+        const label = Util.disableButton(button);
+        await addNewProduct(e.target);
+        await product_page();
+        Util.enableButton(button, label);
+    });
+
+    Element.formAddProduct.imageButton.addEventListener("change", (e) => {
+        imageFile2Upload = e.target.files[0];
+        if (!imageFile2Upload) {
+            Element.formAddProduct.imageTag.src = null;
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () =>
+            (Element.formAddProduct.imageTag.src = reader.result);
+        reader.readAsDataURL(imageFile2Upload);
+    });
+}
+
+// product edit events
+export function handleProductEditEvents() {
     Element.formEditProduct.imageButton.addEventListener("change", (e) => {
         imageFile2Upload = e.target.files[0];
         if (!imageFile2Upload) {
@@ -285,7 +287,7 @@ export function addEventListeners() {
 
     Element.formEditProduct.form.addEventListener("submit", async(e) => {
         e.preventDefault();
-        const button = e.target.getElementsByTagName("button")[0];
+        const button = e.target.querySelector("button");
         const label = Util.disableButton(button);
 
         const p = new Product({
@@ -312,14 +314,14 @@ export function addEventListeners() {
 
         try {
             if (imageFile2Upload) {
-                const imageInfo = await FirebaseController.uploadImage(
+                const imageInfo = await ProductsController.uploadImage(
                     imageFile2Upload,
                     e.target.imageName.value
                 );
                 p.imageURL = imageInfo.imageURL;
             }
             // update firestore of the doc
-            await FirebaseController.updateProduct(p);
+            await ProductsController.updateProduct(p);
             // update web browser
             const cardTag = document.getElementById(`card-${p.docId}`);
             if (imageFile2Upload) {
@@ -335,7 +337,7 @@ export function addEventListeners() {
                 Element.modalAddProduct
             );
         } catch (error) {
-            if (Constant.DEV) {
+            if (Constant.DeV) {
                 console.log(error);
                 Util.info(
                     "Update product error",
