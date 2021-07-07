@@ -3,7 +3,7 @@
 // @ts-nocheck
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const serviceAccount = require("./account_key.json");
+const serviceAccount = require("./auth_key.json");
 const Constant = require("./constant");
 
 admin.initializeApp({
