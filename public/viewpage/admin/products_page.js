@@ -158,11 +158,13 @@ function handleDeleteforms() {
 async function addNewProduct(form) {
     const name = form.name.value;
     const price = form.price.value;
+    const discount = form.discount.value;
     const summary = form.summary.value;
 
     const product = new Product({
         name,
         price,
+        discount,
         summary,
     }); //Product object
 
@@ -171,6 +173,9 @@ async function addNewProduct(form) {
     Element.formAddProduct.errorName.innerHTML = errors.name ? errors.name : "";
     Element.formAddProduct.errorPrice.innerHTML = errors.price ?
         errors.price :
+        "";
+    Element.formAddProduct.errorDiscount.innerHTML = errors.discount ?
+        errors.discount :
         "";
     Element.formAddProduct.errorSummary.innerHTML = errors.summary ?
         errors.summary :
@@ -314,6 +319,7 @@ export function handleProductEditEvents() {
         const p = new Product({
             name: e.target.name.value,
             price: e.target.price.value,
+            discount: e.target.discount.value,
             summary: e.target.summary.value,
         });
         p.docId = e.target.docId.value;
@@ -324,6 +330,9 @@ export function handleProductEditEvents() {
             "";
         Element.formEditProduct.errorPrice.innerHTML = errors.price ?
             errors.price :
+            "";
+        Element.formEditProduct.errorDiscount.innerHTML = errors.discount ?
+            errors.errorDiscount :
             "";
         Element.formEditProduct.errorSummary.innerHTML = errors.summary ?
             errors.summary :
@@ -393,6 +402,7 @@ export async function edit_product(docId) {
     Element.formEditProduct.form.imageName.value = product.imageName;
     Element.formEditProduct.form.name.value = product.name;
     Element.formEditProduct.form.price.value = product.price;
+    Element.formEditProduct.form.discount.value = product.discount;
     Element.formEditProduct.form.summary.value = product.summary;
     Element.formEditProduct.imageTag.src = product.imageURL;
     Element.formEditProduct.errorImage.innerHTML = "";
