@@ -2,8 +2,7 @@
 import * as Element from "../element.js";
 import * as Constant from "../../model/constant.js";
 import * as Util from "../util.js";
-import * as FirebaseController from "../../controller/firebase_controller.js";
-import * as Auth from "../admin/signin.js";
+import * as UsersController from "../../controller/admin/users_controller.js";
 
 export async function users_page() {
     // if (!Auth.currentUser) {
@@ -19,7 +18,7 @@ export async function users_page() {
 
     let userList = [];
     try {
-        userList = await FirebaseController.getUserList();
+        userList = await UsersController.getUserList();
         html += `
 			 <table class="table table-stripped">
 				<thead>
@@ -40,7 +39,7 @@ export async function users_page() {
 
         html += `</tbody></table>`;
     } catch (error) {
-        if (Constant.DEV) {
+        if (Constant.DeV) {
             console.log(error);
         }
         Util.info("Error getUserList", JSON.stringify(error));
@@ -63,7 +62,7 @@ export async function users_page() {
                 disabled: disabled === "true" ? false : true,
             };
             try {
-                await FirebaseController.updateUser(uid, update);
+                await UsersController.updateUser(uid, update);
                 e.target.disabled.value = `${update.disabled}`;
                 document.getElementById(`user-status-${uid}`).innerHTML = `${
 					update.disabled ? "<span class='badge bg-danger'>disabled</span>" : "<span class='badge bg-success'>active</span>"
@@ -95,11 +94,11 @@ export async function users_page() {
             Util.disableButton(button);
             const uid = e.target.uid.value;
             try {
-                await FirebaseController.deleteUser(uid);
+                await UsersController.deleteUser(uid);
                 document.getElementById(`user-row-${uid}`).remove();
                 Util.info('Deleted', `user deleted: uid=${uid}`);
             } catch (error) {
-                if (Constant.DEV) {
+                if (Constant.DeV) {
                     console.log(error);
                     Util.info('Delete user in Error', JSON.stringify(error));
                 }
@@ -121,7 +120,7 @@ export async function users_page() {
         const label = Util.disableButton(e.target);
         const userUid = e.target.dataset.uid;
 
-        selectedUser = await FirebaseController.getUser(userUid);
+        selectedUser = await UsersController.getUser(userUid);
         Element.userModal.modal.show();
         Util.enableButton(e.target, label);
 
@@ -158,18 +157,18 @@ export async function users_page() {
 
             // store user in database
             try {
-                await FirebaseController.addUser(userData);
+                await UsersController.addUser(userData);
                 // reset modal form and close modal
                 Element.userForm.reset();
                 Element.userModal.modal.hide();
             } catch (error) {
-                if (Constant.DEV) {
+                if (Constant.DeV) {
                     console.log(error);
-                    Util.info('Create user error: ', JSON.stringify(error));
+                    //Util.info('Create user error: ', JSON.stringify(error));
                 }
             }
         } else {
-            await FirebaseController.updateUser(selectedUser.uid, userData);
+            await UsersController.updateUser(selectedUser.uid, userData);
             Element.userModal.modal.hide();
         }
 

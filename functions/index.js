@@ -65,7 +65,7 @@ async function addUser(data, context) {
         return ref;
     } catch (error) {
         if (Constant.DEV) console.log(error);
-        throw new functions.https.HttpsError('internal', `create user failde: ${error}`);
+        throw new functions.https.HttpsError('internal', `create user faild: ${error}`);
     }
 
 }

@@ -1,13 +1,13 @@
-import * as Element from './element.js'
-import * as Route from '../controller/route.js'
-import * as FirebaseController from '../controller/firebase_controller.js'
-import * as Constant from '../model/constant.js'
-import * as Util from './util.js'
-import * as Auth from '../controller/auth.js'
+import * as Element from './element.js';
+import * as Route from '../controller/route.js';
+import * as FirebaseController from '../controller/firebase_controller.js';
+import * as Constant from '../model/constant.js';
+import * as Util from './util.js';
+import * as Auth from '../controller/auth.js';
 
 
-export function addEventListeners(){
-    Element.menuProfile.addEventListener('click', async()=>{
+export function addEventListeners() {
+    Element.menuProfile.addEventListener('click', async() => {
         history.pushState(null, null, Route.routePathnames.PROFILE);
         await profile_page();
     });
@@ -15,16 +15,16 @@ export function addEventListeners(){
 
 let accountInfo;
 
-export async function profile_page(){
+export async function profile_page() {
     let html = '<h1> Profile Page </h1>';
-    if (!Auth.currentUser){
+    if (!Auth.currentUser) {
         html += '<h2>Protected Page</h2>';
         Element.root.innerHTML = html;
         return;
 
     }
 
-    if (!accountInfo){
+    if (!accountInfo) {
         html += `<h2>Failed to retrieve account info for ${Auth.currentUser.email}</h2>`;
         Element.root.innerHTML = html;
         return;
@@ -68,7 +68,7 @@ export async function profile_page(){
     </form>
 `;
 
-html += `
+    html += `
     <form class="form-profile" method="post">
         <table class="table table-sm">
         <tr>
@@ -84,7 +84,7 @@ html += `
     </form>
 `;
 
-html += `
+    html += `
     <form class="form-profile" method="post">
         <table class="table table-sm">
         <tr>
@@ -101,7 +101,7 @@ html += `
     </form>
 `;
 
-html += `
+    html += `
     <form class="form-profile" method="post">
         <table class="table table-sm">
         <tr>
@@ -118,7 +118,7 @@ html += `
     </form>
 `;
 
-html += `
+    html += `
     <form class="form-profile" method="post">
         <table class="table table-sm">
         <tr>
@@ -135,7 +135,7 @@ html += `
     </form>
 `;
 
-html += `
+    html += `
     <table>
         <tr>
             <td>
@@ -155,8 +155,8 @@ html += `
     let photoFile;
 
     const updateProfilePhotoButton = document.getElementById('profile-photo-update-button');
-    updateProfilePhotoButton.addEventListener('click', async () =>{
-        if (!photoFile){
+    updateProfilePhotoButton.addEventListener('click', async() => {
+        if (!photoFile) {
             Util.info('No Photo Selected', 'Choose a profile photo')
             return;
         }
@@ -164,7 +164,9 @@ html += `
 
         try {
             const photoURL = await FirebaseController.uploadProfilePhoto(photoFile, Auth.currentUser.uid);
-            await FirebaseController.updateAccountInfo(Auth.currentUser.uid, {photoURL});
+            await FirebaseController.updateAccountInfo(Auth.currentUser.uid, {
+                photoURL
+            });
             accountInfo.photoURL = photoURL;
             Element.menuProfile.innerHTML = `
                 <img src=${accountInfo.photoURL} class="rounded-circle" height="30px">
@@ -180,21 +182,21 @@ html += `
 
     });
 
-    document.getElementById('profile-photo-upload-button').addEventListener('change', e =>{
+    document.getElementById('profile-photo-upload-button').addEventListener('change', e => {
         photoFile = e.target.files[0];
-        if (!photoFile){
+        if (!photoFile) {
             document.getElementById('profile-img-tag').src = accountInfo.photoURL;
             return;
         }
-        
+
         const reader = new FileReader();
         reader.onload = () => document.getElementById('profile-img-tag').src = reader.result;
         reader.readAsDataURL(photoFile);
     })
 
     const forms = document.getElementsByClassName('form-profile');
-    for (let i=0; i<forms.length; i++){
-        forms[i].addEventListener('submit', async e=>{
+    for (let i = 0; i < forms.length; i++) {
+        forms[i].addEventListener('submit', async e => {
             e.preventDefault();
             const buttons = e.target.getElementsByTagName('button');
             const inputTag = e.target.getElementsByTagName('input')[0];
@@ -202,43 +204,43 @@ html += `
             const key = inputTag.name;
             const value = inputTag.value;
 
-            if (buttonLabel == 'Edit'){
-                    buttons[0].style.display  = 'none';
-                    buttons[1].style.display = 'inline-block';
-                    buttons[2].style.display = 'inline-block';
-                    inputTag.disabled = false;
-            }else if (buttonLabel == 'Update'){
-                    const updateInfo = {}; //obj, updateInfo.xxx = yyy;
-                    updateInfo[key] = value;
-                    const label = Util.disableButton(buttons[1]);
-                    try {
-                        await FirebaseController.updateAccountInfo(Auth.currentUser.uid, updateInfo);
-                        accountInfo[key] = value;
-                    } catch (error) {
-                        if (Constant.DeV) console.log(e);
-                        Util.info(`Update Error: ${key}`, JSON.stringify(e));
-                        
-                    }
-                    Util.enableButton(buttons[1], label);
+            if (buttonLabel == 'Edit') {
+                buttons[0].style.display = 'none';
+                buttons[1].style.display = 'inline-block';
+                buttons[2].style.display = 'inline-block';
+                inputTag.disabled = false;
+            } else if (buttonLabel == 'Update') {
+                const updateInfo = {}; //obj, updateInfo.xxx = yyy;
+                updateInfo[key] = value;
+                const label = Util.disableButton(buttons[1]);
+                try {
+                    await FirebaseController.updateAccountInfo(Auth.currentUser.uid, updateInfo);
+                    accountInfo[key] = value;
+                } catch (error) {
+                    if (Constant.DeV) console.log(e);
+                    Util.info(`Update Error: ${key}`, JSON.stringify(e));
 
-                    buttons[0].style.display  = 'inline-block';
-                    buttons[1].style.display = 'none';
-                    buttons[2].style.display = 'none';
-                    inputTag.disabled = true;
+                }
+                Util.enableButton(buttons[1], label);
 
-            }else {
-                    buttons[0].style.display  = 'inline-block';
-                    buttons[1].style.display = 'none';
-                    buttons[2].style.display = 'none';
-                    inputTag.disabled = true;
-                    inputTag.value = accountInfo[key];
+                buttons[0].style.display = 'inline-block';
+                buttons[1].style.display = 'none';
+                buttons[2].style.display = 'none';
+                inputTag.disabled = true;
+
+            } else {
+                buttons[0].style.display = 'inline-block';
+                buttons[1].style.display = 'none';
+                buttons[2].style.display = 'none';
+                inputTag.disabled = true;
+                inputTag.value = accountInfo[key];
             }
 
         })
     }
 }
 
-function actionButtons(){
+function actionButtons() {
     return `
         <button onclick="this.form.submitter='Edit'"
             type="submit" class="btn btn-outline-primary">Edit</button>
@@ -250,7 +252,7 @@ function actionButtons(){
 }
 
 
-export async function getAccountInfo(user){
+export async function getAccountInfo(user) {
     try {
         accountInfo = await FirebaseController.getAccountInfo(user.uid);
     } catch (e) {
@@ -262,5 +264,5 @@ export async function getAccountInfo(user){
     Element.menuProfile.innerHTML = `
         <img src=${accountInfo.photoURL} class="rounded-circle" height="30px">
     `
-    
+
 }
