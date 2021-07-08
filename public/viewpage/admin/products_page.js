@@ -81,7 +81,6 @@ export async function products_page() {
         });
 
     // handle product events
-    handleAddProductEvents();
     handleProductEditEvents();
     handleEditforms();
     handleDeleteforms();
@@ -226,7 +225,7 @@ function buildProductCard(product, index) {
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">${product.summary}</p>
 		</td>
-		<td>$ ${product.price}</td>
+		<td>$ ${product.price} ${product.discount}</td>
 		<td>
 			<div class="d-inline-flex" style="gap: 10px">
 				<form class="form-edit-product mr-2" method="post">
@@ -269,7 +268,7 @@ function shuffleProducts(products, options) {
 }
 
 // product create events
-export function handleAddProductEvents() {
+export function addEventListeners() {
 
     Element.formAddProduct.form.addEventListener("submit", async(e) => {
         e.preventDefault();

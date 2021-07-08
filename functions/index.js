@@ -227,6 +227,7 @@ async function getProductById(data, context) {
                 name,
                 summary,
                 price,
+                discount,
                 imageName,
                 imageURL
             } = doc.data();
@@ -234,6 +235,7 @@ async function getProductById(data, context) {
                 name,
                 summary,
                 price,
+                discount,
                 imageName,
                 imageURL,
             };
@@ -272,6 +274,7 @@ async function getProductList(data, context) {
             const {
                 name,
                 price,
+                discount,
                 summary,
                 imageName,
                 imageURL
@@ -279,6 +282,7 @@ async function getProductList(data, context) {
             const p = {
                 name,
                 price,
+                discount,
                 summary,
                 imageName,
                 imageURL,

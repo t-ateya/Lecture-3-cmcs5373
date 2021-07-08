@@ -5,6 +5,7 @@ import * as Cart from "./viewpage/cart.js";
 import * as Profile from "./viewpage/profile_page.js";
 import * as Route from "./controller/route.js";
 import * as Admin from "./viewpage/admin/signin.js";
+import * as Product from "./viewpage/admin/products_page.js";
 
 Auth.addEventListeners();
 Home.addEventListeners();
@@ -12,6 +13,7 @@ Purchase.addEventListeners();
 Cart.addEventListeners();
 Profile.addEventListeners();
 Admin.addEventListeners();
+Product.addEventListeners();
 
 //attach a function to be called when a web browser loads a page
 window.onload = () => {
