@@ -225,7 +225,16 @@ function buildProductCard(product, index) {
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">${product.summary}</p>
 		</td>
-		<td>$ ${product.price} ${product.discount}</td>
+		<td class="discount">
+            <p>
+                <del>$ ${product.price}</del>  
+                <span class="badge bg-success">$${product.price - (product.discount * 0.01 * product.price).toFixed(2)}</span>
+                </p>
+            <p>
+                <strong>Discount: </strong>
+                <span class="badge bg-info">${product.discount}% ($ ${(product.discount * 0.01 * product.price).toFixed(2)})</span>
+            </p>
+        </td>
 		<td>
 			<div class="d-inline-flex" style="gap: 10px">
 				<form class="form-edit-product mr-2" method="post">
@@ -340,6 +349,8 @@ export function handleProductEditEvents() {
         if (Object.keys(errors).length != 0) {
             Util.enableButton(button, label);
             return;
+        } else {
+            console.log('error: ', errors);
         }
 
         try {
@@ -362,11 +373,26 @@ export function handleProductEditEvents() {
             cardTag.getElementsByClassName(
                 "card-text"
             )[0].innerHTML = `$ ${p.price}<br > ${p.summary}`;
+
+            // update discount
+            cardTag.querySelector('.discount').innerHTML = `
+            <p>
+                <del>$ ${p.price}</del>  
+                <span class="badge bg-success">$${p.price - (p.discount * 0.01 * p.price).toFixed(2)}</span>
+                </p>
+            <p>
+                <strong>Discount: </strong>
+                <span class="badge bg-info">${p.discount}% ($ ${(p.discount * 0.01 * p.price).toFixed(2)})</span>
+            </p>`;
+
             Util.info(
                 "Updated",
                 `${p.name} is updated successfully`,
                 Element.modalAddProduct
             );
+
+            // close the edit modal
+            Element.modalEditProduct.hide();
         } catch (error) {
             if (Constant.DeV) {
                 console.log(error);
