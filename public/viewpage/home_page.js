@@ -7,6 +7,9 @@ import * as Auth from '../controller/auth.js';
 import {
     ShoppingCart
 } from '../model/ShoppingCart.js';
+import {
+    dashboard_page
+} from './admin/dashboard_page.js';
 
 export function addEventListeners() {
     Element.menuHome.addEventListener('click', async() => {
@@ -20,6 +23,7 @@ export function addEventListeners() {
 export let cart;
 
 export async function home_page() {
+    Util.toggleMenuLinks();
     let html = '<h1> Enjoy Shopping! </h1>';
 
     let products;
@@ -53,7 +57,7 @@ export async function home_page() {
                 (p.qty == null || p.qty == 0) ? 'Add' : p.qty;
             Element.shoppingCartCount.innerHTML = cart.getTotalQty();
 
-        })
+        });
     }
 
     const incForms = document.getElementsByClassName('form-inc-qty');

@@ -13,7 +13,7 @@ export function dashboard_page() {
 
     // show dashboard nav
     showDashboardNav();
-    Element.root.classList.add("container", "bg-white", "mx-auto");
+    // Element.root.classList.add("container", "bg-white", "mx-auto");
     Element.root.innerHTML = `<h4 class="mb-4 text-dark">Hello <span class="text-primary font-weight-bold">bless</span> welcome back!<h4>`;
 
     showStats();
@@ -47,6 +47,16 @@ function dashboardEventListeners() {
     handleDashboard();
     handleUsers();
     handleProducts();
+    handleVisitSite();
+}
+
+function handleVisitSite() {
+    Element.adminVisitSite.addEventListener('click', async e => {
+        e.preventDefault();
+        Util.setActiveNav(e.target);
+        history.pushState(null, null, Route.routePathnames.HOME);
+        showUserNav();
+    });
 }
 
 function handleSignOut() {

@@ -9,7 +9,10 @@ export const menuPurchases = document.getElementById('menu-purchases');
 export const menuSignOut = document.getElementById('menu-signout');
 export const menuCart = document.getElementById('menu-cart');
 export const menuProfile = document.getElementById('menu-profile');
+export const userProfileImage = document.getElementById('user-profile-image');
 export const shoppingCartCount = document.getElementById('shoppingcart-count');
+export const adminUserDashboard = document.getElementById('admin-user-dashboard');
+
 
 
 //forms
@@ -56,6 +59,7 @@ export const adminNavbar = document.querySelector('#admin-nav');
 export const adminDashboard = document.querySelector('#admin-dashboard');
 export const adminUsers = document.querySelector('#admin-users');
 export const adminProducts = document.querySelector('#admin-products');
+export const adminVisitSite = document.querySelector('#admin-visit-site');
 export const adminProfile = document.querySelector('#admin-profile');
 export const adminSignOut = document.querySelector('#admin-sign-out');
 
