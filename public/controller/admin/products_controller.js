@@ -2,9 +2,7 @@ import {
     Product
 } from "../../model/product.js";
 import * as Constant from "../../model/constant.js";
-import {
-    adminDashboard
-} from "../../viewpage/element.js";
+
 // @ts-nocheck
 
 const cf_addProduct = firebase.functions().httpsCallable("cf_addProduct");
