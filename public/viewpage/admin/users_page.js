@@ -143,7 +143,9 @@ export async function users_page() {
 
     // handle new user creation
     Element.userForm.addEventListener('submit', async e => {
+
         e.preventDefault();
+
         // get form data
         const userData = {
             displayName: e.target.firstName.value.trim() + ' ' + e.target.lastName.value.trim(),
@@ -180,6 +182,17 @@ export async function users_page() {
         Element.userModal.title.textContent = 'Create new user';
         Element.userModal.submitBtn.textContent = '✔ Save user';
         await users_page();
+    });
+
+    // reset form when clicking on add user btn
+    document.querySelector('#btn-create-user').addEventListener('click', e => {
+        // set form mode to edit
+        Element.userForm.dataset.editMode = "create";
+        // reset form
+        Element.userForm.reset();
+        // change modal tilte and submit button contents
+        Element.userModal.title.textContent = 'Create new user';
+        Element.userModal.submitBtn.textContent = '✔ Save user';
     });
 }
 
