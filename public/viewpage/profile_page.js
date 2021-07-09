@@ -149,7 +149,7 @@ export async function profile_page() {
             </td>
         <tr>
     </table>
-`
+`;
 
     Element.root.innerHTML = html;
     let photoFile;
@@ -157,7 +157,7 @@ export async function profile_page() {
     const updateProfilePhotoButton = document.getElementById('profile-photo-update-button');
     updateProfilePhotoButton.addEventListener('click', async() => {
         if (!photoFile) {
-            Util.info('No Photo Selected', 'Choose a profile photo')
+            Util.info('No Photo Selected', 'Choose a profile photo');
             return;
         }
         const label = Util.disableButton(updateProfilePhotoButton);
@@ -168,8 +168,8 @@ export async function profile_page() {
                 photoURL
             });
             accountInfo.photoURL = photoURL;
-            Element.menuProfile.innerHTML = `
-                <img src=${accountInfo.photoURL} class="rounded-circle" height="30px">
+            Element.userProfileImage.innerHTML = `
+                <img src=${accountInfo.photoURL} class="rounded-circle img-fluid" height="30px">
             `;
             Util.info('Success!', 'Profile Photo Updated!');
         } catch (e) {
@@ -236,7 +236,7 @@ export async function profile_page() {
                 inputTag.value = accountInfo[key];
             }
 
-        })
+        });
     }
 }
 
@@ -261,8 +261,8 @@ export async function getAccountInfo(user) {
         accountInfo = null;
         return;
     }
-    Element.menuProfile.innerHTML = `
-        <img src=${accountInfo.photoURL} class="rounded-circle" height="30px">
-    `
+    Element.userProfileImage.innerHTML = `
+        <img src=${accountInfo.photoURL} class="rounded-circle img-fluid showdow-sm border-2 border-light profile-image" height="50" width="50">
+    `;
 
 }

@@ -21,8 +21,8 @@
     <div class="my-banner">My Awesome Online Store</div>
 
     <!-- user nav bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="user-nav">
-        <div class="container-fluid">
+    <nav class="top-0 navbar navbar-expand-lg navbar-light bg-light position-sticky" id="user-nav">
+        <div class="container">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -33,33 +33,55 @@
                             Sign In/Up
                         </button>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item guest-link">
                         <a href="#" id="admin-signin" class="nav-link">
                             <i class='mr-2 bx bx-user-circle'></i> Sign in as admin
                         </a>
                     </li>
+                    <!-- <li class="nav-item d-none">
+                        <a href="#" id="admin-visit-dashboard" class="nav-link">
+                            <i class='mr-2 bx bx-user-circle'></i> dashboard
+                        </a>
+                    </li> -->
                     <li class="nav-item">
-                        <button id="menu-home" class="btn btn-outline-primary">
-                            Home
-                        </button>
+                        <a href="#" id="menu-home" class="nav-link">
+                            <i class="mr-2 bx bx-home"></i>Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <button id="menu-purchases" class="btn btn-outline-primary modal-post-auth">
-                            Purchases
-                        </button>
+                        <a href="#" id="menu-purchases" class="nav-link modal-post-auth">
+                            <i class='mr-2 bx bxs-cart-download'></i></i>Purchases
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <button id="menu-signout" class="btn btn-outline-danger modal-post-auth">
-                            Sign Out
-                        </button>
-                    </li>
+
                 </ul>
-                <button id="menu-cart" class="btn btn-outline-success modal-post-auth">
-                    <img src="images/cart.png" with="30px" /> (<span id="shoppingcart-count">0</span>)
+                <button type="button" class="mr-5 btn btn-primary position-relative private-link" id="menu-cart">
+                    <i class="bx bx-cart"></i>
+                    <span class="top-0 position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+                        <span id="shoppingcart-count">0</span>
+                        <span class="visually-hidden">items</span>
+                    </span>
                 </button>
-                <button id="menu-profile" class="btn btn-outline-success modal-post-auth">
-                    Profile
-                </button>
+
+
+                <div class="dropdown text-end avatar private-link">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="user-profile-image" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./images/blank_profile.png" alt="mdo" width="32" height="32" class="rounded-circle img-fluid modal-post-auth profile-image">
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li class="pr-0"><a class="dropdown-item" href="#" id="menu-profile"><i
+                                    class="mr-2 bx bx-user"></i>Profile</a></li>
+                        <li class="pr-0 admin-only">
+                            <a class="dropdown-item" id="admin-user-dashboard" href="#">
+                                <i class="mr-2 bx bxs-dashboard"></i>Dashboard</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="pr-0"><a class="dropdown-item modal-post-auth" href="#" id="menu-signout">Sign
+                                out</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -78,14 +100,17 @@
                 <ul class="mb-2 nav col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0">
                     <li><a href="#" class="px-2 nav-link link-dark nav-link-active" id="admin-dashboard">Dashboard</a>
                     </li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-products">Products</a>
+                    </li>
                     <li><a href="#" class="px-2 nav-link link-dark" id="admin-users">Users</a></li>
-                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-products">Products</a></li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-visit-site">Visit site</a></li>
                 </ul>
 
                 <form class="mb-3 col-12 col-lg-auto mb-lg-0 me-lg-3">
                     <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
                 </form>
 
+                <!-- profile -->
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
@@ -424,7 +449,9 @@
         </div>
     </template>
 
-    <div id="root" class="p-5 m-5 bg-light"></div>
+    <main class="container">
+        <div id="root"></div>
+    </main>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/8.6.8/firebase-app.js"></script>

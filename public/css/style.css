@@ -6,6 +6,11 @@
     background-color: navy;
 }
 
+#user-nav {
+    z-index: 99999;
+    margin-bottom: 2rem;
+}
+
 li:not(.dropdown-menu li) {
     padding-right: 15px;
 }
@@ -43,4 +48,20 @@ li:not(.dropdown-menu li) {
 
 .nav-link-active:active {
     transform: scale(.95);
+}
+
+.profile-image {
+    --size: 2.8rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+}
+
+#menu-cart {
+    right: 2rem;
+}
+
+i {
+    display: inline-block;
+    margin-right: .4rem;
 }
