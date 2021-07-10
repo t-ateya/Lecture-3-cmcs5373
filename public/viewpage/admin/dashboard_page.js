@@ -14,7 +14,7 @@ export function dashboard_page() {
     // show dashboard nav
     showDashboardNav();
     // Element.root.classList.add("container", "bg-white", "mx-auto");
-    Element.root.innerHTML = `<h4 class="mb-4 text-dark">Hello <span class="text-primary font-weight-bold">bless</span> welcome back!<h4>`;
+    Element.root.innerHTML = `<h4 class="mb-4 text-dark">Hello <span class="text-primary font-weight-bold">Ateya,</span> welcome back!<h4>`;
 
     showStats();
 
