@@ -7,7 +7,7 @@
 }
 
 #user-nav {
-    z-index: 99999;
+    z-index: 999;
     margin-bottom: 2rem;
 }
 
@@ -64,4 +64,48 @@ li:not(.dropdown-menu li) {
 i {
     display: inline-block;
     margin-right: .4rem;
+}
+
+
+/* product styles */
+
+.counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* .counter span {
+    --size: 2rem;
+    display: grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: #eee;
+} */
+
+.counter button {
+    --size: 2rem;
+    border: none;
+    background: #f8f8f8;
+    text-align: center;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    transition: all 200ms ease-in-out;
+}
+
+.counter__minus:hover,
+.counter__plus:hover {
+    cursor: pointer;
+    background-color: #dedede;
+}
+
+.counter__minus:active,
+.counter__plus:active {
+    transform: scale(.96);
 }

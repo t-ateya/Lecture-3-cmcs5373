@@ -25,6 +25,10 @@ export let cart;
 export async function home_page() {
     Util.toggleMenuLinks();
     let html = '<h1> Enjoy Shopping! </h1>';
+    html += `<div class="row" id="product-container"></di>`;
+
+
+
 
     let products;
     try {
@@ -40,11 +44,14 @@ export async function home_page() {
         Util.info('Cannot get product info', JSON.stringify(e));
     }
 
+    Element.root.innerHTML = html;
+
+    const productContainer = document.querySelector('#product-container');
     for (let i = 0; i < products.length; i++) {
-        html += buildProductView(products[i], i);
+        productContainer.innerHTML += build(products[i], i);
     }
 
-    Element.root.innerHTML = html;
+
 
     const decForms = document.getElementsByClassName('form-dec-qty');
     for (let i = 0; i < decForms.length; i++) {
@@ -99,6 +106,61 @@ function buildProductView(product, index) {
             </div>
         </div>
   </div>
+    `;
+}
+
+function build(product, index) {
+    return `
+    <!-- card -->
+            <div class="col-md-3">
+                <div class="rounded rounded-lg shadow card border-light">
+                    <img src="${product.imageURL}" alt="product" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h4 class="mb-2 text-danger">${Util.currency(product.price)}</h4>
+                        <p class="mt-0 text-secondary">${product.name}</p>
+                        <div class="mb-2 d-flex justify-content-between align-items-start">
+                            <span class="badge bg-success">${product.discount}% discount</span>
+                            <div class="review">
+                                <div class="review__stars text-warning">
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                </div>
+                                <p class="mt-0 review__count text-secondary small">10 reviews</p>
+                            </div>
+                        </div>
+
+                        <div class="text-secondary d-flex justify-content-between align-items-center">
+                            <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail">details</a>
+                            <div class="extra__counter counter d-flex align-items-center ${Auth.currentUser ? 'd-block' : 'd-none'}">
+                                <form method="post" class="form-inline form-dec-qty">
+                                    <input type="hidden" name="index" value="${index}">
+                                    <button class="text-center counter__plus" type="submit">
+                                        <i class="m-0 bx bx-minus d-inline-block"></i>
+                                    </button>
+                                </form>
+
+                                <span id="qty-${product.docId}" class="px-2 mr-2 text-center counter__value">
+                                    ${product.qty ==null || product.qty == 0 ? 'Add': product.qty}
+                                </span>
+
+                                <form method="post" class="d-inline form-inc-qty">
+                                    <input type="hidden" name="index" value="${index}">
+                                    <button class="text-center counter__minus d-inline-block" type="submit">
+                                        <i class="m-0 bx bx-plus d-inline-block"></i>
+                                    </button>
+                                </form>
+
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- card end-->
     `;
 }
 
