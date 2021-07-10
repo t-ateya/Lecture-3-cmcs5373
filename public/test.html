@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+    <!-- box icons -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- main stylesheet -->
+    <link href="css/style.css" rel="stylesheet" />
+
+    <title>Lesson 3</title>
+</head>
+
+<body>
+    <div class="my-banner">My Awesome Online Store</div>
+
+    <!-- user nav bar -->
+    <nav class="top-0 navbar navbar-expand-lg navbar-light bg-light position-sticky" id="user-nav">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="mb-2 navbar-nav me-auto mb-lg-0">
+                    <li class="nav-item">
+                        <button id="menu-signin" class="btn btn-outline-danger modal-pre-auth" data-bs-toggle="modal" data-bs-target="#modal-signin">
+                            Sign In/Up
+                        </button>
+                    </li>
+                    <li class="nav-item guest-link">
+                        <a href="#" id="admin-signin" class="nav-link">
+                            <i class='mr-2 bx bx-user-circle'></i> Sign in as admin
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item d-none">
+                        <a href="#" id="admin-visit-dashboard" class="nav-link">
+                            <i class='mr-2 bx bx-user-circle'></i> dashboard
+                        </a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a href="#" id="menu-home" class="nav-link">
+                            <i class="mr-2 bx bx-home"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" id="menu-purchases" class="nav-link modal-post-auth">
+                            <i class='mr-2 bx bxs-cart-download'></i></i>Purchases
+                        </a>
+                    </li>
+
+                </ul>
+                <button type="button" class="mr-5 btn btn-primary position-relative private-link" id="menu-cart">
+                    <i class="bx bx-cart"></i>
+                    <span class="top-0 position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+                        <span id="shoppingcart-count">0</span>
+                        <span class="visually-hidden">items</span>
+                    </span>
+                </button>
+
+
+                <div class="dropdown text-end avatar private-link">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="user-profile-image" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./images/blank_profile.png" alt="mdo" width="32" height="32" class="rounded-circle img-fluid modal-post-auth profile-image">
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li class="pr-0"><a class="dropdown-item" href="#" id="menu-profile"><i
+                                    class="mr-2 bx bx-user"></i>Profile</a></li>
+                        <li class="pr-0 admin-only">
+                            <a class="dropdown-item" id="admin-user-dashboard" href="#">
+                                <i class="mr-2 bx bxs-dashboard"></i>Dashboard</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="pr-0"><a class="dropdown-item modal-post-auth" href="#" id="menu-signout">Sign
+                                out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- user nav bar end -->
+
+    <!-- admin navbar -->
+    <header class="p-3 mb-3 border-bottom d-none" id="admin-nav">
+        <div class="container">
+            <div class="flex-wrap d-flex align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="mb-2 d-flex align-items-center mb-lg-0 text-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                        <use xlink:href="#bootstrap" />
+                    </svg>
+                </a>
+
+                <ul class="mb-2 nav col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0">
+                    <li><a href="#" class="px-2 nav-link link-dark nav-link-active" id="admin-dashboard">Dashboard</a>
+                    </li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-products">Products</a>
+                    </li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-users">Users</a></li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-visit-site">Visit site</a></li>
+                </ul>
+
+                <form class="mb-3 col-12 col-lg-auto mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                </form>
+
+                <!-- profile -->
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li class="pr-0"><a class="dropdown-item" href="#" id="adim-profile">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="pr-0"><a class="dropdown-item" href="#" id="admin-sign-out">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- admin navbar end -->
+
+
+
+    <main class="container pt-5 mt-5">
+        <div class="row" id="root">
+            <!-- card -->
+            <div class="col-md-3">
+                <div class="rounded rounded-lg shadow card border-light">
+                    <img src="https://picsum.photos/300/200" alt="product" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="badge bg-success">20% discount</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="price font-weight-bold">
+                                <h4 class="mb-0 text-danger">1150<sup class="font-weight-normal">99</sup></h4>
+                            </div>
+                            <div class="review">
+                                <div class="review__stars text-warning">
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                </div>
+                                <p class="mt-0 review__count text-secondary small">10 reviews</p>
+                            </div>
+                        </div>
+                        <p class="mt-0 text-secondary">Product name</p>
+
+                        <div class="text-secondary d-flex justify-content-between align-items-center">
+                            <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail">details</a>
+                            <div class="extra__counter counter d-flex align-items-center">
+                                <button class="text-center counter__plus">
+                                    <i class="m-0 bx bx-minus d-inline-block"></i>
+                                </button>
+                                <span class="px-2 mr-2 text-center counter__value">0</span>
+                                <button class="text-center counter__minus d-inline-block">
+                                    <i class="m-0 bx bx-plus d-inline-block"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- card end-->
+        </div>
+    </main>
+
+
+    <!--MY Own JS Code-->
+    <script type="module " src="./app.js "></script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js " integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4 " crossorigin="anonymous "></script>
+</body>
+
+</html>
