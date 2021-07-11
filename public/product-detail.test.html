@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+    <!-- box icons -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- main stylesheet -->
+    <link href="css/style.css" rel="stylesheet" />
+
+    <title>Lesson 3</title>
+</head>
+
+<body>
+    <div class="my-banner">My Awesome Online Store</div>
+
+    <!-- user nav bar -->
+    <nav class="top-0 navbar navbar-expand-lg navbar-light bg-light position-sticky" id="user-nav">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="mb-2 navbar-nav me-auto mb-lg-0">
+                    <li class="nav-item">
+                        <button id="menu-signin" class="btn btn-outline-danger modal-pre-auth" data-bs-toggle="modal" data-bs-target="#modal-signin">
+                            Sign In/Up
+                        </button>
+                    </li>
+                    <li class="nav-item guest-link">
+                        <a href="#" id="admin-signin" class="nav-link">
+                            <i class='mr-2 bx bx-user-circle'></i> Sign in as admin
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item d-none">
+                        <a href="#" id="admin-visit-dashboard" class="nav-link">
+                            <i class='mr-2 bx bx-user-circle'></i> dashboard
+                        </a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a href="#" id="menu-home" class="nav-link">
+                            <i class="mr-2 bx bx-home"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" id="menu-purchases" class="nav-link modal-post-auth">
+                            <i class='mr-2 bx bxs-cart-download'></i></i>Purchases
+                        </a>
+                    </li>
+
+                </ul>
+                <button type="button" class="mr-5 btn btn-primary position-relative private-link" id="menu-cart">
+                    <i class="bx bx-cart"></i>
+                    <span class="top-0 position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+                        <span id="shoppingcart-count">0</span>
+                        <span class="visually-hidden">items</span>
+                    </span>
+                </button>
+
+
+                <div class="dropdown text-end avatar private-link">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="user-profile-image" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./images/blank_profile.png" alt="mdo" width="32" height="32" class="rounded-circle img-fluid modal-post-auth profile-image">
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li class="pr-0"><a class="dropdown-item" href="#" id="menu-profile"><i
+                                    class="mr-2 bx bx-user"></i>Profile</a></li>
+                        <li class="pr-0 admin-only">
+                            <a class="dropdown-item" id="admin-user-dashboard" href="#">
+                                <i class="mr-2 bx bxs-dashboard"></i>Dashboard</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="pr-0"><a class="dropdown-item modal-post-auth" href="#" id="menu-signout">Sign
+                                out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- user nav bar end -->
+
+    <!-- admin navbar -->
+    <header class="p-3 mb-3 border-bottom d-none" id="admin-nav">
+        <div class="container">
+            <div class="flex-wrap d-flex align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="mb-2 d-flex align-items-center mb-lg-0 text-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                        <use xlink:href="#bootstrap" />
+                    </svg>
+                </a>
+
+                <ul class="mb-2 nav col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0">
+                    <li><a href="#" class="px-2 nav-link link-dark nav-link-active" id="admin-dashboard">Dashboard</a>
+                    </li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-products">Products</a>
+                    </li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-users">Users</a></li>
+                    <li><a href="#" class="px-2 nav-link link-dark" id="admin-visit-site">Visit site</a></li>
+                </ul>
+
+                <form class="mb-3 col-12 col-lg-auto mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                </form>
+
+                <!-- profile -->
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li class="pr-0"><a class="dropdown-item" href="#" id="adim-profile">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="pr-0"><a class="dropdown-item" href="#" id="admin-sign-out">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- admin navbar end -->
+
+
+
+    <main class="container">
+        <template class="template-product-detail-header">
+            <!-- product detail header -->
+
+            <div class="flex-row px-0 border-0 card body d-flex justify-content-between align-items-center">
+                <h3>Product detail</h3>
+                <div>
+                    <button class="btn btn-sm btn-primary d-none" id="edit-product">
+                        <i class="bx bx-edit"></i>
+                        edit product
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" id="back-home">
+                        <i class="bx bx-left-arrow"></i>
+                        go back
+                    </button>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <!-- product detail header end -->
+        </template>
+
+        <template class="product-detail-body">
+            <!-- product details -->
+            <div class="mt-5 row product-detail">
+                <div class="col-md-4">
+                    <img src="https://picsum.photos/400/300" alt="product" class="rounded rounded-lg img-fluid">
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <!-- left section -->
+                        <ul class="list-unstyled detail col-md-9">
+                            <li class="detail__item">
+                                <p class="mb-0 font-weight-bold">Name:</p>
+                                <p class="text-secondary detail__item__name">Product name here</p>
+                            </li>
+                            <li class="detail__item">
+                                <p class="mb-0 font-weight-bold">Price:</p>
+                                <p class="text-secondary detail__item__price">$250</p>
+                            </li>
+                            <li class="detail__item">
+                                <p class="mb-0 font-weight-bold">Stock:</p>
+                                <p class="text-secondary detail__item__stock">15</p>
+                            </li>
+                            <li class="detail__item">
+                                <p class="mb-0 font-weight-bold">description:</p>
+                                <p class="text-secondary detail__item__description">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi quod nemo autem
+                                </p>
+                            </li>
+                        </ul>
+
+                        <!-- right section -->
+                        <ul class="pr-0 text-right list-unstyled text-secondary col-md-3 right-section">
+                            <li class="text-right">
+                                <p class="font-weight-bold text-dark">Rating</p>
+                                <div class="review">
+                                    <div class="review__stars text-warning">
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                    </div>
+                                    <p class="mt-0 review__rating text-secondary small">2.5/5</p>
+                                </div>
+                            </li>
+                            <li>
+                                <p class="mb-0 font-weight-bold text-dark">Reviews</p>
+                                <p class="review__count">08</p>
+                            </li>
+                            <li class="delete">
+                                <a href="#" class="px-0 btn btn-link text-danger delete__product__button">delete
+                                    product</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- product reviews -->
+                    <div class="pb-3 mt-3 mb-2 reviews">
+                        <h5 class="font-weight-bold">Reviews</h5>
+                        <hr class="bg-secondary">
+
+                        <!-- review list -->
+                        <ul class="p-0 review-list list-unstyled">
+                            <!-- review items -->
+                            review items
+                        </ul>
+                        <!-- review list end -->
+                    </div>
+                    <!-- product reviews end -->
+                </div>
+            </div>
+            <!-- product details end -->
+        </template>
+
+        <template class="template-review-item">
+            <li class="review__item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-start">
+                        <img src="https://picsum.photos/40" alt="avatar of client who reviewed the product"
+                            class="border img-fluid rounded-circle border-primary review__item__image">
+                        <p class="flex-column d-flex">
+                            <span class="review__item__name text-dark font-weight-bold">James brown</span>
+                            <span class="review__item__date text-secondary small">Sept 20th</span>
+                        </p>
+                    </div>
+                    <div class="review__stars text-warning">
+                        <i class="bx bxs-star"></i>
+                        <i class="bx bxs-star"></i>
+                        <i class="bx bxs-star"></i>
+                        <i class="bx bxs-star"></i>
+                        <i class="bx bxs-star"></i>
+                    </div>
+                </div>
+                <p class="review__item__text text-secondary">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, itaque optio libero voluptas minus
+                    illo
+                    delectus fuga praesentium aut explicabo.
+                </p>
+            </li>
+        </template>
+
+    </main>
+
+
+    <!--MY Own JS Code-->
+    <script type="module " src="./app.js "></script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js " integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4 " crossorigin="anonymous "></script>
+</body>
+
+</html>

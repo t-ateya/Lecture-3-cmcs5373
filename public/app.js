@@ -6,7 +6,10 @@ import * as Profile from "./viewpage/profile_page.js";
 import * as Route from "./controller/route.js";
 import * as Admin from "./viewpage/admin/signin.js";
 import * as Product from "./viewpage/admin/products_page.js";
+<<<<<<< HEAD
 
+=======
+>>>>>>> Lecture3-cmsc5373/reviews
 
 Auth.addEventListeners();
 Home.addEventListeners();

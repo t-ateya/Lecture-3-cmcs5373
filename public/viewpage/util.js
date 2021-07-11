@@ -29,6 +29,10 @@ export function disableButton(button) {
     return label;
 }
 
+export function get(className) {
+    return document.querySelector(className);
+}
+
 export function enableButton(button, label) {
     if (label) button.innerHTML = label;
     button.disabled = false;
@@ -63,6 +67,7 @@ export function toggleMenuLinks() {
             Element.adminUserDashboard.addEventListener('click', async e => {
                 try {
                     history.pushState(null, null, Route.routePathnames.DASHBOARD);
+                    Element.root.innerHTML = '<h3>Loading content. Please wait...</h3>';
                     await dashboard_page();
                 } catch (error) {
                     console.log('error: ', error);

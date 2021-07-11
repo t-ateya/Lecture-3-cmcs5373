@@ -281,13 +281,22 @@
                 </div>
                 <div class="modal-body">
                     <form id="form-signin" method="post">
-                        <div>
-                            <input type="email" name="email" placeholder="email address" />
+                        <div class="mb-3 form-group">
+                            <label class="d-block w-100">
+                                <span class="pb-2 d-block text-secondary">Email address</span>
+                                <input type="email" name="email" class="form-control form-control-sm d-block w-100"
+                                    placeholder="email address" />
+                            </label>
+
                         </div>
-                        <div>
-                            <input type="password" name="password" placeholder="enter password" />
+                        <div class="mb-3 form-group">
+                            <label class="d-block w-100">
+                                <span class="pb-2 d-block text-secondary">Password</span>
+                                <input type="password" class="form-control form-control-sm d-block w-100"
+                                    name="password" placeholder="enter password" />
+                            </label>
                         </div>
-                        <div>
+                        <div class="form-group">
                             <button type="submit" class="btn btn-outline-primary">
                                 Sign In
                             </button>
@@ -303,6 +312,7 @@
             </div>
         </div>
     </div>
+    <!-- Modal: Sign In -->
 
     <!-- Modal: Sign Up -->
     <div class="modal fade" id="modal-signup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-signup-title" aria-hidden="true">
@@ -447,6 +457,172 @@
                 </div>
             </div>
         </div>
+    </template>
+    <!-- Modal: Review modal -->
+    <div class="modal fade" id="modal-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-review-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-review-title">Review this product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-review-body">
+                    <form action="#" class="review-form">
+                        <div class="mb-3 form-group">
+                            <label class="mb-2 d-inline-block">Star rating (<span>0</span>/5)</label>
+                            <input type="hidden" name="starRating">
+                            <!-- stars go here -->
+                            <div class="review__stars text-secondary">
+                                <i class="bx bx-sm bxs-star"></i>
+                                <i class="bx bx-sm bxs-star"></i>
+                                <i class="bx bx-sm bxs-star"></i>
+                                <i class="bx bx-sm bxs-star"></i>
+                                <i class="bx bx-sm bxs-star"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="d-block">
+                                Comment <br />
+                                <textarea class="form-control form-control-sm" name="comment" id="comment" cols="30"
+                                    rows="5"></textarea>
+                            </label>
+                        </div>
+                        <div class="mt-4 form-group">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- product templates -->
+    <template class="template-product-detail-header">
+        <!-- product detail header -->
+
+        <div class="flex-row px-0 border-0 card body d-flex justify-content-between align-items-center">
+            <h3>Product detail</h3>
+            <div>
+                <button class="btn btn-sm btn-primary d-none" id="edit-product">
+                    <i class="bx bx-edit"></i>
+                    edit product
+                </button>
+                <button class="btn btn-sm btn-outline-primary" id="back__home">
+                    <i class="bx bx-left-arrow"></i>
+                    go back
+                </button>
+            </div>
+        </div>
+        <hr class="bg-secondary">
+        <!-- product detail header end -->
+    </template>
+
+    <template class="product-detail-body">
+        <!-- product details -->
+        <div class="mt-5 row product-detail">
+            <div class="col-md-4">
+                <img src="https://picsum.photos/400/300" alt="product"
+                    class="rounded rounded-lg img-fluid product__detail__image">
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <!-- left section -->
+                    <ul class="list-unstyled detail col-md-9">
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Name:</p>
+                            <p class="text-secondary detail__item__name">Product name here</p>
+                        </li>
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Price:</p>
+                            <p class="text-secondary detail__item__price">$250</p>
+                        </li>
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Stock:</p>
+                            <p class="text-secondary detail__item__stock">15</p>
+                        </li>
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">description:</p>
+                            <p class="text-secondary detail__item__description">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi quod nemo autem
+                            </p>
+                        </li>
+                    </ul>
+
+                    <!-- right section -->
+                    <ul class="pr-0 text-right list-unstyled text-secondary col-md-3 right-section">
+                        <li class="text-right">
+                            <p class="font-weight-bold text-dark">Rating</p>
+                            <div class="review">
+                                <div class="review__stars text-warning">
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                </div>
+                                <p class="mt-0 review__rating text-secondary small">2.5/5</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="mb-0 font-weight-bold text-dark">Reviews</p>
+                            <p class="review__count">08</p>
+                        </li>
+                        <li class="delete">
+                            <a href="#" class="px-0 btn btn-link text-danger delete__product__button">
+                                delete product
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- product reviews -->
+                <div class="pb-3 mt-3 mb-2 reviews">
+                    <h5 class="font-weight-bold">Reviews</h5>
+                    <hr class="bg-secondary">
+
+                    <!-- review list -->
+                    <ul class="p-0 review-list list-unstyled">
+                        <!-- review items -->
+
+                    </ul>
+                    <!-- review list end -->
+                </div>
+                <!-- product reviews end -->
+            </div>
+        </div>
+        <!-- product details end -->
+    </template>
+
+    <template class="template-review-item">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-start">
+                <img src="https://picsum.photos/40" alt="avatar of client who reviewed the product"
+                    class="border img-fluid rounded-circle border-primary review__item__image">
+                <p class="flex-column d-flex">
+                    <span class="review__item__name text-dark font-weight-bold">James brown</span>
+                    <span class="review__item__date text-secondary small">Sept 20th</span>
+                </p>
+            </div>
+            <div class="review__stars text-warning">
+                <i class="bx bxs-star"></i>
+                <i class="bx bxs-star"></i>
+                <i class="bx bxs-star"></i>
+                <i class="bx bxs-star"></i>
+                <i class="bx bxs-star"></i>
+            </div>
+        </div>
+        <p class="review__item__text text-secondary">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, itaque optio libero voluptas minus
+            illo
+            delectus fuga praesentium aut explicabo.
+        </p>
+        <p class="mt-2 d-flex justify-content-end align-items-center review__buttons">
+            <button class="mr-2 btn btn-link text-underline text-info bg-light edit__review"><i
+                    class="bx bx-pencil"></i>
+                edit</button>
+            <button class="pr-0 mr-0 btn btn-link text-underline text-danger bg-light delete__review"><i
+                    class="bx bx-trash"></i>
+                delete</button>
+        </p>
     </template>
 
     <main class="container">

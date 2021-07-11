@@ -13,13 +13,18 @@ export const routePathnames = {
     ADMIN_LOGIN: '/admin/login',
     USERS: '/admin/users',
     DASHBOARD: '/admin/dashboard',
-    PRODUCTS: '/admin/products'
+    PRODUCTS: '/admin/products',
+    PRODUCT_DETAIL: '/products/'
 };
 
 //let's define a mapping b/n pathname and the corresponding function
 export const routes = [{
         pathname: routePathnames.HOME,
         page: Home.home_page
+    },
+    {
+        pathname: routePathnames.PRODUCT_DETAIL,
+        page: Home.product_details
     },
     {
         pathname: routePathnames.PURCHASE,
