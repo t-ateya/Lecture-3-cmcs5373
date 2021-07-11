@@ -21,6 +21,7 @@ export const formSignup = document.getElementById('form-signup');
 export const formSignupPasswordError = document.getElementById('form-signup-password-error');
 export const userForm = document.getElementById('user-form');
 console.log('user form: ', userForm);
+export const reviewForm = document.querySelector('.review-form');
 
 export const buttonSignup = document.getElementById('button-signup');
 
@@ -49,6 +50,11 @@ export const userModal = {
     title: document.querySelector('#modal-user-title'),
     submitBtn: document.querySelector('#form-user-submit-btn')
 };
+
+/* templates */
+export const templateProdutDetailHeader = document.querySelector('.template-product-detail-header');
+export const templateProdutDetailBody = document.querySelector('.product-detail-body');
+export const templateReviewItem = document.querySelector('.template-review-item');
 
 
 /* Admin elements */
@@ -92,5 +98,9 @@ export const modalAddProduct = new bootstrap.Modal(document.getElementById('moda
 });
 
 export const modalEditProduct = new bootstrap.Modal(document.getElementById('modal-edit-product'), {
+    backdrop: 'static'
+});
+
+export const modalReview = new bootstrap.Modal(document.getElementById('modal-review'), {
     backdrop: 'static'
 });

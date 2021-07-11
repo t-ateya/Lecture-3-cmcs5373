@@ -4,12 +4,11 @@ import * as FirebaseController from '../controller/firebase_controller.js';
 import * as Constant from '../model/constant.js';
 import * as Util from './util.js';
 import * as Auth from '../controller/auth.js';
+import * as ProductDetails from "./product_detail.js";
 import {
     ShoppingCart
 } from '../model/ShoppingCart.js';
-import {
-    dashboard_page
-} from './admin/dashboard_page.js';
+
 
 export function addEventListeners() {
     Element.menuHome.addEventListener('click', async() => {
@@ -28,11 +27,13 @@ export async function home_page() {
     html += `<div class="row" id="product-container"></di>`;
 
 
-
-
     let products;
     try {
         products = await FirebaseController.getProductList();
+
+        // push products to local storage
+        localStorage.setItem("products", JSON.stringify(products));
+
         if (cart) {
             cart.items.forEach(item => {
                 const product = products.find(p => item.docId == p.docId);
@@ -48,10 +49,11 @@ export async function home_page() {
 
     const productContainer = document.querySelector('#product-container');
     for (let i = 0; i < products.length; i++) {
-        productContainer.innerHTML += build(products[i], i);
+        productContainer.innerHTML += buildProductView(products[i], i);
     }
 
-
+    // handle effect when user click on product details
+    handleProductDetailEvents(products);
 
     const decForms = document.getElementsByClassName('form-dec-qty');
     for (let i = 0; i < decForms.length; i++) {
@@ -83,38 +85,10 @@ export async function home_page() {
 
 function buildProductView(product, index) {
     return `
-    <div class="card" style="width: 18rem; display: inline-block;">
-        <img src="${product.imageURL}" class="card-img-top">
-        <div class="card-body">
-            <h5 class="card-title">${product.name}</h5>
-            <p class="card-text">
-                ${Util.currency(product.price)} <br>
-                ${product.summary}
-            </p>
-            <div class="container pt-3 bg-light ${Auth.currentUser ? 'd-block' : 'd-none'}">  
-                <form method="post" class="d-inline form-dec-qty">
-                    <input type="hidden" name="index" value="${index}">
-                    <button class="btn btn-outline-danger" type="submit">&minus;</button>
-                </form>
-                    <div id="qty-${product.docId}" class="container rounded text-center text-white bg-primary d-inline-block w-50">
-                        ${product.qty ==null || product.qty == 0 ? 'Add': product.qty}
-                    </div>
-                <form method="post" class="d-inline form-inc-qty">
-                    <input type="hidden" name="index" value="${index}">
-                    <button class="btn btn-outline-primary" type="submit">&plus;</button>
-                </form>
-            </div>
-        </div>
-  </div>
-    `;
-}
-
-function build(product, index) {
-    return `
-    <!-- card -->
-            <div class="col-md-3">
-                <div class="rounded rounded-lg shadow card border-light">
-                    <img src="${product.imageURL}" alt="product" class="card-img-top img-fluid">
+        <!-- card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="rounded rounded-lg shadow card border-light mb-4">
+                    <img src="${product.imageURL}" alt="product" class="card-img-top img-fluid product-image">
                     <div class="card-body">
                         <h4 class="mb-2 text-danger">${Util.currency(product.price)}</h4>
                         <p class="mt-0 text-secondary">${product.name}</p>
@@ -133,7 +107,7 @@ function build(product, index) {
                         </div>
 
                         <div class="text-secondary d-flex justify-content-between align-items-center">
-                            <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail">details</a>
+                            <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail" data-product-id="${product.docId}">details</a>
                             <div class="extra__counter counter d-flex align-items-center ${Auth.currentUser ? 'd-block' : 'd-none'}">
                                 <form method="post" class="form-inline form-dec-qty">
                                     <input type="hidden" name="index" value="${index}">
@@ -152,17 +126,37 @@ function build(product, index) {
                                         <i class="m-0 bx bx-plus d-inline-block"></i>
                                     </button>
                                 </form>
-
-
-                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- card end-->
+        <!-- card end-->
     `;
 }
+
+function handleProductDetailEvents(products) {
+    const detailLinks = document.querySelectorAll(".extra__detail");
+    detailLinks.forEach(link => link.addEventListener('click', e => {
+        e.preventDefault();
+        const productId = e.target.dataset.productId;
+        const selectedProduct = products.find(p => p.docId === productId);
+        localStorage.setItem('product', JSON.stringify(selectedProduct));
+        // Route to product details page.
+        history.pushState(null, productId, Route.routePathnames.PRODUCT_DETAIL);
+        product_details();
+    }));
+}
+
+export function product_details() {
+    Element.root.innerHTML = `loading...`;
+    // get the product from local storage
+    const productData = localStorage.getItem('product');
+    const product = JSON.parse(productData);
+    ProductDetails.showProductDetail(product);
+}
+
+
 
 export function initShoppingCart() {
     const cartString = window.localStorage.getItem('cart-' + Auth.currentUser.uid);
