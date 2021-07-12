@@ -7,6 +7,8 @@ import {
     Review
 } from '../model/Review.js';
 
+import * as ReviewsController from '../controller/reviews_controller.js';
+
 
 export function showProductDetail(product) {
     Element.root.innerHTML = '';
@@ -50,15 +52,28 @@ export function showProductDetail(product) {
     Element.root.append(pageHeader, pageBody);
 
     // handle review form events
-    Element.reviewForm.addEventListener('submit', e => {
+    Element.reviewForm.addEventListener('submit', async e => {
         e.preventDefault();
         const starRating = e.target.starRating.value;
         const comment = e.target.comment.value;
         const review = new Review({
             starRating,
             comment,
-            author: product.docId
+            product: product.docId,
+            author: Auth.currentUser.email,
         });
-        console.log('review obj: ', review);
+        try {
+            const feedback= await ReviewsController.addReview(review);
+            if (feedback){
+                const reviewList = await ReviewsController.getReviewList();
+                console.log('reviewList: ', reviewList);
+
+            }
+            
+            
+        } catch (error) {
+            console.log('feebackerror: ',error)
+        }
+       
     });
 }
