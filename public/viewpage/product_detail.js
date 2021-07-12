@@ -7,7 +7,7 @@ import { Review } from "../model/Review.js";
 
 import * as ReviewsController from "../controller/reviews_controller.js";
 
-export function showProductDetail(product) {
+export async function showProductDetail(product) {
   Element.root.innerHTML = "";
   // clone the page header
   const pageHeader = Element.templateProdutDetailHeader.cloneNode(true).content;
@@ -29,13 +29,11 @@ export function showProductDetail(product) {
     product.summary;
   pageBody.querySelector(".product__detail__image").src = product.imageURL;
 
-  pageBody.querySelector(".review-list").appendChild(li);
-
-  console.log(reviewItem);
+  //console.log(reviewItem);
 
   // clone the list
   Element.root.append(pageHeader, pageBody);
-
+  await showProductReviews();
   // handle review form events
   Element.reviewForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -49,38 +47,47 @@ export function showProductDetail(product) {
     });
     try {
       let reviewList;
-      const label = Util.disableButton(e.target.submitReview);
       const feedback = await ReviewsController.addReview(review);
       if (feedback) {
         reviewList = await ReviewsController.getReviewList();
         console.log("reviewList: ", reviewList);
       }
+      const label = Util.disableButton(e.target.submitReview);
+      await showProductReviews();
       Util.enableButton(e.target.submitReview, label);
       e.target.reset();
       Element.modalReview.hide();
-      reviewList.forEach((item) => {
-        const li = document.createElement("li");
-        // add delete event listener
-        li.querySelector(".delete__review").addEventListener("click", () => {
-          confirm("Are you sure you want to delete this review?");
-        });
-
-        // edit delete event listener
-        li.querySelector(".edit__review").addEventListener("click", () => {
-          Element.modalReview.show();
-        });
-        li.classList.add("review__item");
-        const reviewItem = Element.templateReviewItem.cloneNode(true).content;
-        reviewItem.querySelector(".review__item__name").textContent =
-          item.author;
-        reviewItem.querySelector(".review__item__date").textContent =
-          item.timestamp;
-        reviewItem.querySelector(".review__item__text").textContent =
-          item.comment;
-        li.appendChild(reviewItem);
-      });
     } catch (error) {
       console.log("feebackerror: ", error);
     }
+  });
+}
+
+async function showProductReviews() {
+  let reviewList;
+  const feedback = await ReviewsController.addReview(review);
+  if (feedback) {
+    reviewList = await ReviewsController.getReviewList();
+    console.log("reviewList: ", reviewList);
+  }
+  reviewList.forEach((item) => {
+    const li = document.createElement("li");
+    // add delete event listener
+    li.querySelector(".delete__review").addEventListener("click", () => {
+      confirm("Are you sure you want to delete this review?");
+    });
+
+    // edit delete event listener
+    li.querySelector(".edit__review").addEventListener("click", () => {
+      Element.modalReview.show();
+    });
+    li.classList.add("review__item");
+    const reviewItem = Element.templateReviewItem.cloneNode(true).content;
+    reviewItem.querySelector(".review__item__name").textContent = item.author;
+    reviewItem.querySelector(".review__item__date").textContent =
+      item.timestamp;
+    reviewItem.querySelector(".review__item__text").textContent = item.comment;
+    li.appendChild(reviewItem);
+    pageBody.querySelector(".review-list").appendChild(li);
   });
 }

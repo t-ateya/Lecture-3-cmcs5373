@@ -148,7 +148,7 @@ function handleProductDetailEvents(products) {
     }));
 }
 
-export function product_details() {
+export async function product_details() {
     Element.root.innerHTML = `loading...`;
     // get the product from local storage
     const productData = localStorage.getItem('product');
