@@ -65,8 +65,8 @@ export async function showProductDetail(product) {
             const submitReviewBtn = Element.reviewForm.querySelector('.btn');
             const label = Util.disableButton(submitReviewBtn);
             // check if user is updating or creating a review
-            if (e.target.dateset.mode === 'create') {
-                await ReviewsController.addReview(review);
+            if (Element.reviewForm.dataset.mode === 'create') {
+                await ReviewsController.addReview(review.serializeForUpdate());
             } else {
                 const ref = await ReviewsController.editReview(review);
                 console.log('Update successful: ', ref);
@@ -126,7 +126,7 @@ async function showProductReviews() {
                 } else {
                     reviewItem.querySelector('.review__buttons').classList.remove('d-none');
                     // save this review to local storage
-                    localStorage.setItem('review', JSON.stringify(reviewItem));
+                    localStorage.setItem('review', JSON.stringify(item));
                 }
                 li.appendChild(reviewItem);
 

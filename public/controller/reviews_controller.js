@@ -1,4 +1,7 @@
 import * as Constant from "../model/constant.js";
+import {
+    Review
+} from "../model/Review.js";
 
 export async function addReview(data) {
     try {
@@ -21,11 +24,13 @@ export async function editReview(data) {
         data.timestamp = firebase.firestore.FieldValue.serverTimestamp();
         const snapShot = await firebase.firestore()
             .collection(Constant.collectionNames.REVIEWS)
-            .where('product', '==', data.docId);
+            .where('product', '==', data.product);
+
+        const updatedData = new Review(data);
 
         const ref = await firebase.firestore()
             .collection(Constant.collectionNames.REVIEWS)
-            .doc(snapShot.ref).update(data);
+            .doc(snapShot.ref).update(data.serialize());
 
         return ref.docId;
 
