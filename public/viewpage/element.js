@@ -20,9 +20,7 @@ export const formSignin = document.getElementById('form-signin');
 export const formSignup = document.getElementById('form-signup');
 export const formSignupPasswordError = document.getElementById('form-signup-password-error');
 export const userForm = document.getElementById('user-form');
-console.log('user form: ', userForm);
 export const reviewForm = document.querySelector('.review-form');
-
 export const buttonSignup = document.getElementById('button-signup');
 
 //modals

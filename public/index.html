@@ -467,9 +467,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modal-review-body">
-                    <form action="#" class="review-form">
+                    <form action="#" class="review-form" data-mode="create">
                         <div class="mb-3 form-group">
-                            <label class="mb-2 d-inline-block">Star rating (<span>0</span>/5)</label>
+                            <label class="mb-2 d-inline-block">Star rating (<span
+                                    class="review__start__rating">0</span>/5)</label>
                             <input type="hidden" name="starRating">
                             <!-- stars go here -->
                             <div class="review__stars text-secondary">
@@ -522,6 +523,7 @@
             <div class="col-md-4">
                 <img src="https://picsum.photos/400/300" alt="product"
                     class="rounded rounded-lg img-fluid product__detail__image">
+                <button class="mt-4 btn btn-outline-success btn-sm add__review__button">Add a review</button>
             </div>
             <div class="col-md-8">
                 <div class="row">
@@ -602,7 +604,7 @@
                     <span class="review__item__date text-secondary small">Sept 20th</span>
                 </p>
             </div>
-            <div class="review__stars text-warning">
+            <div class="review__stars text-secondary">
                 <i class="bx bxs-star"></i>
                 <i class="bx bxs-star"></i>
                 <i class="bx bxs-star"></i>
@@ -623,6 +625,18 @@
                     class="bx bx-trash"></i>
                 delete</button>
         </p>
+    </template>
+
+    <template class="template-no-reviews">
+        <div class="py-4 text-center border jumbotron bg-light rounded-3">
+            <h1 class="display-3">Ooops...</h1>
+            <p class="lead">There are no reviews for this product yet.</p>
+            <hr class="my-2">
+            <p>We noticed, you have already purchased this product before. 😊 would you like to submit a review?</p>
+            <p class="lead">
+                <button class="btn btn-primary btn-lg" role="button">Review this product.</button>
+            </p>
+        </div>
     </template>
 
     <main class="container">

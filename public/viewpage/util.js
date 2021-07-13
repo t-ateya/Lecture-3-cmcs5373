@@ -42,6 +42,20 @@ export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export function generateDateFromTimestamp(firebaseTimestamp) {
+    const date = new Date(firebaseTimestamp.toDate());
+    const day = date.getDay();
+    const month = date.toLocaleString('default', {
+        month: 'short'
+    });
+    const year = date.getFullYear();
+    return {
+        day,
+        month,
+        year
+    };
+}
+
 export function setActiveNav(navLink) {
     const currentActiveNav = document.querySelector('.nav-link-active');
     currentActiveNav.classList.remove('nav-link-active');
