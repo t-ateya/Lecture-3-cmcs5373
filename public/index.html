@@ -535,7 +535,7 @@
                         </li>
                         <li class="detail__item">
                             <p class="mb-0 font-weight-bold">Price:</p>
-                            <p class="text-secondary detail__item__price">$250</p>
+                            <p class="text-secondary detail__item__price">loading...</p>
                         </li>
                         <li class="detail__item">
                             <p class="mb-0 font-weight-bold">Stock:</p>
@@ -552,9 +552,9 @@
                     <!-- right section -->
                     <ul class="pr-0 text-right list-unstyled text-secondary col-md-3 right-section">
                         <li class="text-right">
-                            <p class="font-weight-bold text-dark">Rating</p>
+                            <p class="font-weight-bold text-dark">Average Rating</p>
                             <div class="review">
-                                <div class="review__stars text-warning">
+                                <div class="review__stars average__star__rating text-secondary">
                                     <i class="bx bxs-star"></i>
                                     <i class="bx bxs-star"></i>
                                     <i class="bx bxs-star"></i>
@@ -566,7 +566,7 @@
                         </li>
                         <li>
                             <p class="mb-0 font-weight-bold text-dark">Reviews</p>
-                            <p class="review__count">08</p>
+                            <p class="review__count">loading...</p>
                         </li>
                         <li class="delete">
                             <a href="#" class="px-0 btn btn-link text-danger delete__product__button">
@@ -636,6 +636,53 @@
             <p class="lead">
                 <button class="btn btn-primary btn-lg" role="button">Review this product.</button>
             </p>
+        </div>
+    </template>
+
+    <template class="template-product-card">
+        <div class="rounded rounded-lg shadow card border-light mb-4">
+            <img src="${product.imageURL}" alt="product" class="card-img-top img-fluid product-image">
+            <div class="card-body">
+                <h4 class="mb-2 text-danger"><span class="product__price">loading...</span></h4>
+                <p class="mt-0 text-secondary product__name">loading...</p>
+                <div class="mb-2 d-flex justify-content-between align-items-start">
+                    <span class="badge bg-success product__discount d-none"><span
+                            class="product__discount_text"></span>% discount</span>
+                    <div class="review">
+                        <div class="review__stars product__average__review text-secondary">
+                            <i class="bx bxs-star"></i>
+                            <i class="bx bxs-star"></i>
+                            <i class="bx bxs-star"></i>
+                            <i class="bx bxs-star"></i>
+                            <i class="bx bxs-star"></i>
+                        </div>
+                        <p class="mt-0 review__count text-secondary small">loading...</p>
+                    </div>
+                </div>
+
+                <div class="text-secondary d-flex justify-content-between align-items-center">
+                    <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail">details</a>
+                    <div class="extra__counter counter d-flex align-items-center d-none">
+                        <form method="post" class="form-inline form-dec-qty">
+                            <input type="hidden" name="index">
+                            <button class="text-center counter__plus" type="submit">
+                                <i class="m-0 bx bx-minus d-inline-block"></i>
+                            </button>
+                        </form>
+
+                        <span class="px-2 mr-2 text-center counter__value">
+                            0
+                        </span>
+
+                        <form method="post" class="d-inline form-inc-qty">
+                            <input type="hidden" name="index">
+                            <button class="text-center counter__minus d-inline-block" type="submit">
+                                <i class="m-0 bx bx-plus d-inline-block"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </template>
 

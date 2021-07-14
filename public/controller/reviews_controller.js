@@ -9,7 +9,7 @@ export async function addReview(data) {
         const ref = await firebase
             .firestore()
             .collection(Constant.collectionNames.REVIEWS)
-            .add(data.serialize());
+            .add(data);
         return ref;
     } catch (error) {
         if (Constant.DeV) {
@@ -21,19 +21,19 @@ export async function addReview(data) {
 
 export async function editReview(data) {
     try {
-        data.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-        const snapShot = await firebase.firestore()
+        const snapShots = await firebase.firestore()
             .collection(Constant.collectionNames.REVIEWS)
-            .where('product', '==', data.product);
+            .where('product', '==', data.product)
+            .get();
 
-        const updatedData = new Review(data);
+        let ref;
+        snapShots.forEach(doc => {
+            ref = doc.id;
+        });
 
-        const ref = await firebase.firestore()
+        await firebase.firestore()
             .collection(Constant.collectionNames.REVIEWS)
-            .doc(snapShot.ref).update(data.serialize());
-
-        return ref.docId;
-
+            .doc(ref).update(data);
     } catch (error) {
         if (Constant.DeV) {
             console.log(error);
@@ -48,7 +48,7 @@ export async function getReviewList() {
 
         // .where('product', '==', selectedProduct.docId)
         const snapShot = await firebase.firestore().collection(Constant.collectionNames.REVIEWS)
-            .orderBy('timestamp')
+            .orderBy('timestamp', 'desc')
             .get();
         snapShot.forEach((doc) => {
             const review = doc.data();
@@ -62,4 +62,15 @@ export async function getReviewList() {
             console.log("getReviewList error!", error);
         }
     }
+}
+
+export function getAverageRating(reviewList, selectedProduct) {
+    const numberOfReviews = reviewList.filter(r => r.product === selectedProduct.docId);
+    const totalStars = numberOfReviews.reduce((sum, review) => Number(review.stars) + sum, 0);
+    const averageRating = numberOfReviews.length > 0 ? Math.ceil(totalStars / numberOfReviews.length) : 0;
+    return averageRating;
+}
+
+export function getProductReviewList(reviewList, product) {
+    return reviewList.filter(review => review.product === product.docId);
 }

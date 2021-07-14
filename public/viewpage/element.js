@@ -53,6 +53,7 @@ export const userModal = {
 export const templateProdutDetailHeader = document.querySelector('.template-product-detail-header');
 export const templateProdutDetailBody = document.querySelector('.product-detail-body');
 export const templateReviewItem = document.querySelector('.template-review-item');
+export const templateProductCard = document.querySelector('.template-product-card');
 
 
 /* Admin elements */

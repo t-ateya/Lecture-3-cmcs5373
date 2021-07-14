@@ -1,5 +1,4 @@
 import * as Element from "./element.js";
-import * as Route from "../controller/route.js";
 import * as Constant from "../model/constant.js";
 import * as Util from "./util.js";
 import * as Auth from "../controller/auth.js";
@@ -20,6 +19,7 @@ export async function showProductDetail(product) {
 
     // clone the page body
     const pageBody = Element.templateProdutDetailBody.cloneNode(true).content;
+    const addReviewBtn = pageBody.querySelector('.add__review__button');
     pageBody.querySelector(".detail__item__name").textContent = product.name;
     pageBody.querySelector(
         ".detail__item__price"
@@ -38,7 +38,7 @@ export async function showProductDetail(product) {
     }
 
     // listen to add review event
-    pageBody.querySelector('.add__review__button').addEventListener('click', e => {
+    addReviewBtn.addEventListener('click', e => {
         Element.modalReview.show();
         // add star rating event listener
         setFormMode(Element.reviewForm, 'create');
@@ -66,9 +66,9 @@ export async function showProductDetail(product) {
             const label = Util.disableButton(submitReviewBtn);
             // check if user is updating or creating a review
             if (Element.reviewForm.dataset.mode === 'create') {
-                await ReviewsController.addReview(review.serializeForUpdate());
+                await ReviewsController.addReview(review.serialize());
             } else {
-                const ref = await ReviewsController.editReview(review);
+                const ref = await ReviewsController.editReview(review.serializeForUpdate());
                 console.log('Update successful: ', ref);
             }
 
@@ -90,13 +90,31 @@ function setFormMode(form, mode) {
     form.dataset.mode = mode;
 }
 
+function updateReviewCount(reviewList, selectedProduct) {
+    const count = reviewList.filter(r => r.product === selectedProduct.docId).length;
+    document.querySelector('.review__count').textContent = count < 10 ? `0${count}` : count;
+}
+
 async function showProductReviews() {
     const reviewList = await ReviewsController.getReviewList();
-    document.querySelector(".review-list").innerHTML = '';
     const selectedProduct = JSON.parse(localStorage.getItem('product'));
+    updateReviewCount(reviewList, selectedProduct);
+
+    // update average rating for product
+    const averageRating = ReviewsController.getAverageRating(reviewList, selectedProduct);
+    document.querySelector('.review__rating').textContent = `${averageRating}/5`;
+
+    // highlight average star rating
+    // average__star__rating
+    const stars = Array.from(document.querySelectorAll('.average__star__rating .bxs-star'));
+    stars.filter((star, index) => index < averageRating)
+        .map(star => star.classList.add('text-warning'));
+
+    document.querySelector(".review-list").innerHTML = '';
     if (reviewList && reviewList.length > 0) {
         const currentProductReviews = reviewList.filter(review => review.product === selectedProduct.docId);
         if (currentProductReviews.length > 0) {
+            /* loop through reviews */
             currentProductReviews.forEach((item) => {
                 const li = document.createElement("li");
                 li.classList.add("review__item");
@@ -153,6 +171,13 @@ async function showProductReviews() {
                     highLightStars(reviewFormStarList, currentUserReview.stars);
                 });
             });
+
+            // check if review include current user email
+            if (currentProductReviews.find(review => review.author === Auth.currentUser.email)) {
+                document.querySelector('.add__review__button').classList.add('d-none');
+            } else {
+                document.querySelector('.add__review__button').classList.remove('d-none');
+            }
         } else {
             showNoReviews();
             // add star rating event listener

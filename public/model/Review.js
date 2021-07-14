@@ -31,7 +31,7 @@ export class Review {
     serializeForUpdate() {
         const p = {};
         if (this.stars) {
-            p.name = this.stars;
+            p.stars = this.stars;
         }
         if (this.comment) {
             p.comment = this.comment;

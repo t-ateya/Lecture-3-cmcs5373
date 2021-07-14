@@ -1,6 +1,7 @@
 import * as Element from './element.js';
 import * as Route from '../controller/route.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
+import * as ReviewsController from '../controller/reviews_controller.js';
 import * as Constant from '../model/constant.js';
 import * as Util from './util.js';
 import * as Auth from '../controller/auth.js';
@@ -26,6 +27,7 @@ export async function home_page() {
     let html = '<h1> Enjoy Shopping! </h1>';
     html += `<div class="row" id="product-container"></di>`;
 
+    initShoppingCart();
 
     let products;
     try {
@@ -46,93 +48,93 @@ export async function home_page() {
     }
 
     Element.root.innerHTML = html;
-
     const productContainer = document.querySelector('#product-container');
+    productContainer.innerHTML = '';
     for (let i = 0; i < products.length; i++) {
-        productContainer.innerHTML += buildProductView(products[i], i);
+        await buildProductView(products[i]);
     }
 
     // handle effect when user click on product details
     handleProductDetailEvents(products);
-
-    const decForms = document.getElementsByClassName('form-dec-qty');
-    for (let i = 0; i < decForms.length; i++) {
-        decForms[i].addEventListener('submit', e => {
-            e.preventDefault();
-            const p = products[e.target.index.value];
-            //dec(remove) p to shoppingcart
-            cart.removeItem(p);
-            document.getElementById('qty-' + p.docId).innerHTML =
-                (p.qty == null || p.qty == 0) ? 'Add' : p.qty;
-            Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-
-        });
-    }
-
-    const incForms = document.getElementsByClassName('form-inc-qty');
-    for (let i = 0; i < incForms.length; i++) {
-        incForms[i].addEventListener('submit', e => {
-            e.preventDefault();
-            const p = products[e.target.index.value];
-            //add p to shoppingcart
-            cart.addItem(p);
-            document.getElementById('qty-' + p.docId).innerHTML = p.qty;
-            Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-
-        });
-    }
 }
 
-function buildProductView(product, index) {
-    return `
-        <!-- card -->
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="rounded rounded-lg shadow card border-light mb-4">
-                    <img src="${product.imageURL}" alt="product" class="card-img-top img-fluid product-image">
-                    <div class="card-body">
-                        <h4 class="mb-2 text-danger">${Util.currency(product.price)}</h4>
-                        <p class="mt-0 text-secondary">${product.name}</p>
-                        <div class="mb-2 d-flex justify-content-between align-items-start">
-                            <span class="badge bg-success">${product.discount}% discount</span>
-                            <div class="review">
-                                <div class="review__stars text-warning">
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                </div>
-                                <p class="mt-0 review__count text-secondary small">10 reviews</p>
-                            </div>
-                        </div>
+async function buildProductView(product) {
+    // set qty to 0 of this product
+    product.qty = 0;
+    const productContainer = document.querySelector('#product-container');
+    const cardContainer = document.createElement('div');
+    cardContainer.classList.add('col-12', 'col-md-6', 'col-lg-3');
 
-                        <div class="text-secondary d-flex justify-content-between align-items-center">
-                            <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail" data-product-id="${product.docId}">details</a>
-                            <div class="extra__counter counter d-flex align-items-center ${Auth.currentUser ? 'd-block' : 'd-none'}">
-                                <form method="post" class="form-inline form-dec-qty">
-                                    <input type="hidden" name="index" value="${index}">
-                                    <button class="text-center counter__plus" type="submit">
-                                        <i class="m-0 bx bx-minus d-inline-block"></i>
-                                    </button>
-                                </form>
+    const productCard = Element.templateProductCard.cloneNode(true).content;
 
-                                <span id="qty-${product.docId}" class="px-2 mr-2 text-center counter__value">
-                                    ${product.qty ==null || product.qty == 0 ? 'Add': product.qty}
-                                </span>
+    productCard.querySelector('.product__price').textContent = Util.currency(product.price);
+    productCard.querySelector('.product__name').textContent = product.name;
+    productCard.querySelector('.product-image').src = product.imageURL;
+    productCard.querySelector('.extra__detail').dataset.productId = product.docId;
+    productCard.querySelector('.counter__value').id = `qty-${product.docId}`;
+    const counterForm = productCard.querySelector('.extra__counter');
 
-                                <form method="post" class="d-inline form-inc-qty">
-                                    <input type="hidden" name="index" value="${index}">
-                                    <button class="text-center counter__minus d-inline-block" type="submit">
-                                        <i class="m-0 bx bx-plus d-inline-block"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <!-- card end-->
-    `;
+    const minusProductForm = productCard.querySelector('.form-dec-qty');
+    const addProductForm = productCard.querySelector('.form-inc-qty');
+
+    minusProductForm.addEventListener('submit', e => {
+        e.preventDefault();
+
+        // subtract product qty
+        product.qty += 1;
+        // e.target.index.value;
+        //dec(remove) p to shoppingcart
+        cart.removeItem(product);
+        productCard.querySelector('.counter__value').textContent =
+            (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
+
+        Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+    });
+
+    addProductForm.addEventListener('submit', e => {
+        e.preventDefault();
+        // subtract product qty
+        product.qty -= 1;
+        // e.target.index.value;
+        //dec(remove) p to shoppingcart
+        cart.addItem(product);
+        productCard.querySelector('.counter__value').textContent =
+            (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
+
+        Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+    });
+
+    if (Auth.currentUser) {
+        counterForm.classList.remove('d-none');
+    } else {
+        counterForm.classList.add('d-none');
+    }
+
+    if (product.discount > 0) {
+        productCard
+            .querySelector('.product__discount')
+            .classList.remove('d-none');
+        productCard
+            .querySelector('.product__discount_text')
+            .textContent = product.discount;
+    } else {
+        productCard
+            .querySelector('.product__discount')
+            .classList.add('d-none');
+    }
+
+    const reviewList = await ReviewsController.getReviewList();
+    const averageStarRating = ReviewsController.getAverageRating(reviewList, product);
+    const productReviewList = ReviewsController.getProductReviewList(reviewList, product);
+    productCard.querySelector('.review__count').textContent = `${productReviewList.length} reviews`;
+    // highlight average star rating
+    // average__star__rating
+    const stars = Array.from(document.querySelectorAll('.product__average__review .bxs-star'));
+    stars.filter((_star, index) => index < averageStarRating)
+        .map(star => star.classList.add('text-warning'));
+
+    cardContainer.appendChild(productCard);
+    productContainer.appendChild(cardContainer);
 }
 
 function handleProductDetailEvents(products) {
