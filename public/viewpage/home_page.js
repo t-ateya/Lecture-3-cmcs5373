@@ -51,14 +51,66 @@ export async function home_page() {
     const productContainer = document.querySelector('#product-container');
     productContainer.innerHTML = '';
     for (let i = 0; i < products.length; i++) {
-        await buildProductView(products[i], productContainer);
+        productContainer.innerHTML += buildProductView(products[i], productContainer);
     }
 
     // handle effect when user click on product details
     handleProductDetailEvents(products);
 }
 
-async function buildProductView(product, container) {
+function buildProductView(product, index) {
+    return `
+        <!-- card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="rounded rounded-lg shadow card border-light mb-4">
+                    <img src="${product.imageURL}" alt="product" class="card-img-top img-fluid product-image">
+                    <div class="card-body">
+                        <h4 class="mb-2 text-danger">${Util.currency(product.price)}</h4>
+                        <p class="mt-0 text-secondary">${product.name}</p>
+                        <div class="mb-2 d-flex justify-content-between align-items-start">
+                            <span class="badge bg-success">${product.discount}% discount</span>
+                            <div class="review">
+                                <div class="review__stars text-warning">
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                </div>
+                                <p class="mt-0 review__count text-secondary small">10 reviews</p>
+                            </div>
+                        </div>
+
+                        <div class="text-secondary d-flex justify-content-between align-items-center">
+                            <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail" data-product-id="${product.docId}">details</a>
+                            <div class="extra__counter counter d-flex align-items-center ${Auth.currentUser ? 'd-block' : 'd-none'}">
+                                <form method="post" class="form-inline form-dec-qty">
+                                    <input type="hidden" name="index" value="${index}">
+                                    <button class="text-center counter__plus" type="submit">
+                                        <i class="m-0 bx bx-minus d-inline-block"></i>
+                                    </button>
+                                </form>
+
+                                <span id="qty-${product.docId}" class="px-2 mr-2 text-center counter__value">
+                                    ${product.qty ==null || product.qty == 0 ? 'Add': product.qty}
+                                </span>
+
+                                <form method="post" class="d-inline form-inc-qty">
+                                    <input type="hidden" name="index" value="${index}">
+                                    <button class="text-center counter__minus d-inline-block" type="submit">
+                                        <i class="m-0 bx bx-plus d-inline-block"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- card end-->
+    `;
+}
+
+async function build(product, container) {
     // set qty to 0 of this product
     product.qty = 0;
     const productCard = Element.templateProductCard.cloneNode(true).content;

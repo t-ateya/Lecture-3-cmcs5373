@@ -151,8 +151,14 @@ async function showProductReviews() {
                 document.querySelector(".review-list").appendChild(li);
 
                 // add delete event listener
-                li.querySelector(".delete__review").addEventListener("click", () => {
-                    confirm("Are you sure you want to delete this review?");
+                li.querySelector(".delete__review").addEventListener("click", async() => {
+                    const ok = confirm("Are you sure you want to delete this review?");
+                    if (ok) {
+                        console.log('item: ', item);
+                        await ReviewsController.deleteReview(item.docId);
+                        Util.info('Delete successful', 'Your review has been successfully deleted');
+                        await showProductReviews();
+                    }
                 });
 
                 // edit delete event listener
