@@ -27,7 +27,7 @@ export async function home_page() {
     let html = '<h1> Enjoy Shopping! </h1>';
     html += `<div class="row" id="product-container"></di>`;
 
-    initShoppingCart();
+    // initShoppingCart();
 
     let products;
     try {
@@ -51,20 +51,16 @@ export async function home_page() {
     const productContainer = document.querySelector('#product-container');
     productContainer.innerHTML = '';
     for (let i = 0; i < products.length; i++) {
-        await buildProductView(products[i]);
+        await buildProductView(products[i], productContainer);
     }
 
     // handle effect when user click on product details
     handleProductDetailEvents(products);
 }
 
-async function buildProductView(product) {
+async function buildProductView(product, container) {
     // set qty to 0 of this product
     product.qty = 0;
-    const productContainer = document.querySelector('#product-container');
-    const cardContainer = document.createElement('div');
-    cardContainer.classList.add('col-12', 'col-md-6', 'col-lg-3');
-
     const productCard = Element.templateProductCard.cloneNode(true).content;
 
     productCard.querySelector('.product__price').textContent = Util.currency(product.price);
@@ -81,11 +77,11 @@ async function buildProductView(product) {
         e.preventDefault();
 
         // subtract product qty
-        product.qty += 1;
+        product.qty -= 1;
         // e.target.index.value;
         //dec(remove) p to shoppingcart
         cart.removeItem(product);
-        productCard.querySelector('.counter__value').textContent =
+        e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
             (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
 
         Element.shoppingCartCount.innerHTML = cart.getTotalQty();
@@ -94,11 +90,11 @@ async function buildProductView(product) {
     addProductForm.addEventListener('submit', e => {
         e.preventDefault();
         // subtract product qty
-        product.qty -= 1;
+        product.qty += 1;
         // e.target.index.value;
         //dec(remove) p to shoppingcart
         cart.addItem(product);
-        productCard.querySelector('.counter__value').textContent =
+        e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
             (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
 
         Element.shoppingCartCount.innerHTML = cart.getTotalQty();
@@ -133,8 +129,8 @@ async function buildProductView(product) {
     stars.filter((_star, index) => index < averageStarRating)
         .map(star => star.classList.add('text-warning'));
 
-    cardContainer.appendChild(productCard);
-    productContainer.appendChild(cardContainer);
+    container.append(productCard);
+    // productContainer.appendChild(cardContainer);
 }
 
 function handleProductDetailEvents(products) {
