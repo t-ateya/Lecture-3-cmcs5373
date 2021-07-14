@@ -37,6 +37,10 @@ export async function showProductDetail(product) {
         pageBody.querySelector('.delete__product__button').classList.add('d-none');
     }
 
+
+    // show page header and page content (product details)
+    Element.root.append(pageHeader, pageBody);
+
     // listen to add review event
     addReviewBtn.addEventListener('click', e => {
         Element.modalReview.show();
@@ -44,9 +48,6 @@ export async function showProductDetail(product) {
         setFormMode(Element.reviewForm, 'create');
         handleStarRating();
     });
-
-    // show page header and page content (product details)
-    Element.root.append(pageHeader, pageBody);
 
     await showProductReviews();
 
@@ -87,6 +88,7 @@ export async function showProductDetail(product) {
 function setFormMode(form, mode) {
     form.reset();
     resetStars(form);
+    form.querySelector('button').textContent = 'save';
     form.dataset.mode = mode;
 }
 
@@ -107,7 +109,7 @@ async function showProductReviews() {
     // highlight average star rating
     // average__star__rating
     const stars = Array.from(document.querySelectorAll('.average__star__rating .bxs-star'));
-    stars.filter((star, index) => index < averageRating)
+    stars.filter((_, index) => index < averageRating)
         .map(star => star.classList.add('text-warning'));
 
     document.querySelector(".review-list").innerHTML = '';
@@ -146,6 +148,7 @@ async function showProductReviews() {
                     // save this review to local storage
                     localStorage.setItem('review', JSON.stringify(item));
                 }
+
                 li.appendChild(reviewItem);
 
                 document.querySelector(".review-list").appendChild(li);
@@ -154,7 +157,6 @@ async function showProductReviews() {
                 li.querySelector(".delete__review").addEventListener("click", async() => {
                     const ok = confirm("Are you sure you want to delete this review?");
                     if (ok) {
-                        console.log('item: ', item);
                         await ReviewsController.deleteReview(item.docId);
                         Util.info('Delete successful', 'Your review has been successfully deleted');
                         await showProductReviews();
@@ -174,8 +176,11 @@ async function showProductReviews() {
                     Element.reviewForm.comment.value = currentUserReview.comment;
                     Element.reviewForm.querySelector('.review__start__rating').textContent = currentUserReview.stars;
                     const reviewFormStarList = Array.from(Element.reviewForm.querySelectorAll('.bxs-star'));
-                    highLightStars(reviewFormStarList, currentUserReview.stars);
+                    highLightStars(reviewFormStarList, currentUserReview.stars - 1);
                 });
+
+                // li.removeEventListener('click', handleEditReview);
+                // li.addEventListener('click', handleEditReview);
             });
 
             // check if review include current user email
@@ -195,6 +200,23 @@ async function showProductReviews() {
         // add star rating event listener
         handleStarRating();
         return;
+    }
+}
+
+function handleEditReview() {
+    () => {
+        Element.modalReview.show();
+        setFormMode(Element.reviewForm, 'edit');
+        // add star rating event listener
+        handleStarRating();
+        const currentUserReview = JSON.parse(localStorage.getItem('review'));
+
+        // set the modal form to the value of the current review
+        Element.reviewForm.starRating.value = currentUserReview.stars;
+        Element.reviewForm.comment.value = currentUserReview.comment;
+        Element.reviewForm.querySelector('.review__start__rating').textContent = currentUserReview.stars;
+        const reviewFormStarList = Array.from(Element.reviewForm.querySelectorAll('.bxs-star'));
+        highLightStars(reviewFormStarList, currentUserReview.stars);
     }
 }
 

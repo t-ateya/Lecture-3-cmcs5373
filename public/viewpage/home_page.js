@@ -11,6 +11,7 @@ import {
 } from '../model/ShoppingCart.js';
 
 
+
 export function addEventListeners() {
     Element.menuHome.addEventListener('click', async() => {
         history.pushState(null, null, Route.routePathnames.HOME);
@@ -48,17 +49,47 @@ export async function home_page() {
     }
 
     Element.root.innerHTML = html;
+
     const productContainer = document.querySelector('#product-container');
     productContainer.innerHTML = '';
+
     for (let i = 0; i < products.length; i++) {
-        productContainer.innerHTML += buildProductView(products[i], productContainer);
+        productContainer.innerHTML += await buildProductView(products[i], i);
+        averageProductReview(products[i]);
     }
 
     // handle effect when user click on product details
     handleProductDetailEvents(products);
+
+    const decForms = document.getElementsByClassName('form-dec-qty');
+    for (let i = 0; i < decForms.length; i++) {
+        decForms[i].addEventListener('submit', e => {
+            e.preventDefault();
+            const p = products[e.target.index.value];
+            console.log('product: ', p);
+            //dec(remove) p to shoppingcart
+            cart.removeItem(p);
+            document.getElementById('qty-' + p.docId).innerHTML =
+                (p.qty == null || p.qty == 0) ? 'Add' : p.qty;
+            Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+
+        });
+    }
+
+    const incForms = document.getElementsByClassName('form-inc-qty');
+    for (let i = 0; i < incForms.length; i++) {
+        incForms[i].addEventListener('submit', e => {
+            e.preventDefault();
+            const p = products[e.target.index.value];
+            //add p to shoppingcart
+            cart.addItem(p);
+            document.getElementById('qty-' + p.docId).innerHTML = p.qty;
+            Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+        });
+    }
 }
 
-function buildProductView(product, index) {
+async function buildProductView(product, index) {
     return `
         <!-- card -->
             <div class="col-12 col-md-6 col-lg-3">
@@ -68,16 +99,16 @@ function buildProductView(product, index) {
                         <h4 class="mb-2 text-danger">${Util.currency(product.price)}</h4>
                         <p class="mt-0 text-secondary">${product.name}</p>
                         <div class="mb-2 d-flex justify-content-between align-items-start">
-                            <span class="badge bg-success">${product.discount}% discount</span>
+                            <span class="badge bg-success ${product.discount > 0 ? '' : 'd-none'}">${product.discount}% discount</span>
                             <div class="review">
-                                <div class="review__stars text-warning">
+                                <div class="review__stars text-secondary" id='stars__${product.docId}'>
                                     <i class="bx bxs-star"></i>
                                     <i class="bx bxs-star"></i>
                                     <i class="bx bxs-star"></i>
                                     <i class="bx bxs-star"></i>
                                     <i class="bx bxs-star"></i>
                                 </div>
-                                <p class="mt-0 review__count text-secondary small">10 reviews</p>
+                                <p class="mt-0 review__count text-secondary small" id="review__count__${product.docId}">loading...</p>
                             </div>
                         </div>
 
@@ -108,6 +139,23 @@ function buildProductView(product, index) {
             </div>
         <!-- card end-->
     `;
+}
+
+function averageProductReview(product) {
+    ReviewsController.getReviewList().then(
+        reviewList => {
+            const averageStarRating = ReviewsController.getAverageRating(reviewList, product);
+            const productReviewList = ReviewsController.getProductReviewList(reviewList, product);
+            // average__star__rating
+            const stars = Array.from(document.querySelectorAll(`#stars__${product.docId} .bxs-star`));
+            stars.filter((_star, index) => index < averageStarRating)
+                .map(star => star.classList.add('text-warning'));
+
+            const reviewCount = document.querySelector(`#review__count__${product.docId}`);
+
+            reviewCount.textContent = `${productReviewList.length} reviews`;
+        }
+    ).catch(e => console.log('error: ', e));
 }
 
 async function build(product, container) {

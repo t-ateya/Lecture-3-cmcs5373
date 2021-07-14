@@ -69,7 +69,6 @@ export async function deleteReview(docId) {
             .collection(Constant.collectionNames.REVIEWS)
             .doc(docId)
             .delete();
-        return console.log('ok');
     } catch (error) {
         console.log('delete review error: ', error);
     }
