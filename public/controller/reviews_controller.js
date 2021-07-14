@@ -52,15 +52,26 @@ export async function getReviewList() {
             .get();
         snapShot.forEach((doc) => {
             const review = doc.data();
-            review.docId = doc.docId;
+            review.docId = doc.id;
             reviewList.push(review);
-
         });
         return reviewList;
     } catch (error) {
         if (Constant.DeV) {
             console.log("getReviewList error!", error);
         }
+    }
+}
+
+export async function deleteReview(docId) {
+    try {
+        await firebase.firestore()
+            .collection(Constant.collectionNames.REVIEWS)
+            .doc(docId)
+            .delete();
+        return console.log('ok');
+    } catch (error) {
+        console.log('delete review error: ', error);
     }
 }
 
