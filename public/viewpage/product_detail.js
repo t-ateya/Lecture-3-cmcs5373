@@ -141,12 +141,21 @@ async function showProductReviews() {
                 );
 
                 // hide review list buttons for other users.
-                if (Auth.currentUser.email !== item.author) {
-                    reviewItem.querySelector('.review__buttons').classList.add('d-none');
-                } else {
+                if (Auth.currentUser.email === item.author || Constant.adminEmails.includes(Auth.currentUser.email)) {
                     reviewItem.querySelector('.review__buttons').classList.remove('d-none');
+
+                    if (Constant.adminEmails.includes(Auth.currentUser.email)) {
+                        console.log('admin user');
+                        reviewItem.querySelector('.edit__review').classList.add('d-none');
+                    }
+
+                    if (Constant.adminEmails.includes(item.author)) {
+                        reviewItem.querySelector('.edit__review').classList.remove('d-none');
+                    }
                     // save this review to local storage
                     localStorage.setItem('review', JSON.stringify(item));
+                } else {
+                    reviewItem.querySelector('.review__buttons').classList.add('d-none');
                 }
 
                 li.appendChild(reviewItem);
