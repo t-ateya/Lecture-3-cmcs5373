@@ -2,6 +2,7 @@ import * as Element from "./element.js";
 import * as Constant from "../model/constant.js";
 import * as Util from "./util.js";
 import * as Auth from "../controller/auth.js";
+
 import {
     Review
 } from "../model/Review.js";
@@ -30,9 +31,12 @@ export async function showProductDetail(product) {
         product.summary;
     pageBody.querySelector(".product__detail__image").src = product.imageURL;
 
-    // hide delete product if user is admin
+    // hide delete product if user is not admin
     if (Auth.currentUser && Constant.adminEmails.includes(Auth.currentUser.email)) {
         pageBody.querySelector('.delete__product__button').classList.remove('d-none');
+        // Todo: handle product delete functionality by admin
+        // Todo: When deleting, remove all comments and reviews
+        pageBody.querySelector('.delete__product__button').addEventListener('click', deleteProduct);
     } else {
         pageBody.querySelector('.delete__product__button').classList.add('d-none');
     }
@@ -219,6 +223,11 @@ async function showProductReviews() {
         handleStarRating();
         return;
     }
+}
+
+async function deleteProduct(event, product) {
+    event.preventDefault();
+
 }
 
 function handleEditReview() {
