@@ -31,7 +31,7 @@ export async function showProductDetail(product) {
     pageBody.querySelector(".product__detail__image").src = product.imageURL;
 
     // hide delete product if user is admin
-    if (Constant.adminEmails.includes(Auth.currentUser.email)) {
+    if (Auth.currentUser && Constant.adminEmails.includes(Auth.currentUser.email)) {
         pageBody.querySelector('.delete__product__button').classList.remove('d-none');
     } else {
         pageBody.querySelector('.delete__product__button').classList.add('d-none');
@@ -141,7 +141,10 @@ async function showProductReviews() {
                 );
 
                 // hide review list buttons for other users.
-                if (Auth.currentUser.email === item.author || Constant.adminEmails.includes(Auth.currentUser.email)) {
+                if (Auth.currentUser &&
+                    (Auth.currentUser.email === item.author ||
+                        Constant.adminEmails.includes(Auth.currentUser.email))
+                ) {
                     reviewItem.querySelector('.review__buttons').classList.remove('d-none');
 
                     if (Constant.adminEmails.includes(Auth.currentUser.email)) {
@@ -193,11 +196,17 @@ async function showProductReviews() {
             });
 
             // check if review include current user email
-            if (currentProductReviews.find(review => review.author === Auth.currentUser.email)) {
-                document.querySelector('.add__review__button').classList.add('d-none');
+            if (Auth.currentUser) {
+                const hasReview = currentProductReviews.find(review => review.author === Auth.currentUser.email);
+                if (hasReview) {
+                    document.querySelector('.add__review__button').classList.add('d-none');
+                } else {
+                    document.querySelector('.add__review__button').classList.remove('d-none');
+                }
             } else {
-                document.querySelector('.add__review__button').classList.remove('d-none');
+                document.querySelector('.add__review__button').classList.add('d-none');
             }
+
         } else {
             showNoReviews();
             // add star rating event listener

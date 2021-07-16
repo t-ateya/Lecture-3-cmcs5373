@@ -130,52 +130,81 @@
 
     <main class="container pt-5 mt-5">
         <div class="row" id="root">
-            <!-- card -->
-            <div class="col-md-3">
-                <div class="rounded rounded-lg shadow card border-light">
-                    <img src="https://picsum.photos/300/200" alt="product" class="card-img-top img-fluid">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <span class="badge bg-success">20% discount</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="price font-weight-bold">
-                                <h4 class="mb-0 text-danger">1150<sup class="font-weight-normal">99</sup></h4>
-                            </div>
-                            <div class="review">
-                                <div class="review__stars text-warning">
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                    <i class="bx bxs-star"></i>
-                                </div>
-                                <p class="mt-0 review__count text-secondary small">10 reviews</p>
-                            </div>
-                        </div>
-                        <p class="mt-0 text-secondary">Product name</p>
 
-                        <div class="text-secondary d-flex justify-content-between align-items-center">
-                            <a href="#" class="p-0 btn btn-sm btn-link text-primary extra__detail">details</a>
-                            <div class="extra__counter counter d-flex align-items-center">
-                                <button class="text-center counter__plus">
-                                    <i class="m-0 bx bx-minus d-inline-block"></i>
-                                </button>
-                                <span class="px-2 mr-2 text-center counter__value">0</span>
-                                <button class="text-center counter__minus d-inline-block">
-                                    <i class="m-0 bx bx-plus d-inline-block"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- card end-->
         </div>
+
+        <!-- product details -->
+        <div class="mt-5 row profile-detail">
+            <div class="col-md-3 text-center">
+                <div>
+                    <img src="https://picsum.photos/200" alt="product" class="rounded rounded-circle img-fluid product__detail__image">
+                </div>
+                <button class="mt-4 btn btn-secondary btn-sm upload__image__button">upload image</button>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <!-- left section -->
+                    <ul class="list-unstyled detail col-md-9">
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Name:</p>
+                            <p class="text-secondary detail__profile__name">Product name here</p>
+                        </li>
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Email address:</p>
+                            <p class="text-secondary detail__profile__email">loading...</p>
+                        </li>
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Phone number:</p>
+                            <p class="text-secondary detail__profile__phone">15</p>
+                        </li>
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Address:</p>
+                            <p class="text-secondary detail__profile__address">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi quod nemo autem
+                            </p>
+                        </li>
+                        <li class="detail__item">
+                            <p class="mb-0 font-weight-bold">Zip Code:</p>
+                            <p class="text-secondary detail__profile__zip">
+                                00258
+                            </p>
+                        </li>
+                    </ul>
+
+                    <!-- right section -->
+                    <ul class="pr-0 text-right list-unstyled text-secondary col-md-3 right-section">
+                        <li>
+                            <p class="mb-0 font-weight-bold text-dark">Reviews</p>
+                            <p class="review__count">loading...</p>
+                        </li>
+                        <li class="delete">
+                            <a href="#" class="px-0 btn btn-link text-danger delete__account__button">
+                                delete account
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- purchase history -->
+                <div class="pb-3 mt-3 mb-2 purchase-history">
+                    <h5 class="font-weight-bold">Purchase history</h5>
+                    <hr class="bg-secondary">
+
+                    <!-- purchase list -->
+                    <ul class="p-0 purchase__history__list list-unstyled">
+                        <!-- purchase items -->
+
+                    </ul>
+                    <!-- review list end -->
+                </div>
+                <!-- purchase history end -->
+            </div>
+        </div>
+        <!-- product details end -->
 
 
     </main>
-    <div class="py-4 text-center border jumbotron bg-light rounded-3">
+    <div class="py-4 text-center border jumbotron bg-light rounded-3 d-none">
         <h1 class="display-3">Ooops...</h1>
         <p class="lead">There are no reviews for this product yet.</p>
         <hr class="my-2">
@@ -185,8 +214,61 @@
         </p>
     </div>
 
+    <form action="">
+        <input type="file" name="file-input" id="file-input" style="visibility: hidden;">
+        <label for="file-input" class="btn btn-sm btn-primary" role="button">Upload a file</label>
+    </form>
 
+    <div class="row container">
+        <div class="col-md-4">
 
+        </div>
+        <div class="col-md-8">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header bg-light" id="flush-headingOne">
+                        <button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            <div>
+                                <p class="mb-0">08 items purchased</p>
+                                <p class="small text-muted mb-0">May 19, 2021</p>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body purchase__list__items">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- product purchased -->
+    <div class="row">
+        <div class="col-md-3">
+            <img src="https://picsum.photos/120/100" alt="product purchased" class="img-fluid">
+        </div>
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-start">
+                <ul class="list-unstyled">
+                    <li class="d-flex align-items-center mb-2 ">
+                        <p class="mb-0 " style="width: 8rem ">Name: </p>
+                        <p class="mb-0 ">product name</p>
+                    </li>
+                    <li class="d-flex align-items-center mb-2 ">
+                        <p class="mb-0 " style="width: 8rem ">Qty</p>
+                        <p class="mb-0 ">10</p>
+                    </li>
+                </ul>
+                <div class="right text-secondary">
+                    <p class="fone-weight-bold text-uppercase mb-0">TOTAL</p>
+                    <p>$250</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- product purchased end -->
 
     <!--MY Own JS Code-->
     <script type="module " src="./app.js "></script>

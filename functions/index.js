@@ -227,6 +227,7 @@ async function getProductById(data, context) {
                 name,
                 summary,
                 price,
+                stock,
                 discount,
                 imageName,
                 imageURL
@@ -235,6 +236,7 @@ async function getProductById(data, context) {
                 name,
                 summary,
                 price,
+                stock,
                 discount,
                 imageName,
                 imageURL,
@@ -274,6 +276,7 @@ async function getProductList(data, context) {
             const {
                 name,
                 price,
+                stock,
                 discount,
                 summary,
                 imageName,
@@ -282,6 +285,7 @@ async function getProductList(data, context) {
             const p = {
                 name,
                 price,
+                stock,
                 discount,
                 summary,
                 imageName,

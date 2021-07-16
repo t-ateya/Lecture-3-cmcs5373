@@ -45,6 +45,7 @@ export async function products_page() {
 					<th>Product</th>
 					<th>Description</th>
 					<th>Price</th>
+					<th>Stock</th>
 					<th>Options</th>
 				</tr>
 			</thead>
@@ -157,12 +158,14 @@ function handleDeleteforms() {
 async function addNewProduct(form) {
     const name = form.name.value;
     const price = form.price.value;
+    const stock = form.stock.value;
     const discount = form.discount.value;
     const summary = form.summary.value;
 
     const product = new Product({
         name,
         price,
+        stock,
         discount,
         summary,
     }); //Product object
@@ -172,6 +175,9 @@ async function addNewProduct(form) {
     Element.formAddProduct.errorName.innerHTML = errors.name ? errors.name : "";
     Element.formAddProduct.errorPrice.innerHTML = errors.price ?
         errors.price :
+        "";
+    Element.formAddProduct.errorStock.innerHTML = errors.stock ?
+        errors.stock :
         "";
     Element.formAddProduct.errorDiscount.innerHTML = errors.discount ?
         errors.discount :
@@ -215,6 +221,7 @@ async function addNewProduct(form) {
 }
 
 function buildProductCard(product, index) {
+    console.log('product', product);
     return `
 	<tr id="card-${product.docId}">
 		<td>${index + 1}<td>
@@ -235,6 +242,7 @@ function buildProductCard(product, index) {
                 <span class="badge bg-info">${product.discount}% ($ ${(product.discount * 0.01 * product.price).toFixed(2)})</span>
             </p>
         </td>
+        <td>${product.stock === undefined ? 0 : product.stock}</td>
 		<td>
 			<div class="d-inline-flex" style="gap: 10px">
 				<form class="form-edit-product mr-2" method="post">
@@ -327,6 +335,7 @@ export function handleProductEditEvents() {
         const p = new Product({
             name: e.target.name.value,
             price: e.target.price.value,
+            stock: e.target.stock.value,
             discount: e.target.discount.value,
             summary: e.target.summary.value,
         });
@@ -338,6 +347,9 @@ export function handleProductEditEvents() {
             "";
         Element.formEditProduct.errorPrice.innerHTML = errors.price ?
             errors.price :
+            "";
+        Element.formEditProduct.errorStock.innerHTML = errors.stock ?
+            errors.stock :
             "";
         Element.formEditProduct.errorDiscount.innerHTML = errors.discount ?
             errors.errorDiscount :
@@ -374,6 +386,8 @@ export function handleProductEditEvents() {
                 "card-text"
             )[0].innerHTML = `$ ${p.price}<br > ${p.summary}`;
 
+            // Todo: Add stock to the product card on frontend
+
             // update discount
             cardTag.querySelector('.discount').innerHTML = `
             <p>
@@ -392,6 +406,7 @@ export function handleProductEditEvents() {
             );
 
             // close the edit modal
+            // Todo: Update editProduct modal to include stock
             Element.modalEditProduct.hide();
         } catch (error) {
             if (Constant.DeV) {
@@ -427,6 +442,7 @@ export async function edit_product(docId) {
     Element.formEditProduct.form.imageName.value = product.imageName;
     Element.formEditProduct.form.name.value = product.name;
     Element.formEditProduct.form.price.value = product.price;
+    Element.formEditProduct.form.stock.value = product.stock;
     Element.formEditProduct.form.discount.value = product.discount;
     Element.formEditProduct.form.summary.value = product.summary;
     Element.formEditProduct.imageTag.src = product.imageURL;
