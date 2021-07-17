@@ -40,7 +40,7 @@ export function addEventListeners() {
             Util.info('Sign Out Error', JSON.stringify(e));
 
         }
-    })
+    });
 
     firebase.auth().onAuthStateChanged(async user => {
         if (user) {
@@ -90,7 +90,7 @@ export function addEventListeners() {
         const password = e.target.password.value;
         const passwordConfirm = e.target.passwordConfirm.value;
 
-        Element.formSignupPasswordError.innerHTML = ''
+        Element.formSignupPasswordError.innerHTML = '';
         if (password != passwordConfirm) {
             Element.formSignupPasswordError.innerHTML = 'Two passwords do not match';
             return;
@@ -101,7 +101,6 @@ export function addEventListeners() {
             Util.info('Account Created!', `You are now signed in as ${email}`, Element.modalSignup);
         } catch (error) {
             if (Constant.DeV) console.log(error);
-            ////Element.modalSignup===dismiss modal signup
             Util.info('Failed to create new account', JSON.stringify(e), Element.modalSignup);
 
         }

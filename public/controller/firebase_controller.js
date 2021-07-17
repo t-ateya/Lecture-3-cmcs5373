@@ -1,7 +1,7 @@
 import {
     AccountInfo
 } from '../model/account_info.js';
-import * as Constant from '../model/constant.js'
+import * as Constant from '../model/constant.js';
 import {
     Product
 } from '../model/Product.js';
@@ -19,14 +19,32 @@ export async function signOut() {
 
 export async function getProductList() {
     const products = []; //create array of product objects
-    const snapShot = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
+    const first = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
         .orderBy('name')
+        .limit(8)
         .get();
-    snapShot.forEach(doc => {
+
+    // get the last cursor position
+    let last, next;
+
+    first.forEach(doc => {
         const p = new Product(doc.data());
         p.docId = doc.id;
         products.push(p);
-    })
+
+        // set cursor position
+        last = doc.docs[doc.docs.length - 1];
+
+        // Construct a new query starting at this document,
+        // get the next 25 cities.
+        next = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
+            .orderBy('name')
+            .startAfter(last)
+            .limit(8)
+            .get();
+
+    });
+
     return products;
 
 }
@@ -79,7 +97,7 @@ export async function updateAccountInfo(uid, updateInfo) {
 
 export async function uploadProfilePhoto(photoFile, imageName) {
     const ref = firebase.storage().ref()
-        .child(Constant.storageFolderNames.PROFILE_PHOTOS + imageName)
+        .child(Constant.storageFolderNames.PROFILE_PHOTOS + imageName);
     const taskSnapShot = await ref.put(photoFile);
     const photoURL = await taskSnapShot.ref.getDownloadURL();
     return photoURL;

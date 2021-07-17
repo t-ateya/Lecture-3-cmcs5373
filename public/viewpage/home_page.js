@@ -11,7 +11,6 @@ import {
 } from '../model/ShoppingCart.js';
 
 
-
 export function addEventListeners() {
     Element.menuHome.addEventListener('click', async() => {
         history.pushState(null, null, Route.routePathnames.HOME);
@@ -29,7 +28,6 @@ export async function home_page() {
     html += `<div class="row" id="product-container"></di>`;
 
     // initShoppingCart();
-
     let products;
     try {
         products = await FirebaseController.getProductList();

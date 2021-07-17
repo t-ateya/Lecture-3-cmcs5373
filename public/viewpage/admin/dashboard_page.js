@@ -54,8 +54,10 @@ function handleVisitSite() {
     Element.adminVisitSite.addEventListener('click', async e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
+        const label = Util.disableButton(e.target);
         history.pushState(null, null, Route.routePathnames.HOME);
         showUserNav();
+        Util.enableButton(e.target, label);
     });
 }
 
@@ -63,8 +65,10 @@ function handleSignOut() {
     Element.adminSignOut.addEventListener('click', async e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
+        const label = Util.disableButton(e.target);
         await FirebaseController.signOut();
         showUserNav();
+        Util.enableButton(e.target, label);
     });
 }
 
@@ -72,8 +76,10 @@ function handleUsers() {
     Element.adminUsers.addEventListener('click', async e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
+        const label = Util.disableButton(e.target);
         history.pushState(null, null, Route.routePathnames.USERS);
         await users_page();
+        Util.enableButton(e.target, label);
     });
 }
 
@@ -81,8 +87,10 @@ function handleDashboard() {
     Element.adminDashboard.addEventListener('click', e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
+        const label = Util.disableButton(e.target);
         history.pushState(null, null, Route.routePathnames.DASHBOARD);
         dashboard_page();
+        Util.enableButton(e.target, label);
     });
 }
 
@@ -90,7 +98,9 @@ function handleProducts() {
     Element.adminProducts.addEventListener('click', e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
+        const label = Util.disableButton(e.target);
         history.pushState(null, null, Route.routePathnames.PRODUCTS);
         products_page();
+        Util.enableButton(e.target, label);
     });
 }

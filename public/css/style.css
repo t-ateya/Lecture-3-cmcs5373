@@ -152,3 +152,13 @@ i {
 .review__buttons button:first-child {
     margin-right: .5rem !important;
 }
+
+
+/* spinner */
+
+.app__spinner {
+    position: absolute;
+    top: 3.5rem;
+    left: 17rem;
+    z-index: 999999;
+}

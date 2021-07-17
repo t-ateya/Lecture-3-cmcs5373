@@ -221,7 +221,6 @@ async function addNewProduct(form) {
 }
 
 function buildProductCard(product, index) {
-    console.log('product', product);
     return `
 	<tr id="card-${product.docId}">
 		<td>${index + 1}<td>

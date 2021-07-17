@@ -3,12 +3,12 @@ import * as Element from "../element.js";
 import * as Constant from "../../model/constant.js";
 import * as Util from "../util.js";
 import * as UsersController from "../../controller/admin/users_controller.js";
+import * as Profile from "./../profile_page.js";
+import {
+    profile_page
+} from "../profile_page.js";
 
 export async function users_page() {
-    // if (!Auth.currentUser) {
-    //     return;
-    // }
-
     let html = `
         <h1>Welcome to User Management Page</h1>
 		<button type="button" class="btn btn-primary" id="btn-create-user" data-bs-toggle="modal" data-bs-target="#modal-user">
@@ -194,6 +194,9 @@ export async function users_page() {
         Element.userModal.title.textContent = 'Create new user';
         Element.userModal.submitBtn.textContent = '✔ Save user';
     });
+
+    // handle events when user clicks on view profile button
+    handleViewProfileEvents();
 }
 
 function buildUserRow(user) {
@@ -204,9 +207,10 @@ function buildUserRow(user) {
 				<td>${user.phoneNumber || 'not provided'}</td>
 				<td id="user-status-${user.uid}">${user.disabled ? "<span class='badge bg-danger'>disabled</span>" : "<span class='badge bg-success'>active</span>"}</td>
 				<td>
+                    <button class="view__profile btn btn-sm btn-secondary" id="view__profile__${user.uid}" data-user-uid="${user.uid}">View profile</button>
 					<form class="form-toggle-user" method="post" style="display: inline-block">
 						<input type="hidden" name="uid" value="${user.uid}" />
-						<input type="hidden" name="disabled" value="${user.disabled}" />
+						<input type="hidden" name="disabled" value="${user.disabled}"/>
 						<button type="submit" class="btn btn-outline-primary">Toggle Active</button>
 					</form>
 					<form class="form-delete-user" method="post" style="display: inline-block">
@@ -217,4 +221,29 @@ function buildUserRow(user) {
 				</td>
 			</tr>
 			`;
+}
+
+
+function handleViewProfileEvents() {
+    // get all view profile buttons
+    const profileButtons = Array.from(document.querySelectorAll('.view__profile'));
+    profileButtons.forEach(button => button.addEventListener('click', async e => {
+        const label = Util.disableButton(e.target);
+        await viewProfile(e.target.dataset.userUid);
+        Util.enableButton(e.target, label);
+    }));
+}
+
+
+async function viewProfile(userId) {
+    const user = await UsersController.getUser(userId);
+    const userProfileInfo = await Profile.getAccountInfo(user);
+    console.log('user profile info: ', userProfileInfo);
+
+    // stor user and profile info in local storage
+    localStorage.setItem('accountInfo', JSON.stringify(userProfileInfo));
+    localStorage.setItem('adminTargetUser', JSON.stringify(user));
+
+    profile_page();
+    // console.log('user: ', userInfo);
 }

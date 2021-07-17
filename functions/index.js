@@ -267,11 +267,15 @@ async function getProductList(data, context) {
 
     try {
         let products = [];
+
+        // get paginated products: 8 per page
         const snapShot = await admin
             .firestore()
             .collection(Constant.collectionNames.PRODUCT)
             .orderBy("name")
-            .get();
+            .limit(8);
+        // .get();
+
         snapShot.forEach((doc) => {
             const {
                 name,

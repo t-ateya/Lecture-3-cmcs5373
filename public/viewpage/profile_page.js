@@ -12,8 +12,7 @@ export function addEventListeners() {
         e.preventDefault();
         history.pushState(null, null, Route.routePathnames.PROFILE);
         // profile_page();
-        await testPage();
-
+        await profile_page();
     });
 }
 
@@ -21,7 +20,7 @@ let accountInfo;
 let carts;
 
 // TODO: Update this to the real profile page func 
-export async function testPage() {
+export async function profile_page() {
     // get all reviews and save to local storage
     const allReviews = await ReviewsController.getReviewList();
     localStorage.setItem('reviews', JSON.stringify(allReviews));
@@ -39,15 +38,29 @@ export async function testPage() {
         return;
     }
 
-    carts = await getPurchaseHistory();
 
-    html += buildProfileDetail(accountInfo);
+    // reinitialize cart if user is admin
+    if (Auth.isAdmin(Auth.currentUser.email)) {
+        const targetUser = JSON.parse(localStorage.getItem('adminTargetUser'));
+        carts = await getPurchaseHistory(targetUser.uid);
+    } else {
+        carts = await getPurchaseHistory();
+    }
+
+    // reinitialize account info if user is admin
+    if (Auth.isAdmin(Auth.currentUser)) {
+        const accountInfo = JSON.parse(localStorage.getItem('accountInfo'));
+        html += buildProfileDetail(accountInfo);
+    } else {
+        html += buildProfileDetail(accountInfo);
+    }
+
     Element.root.innerHTML = html;
 }
 
 
 /* OLD PROFILE PAGE FUNC */
-export async function profile_page() {
+export async function old_profile_page() {
     let html = '<h1> Profile Page </h1>';
     if (!Auth.currentUser) {
         html += '<h2>Protected Page</h2>';
@@ -366,7 +379,6 @@ function getUserReviews() {
 }
 
 function buildAccordion(purchaseSummary, index) {
-    console.log('purchase summary: ', purchaseSummary);
     return `
         <div class="accordion-item">
             <h2 class="accordion-header bg-light" id="flush-heading-${index}}">
@@ -393,7 +405,6 @@ function buildAccordion(purchaseSummary, index) {
 
 
 function buildPurchaseListItem(item) {
-    console.log('item: ', item);
     return `
     <div class="row">
         <div class="col-md-3">
@@ -425,14 +436,15 @@ function buildPurchaseListItem(item) {
     `;
 }
 
-async function getPurchaseHistory() {
-    const carts = await FirebaseController.getPurchaseHistory(Auth.currentUser.uid);
+async function getPurchaseHistory(userId = Auth.currentUser.uid) {
+    const carts = await FirebaseController.getPurchaseHistory(userId);
     return carts;
 }
 
 export async function getAccountInfo(user) {
     try {
         accountInfo = await FirebaseController.getAccountInfo(user.uid);
+        return accountInfo;
     } catch (e) {
         if (Constant.DeV) console.log(e);
         Util.info(`Failed to retrieve account info for ${user.email}`, JSON.stringify(e));
@@ -442,5 +454,4 @@ export async function getAccountInfo(user) {
     Element.userProfileImage.innerHTML = `
         <img src=${accountInfo.photoURL} class="rounded-circle img-fluid showdow-sm border-2 border-light profile-image" height="50" width="50">
     `;
-
 }
