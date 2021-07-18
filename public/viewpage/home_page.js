@@ -79,31 +79,7 @@ export async function home_page() {
 
 
     // handle search product events
-    // handleSearchProductEvents();
-    const searchForm = document.querySelector('#search__product__form');
-    const searchInput = document.querySelector('#search__product__input');
-
-    searchForm.addEventListener('submit', async e => {
-        e.preventDefault();
-        const data = await FirebaseController.searchProduct(e.target.search.value);
-        if (data.length > 0) {
-            await updateProductView(data);
-        } else {
-            const productContainer = document.querySelector('#product-container');
-            productContainer.innerHTML = `
-                <div class="alert alert-secondary text-center w-50 mx-auto mt-5">
-                    <p>No 😢 search result found for <strong>${e.target.search.value}</strong></p>
-                    <p class="mb-0">Try <button class="btn btn-link text-primary" id="search__again">searching for something else</button> 🙃</p>
-                </div>
-            `;
-
-            const searchAgainBtn = document.querySelector('#search__again');
-            searchAgainBtn.addEventListener('click', e => {
-                searchForm.reset();
-                searchInput.focus();
-            });
-        }
-    });
+    handleSearchProductEvents();
 
     // handle pagination event listeners
     handlePaginationEventListeners();
@@ -114,6 +90,7 @@ export async function home_page() {
     // handle events when user clicks on + or - button on product card
     handleProductSelectEvents(products);
 }
+
 
 function handleProductSelectEvents(products) {
     const decForms = document.getElementsByClassName('form-dec-qty');
@@ -165,15 +142,6 @@ function handlePaginationEventListeners() {
             // enable prev button
             prevPage.parentElement.classList.remove('disabled');
         }
-
-        // handle pagination event listeners
-        handlePaginationEventListeners();
-
-        // handle effect when user click on product details
-        handleProductDetailEvents(products);
-
-        // handle events when user clicks on + or - button on product card
-        handleProductSelectEvents(products);
     });
 
     prevPage.addEventListener('click', async e => {
@@ -204,6 +172,15 @@ async function updateProductView(products) {
         productContainer.innerHTML += await buildProductView(products[i], i);
         averageProductReview(products[i]);
     }
+
+    // handle pagination event listeners
+    handlePaginationEventListeners();
+
+    // handle effect when user click on product details
+    handleProductDetailEvents(products);
+
+    // handle events when user clicks on + or - button on product card
+    handleProductSelectEvents(products);
 }
 
 async function buildProductView(product, index) {
@@ -260,11 +237,28 @@ async function buildProductView(product, index) {
 
 function handleSearchProductEvents() {
     const searchForm = document.querySelector('#search__product__form');
-    console.log('form: ', searchForm);
+    const searchInput = document.querySelector('#search__product__input');
+
     searchForm.addEventListener('submit', async e => {
         e.preventDefault();
-        const data = await FirebaseController.searchProduct(e.target.search.value.trim());
-        console.log('data: ', data);
+        const data = await FirebaseController.searchProduct(e.target.search.value);
+        if (data.length > 0) {
+            await updateProductView(data);
+        } else {
+            const productContainer = document.querySelector('#product-container');
+            productContainer.innerHTML = `
+                <div class="alert alert-secondary text-center w-50 mx-auto mt-5">
+                    <p>No 😢 search result found for <strong>${e.target.search.value}</strong></p>
+                    <p class="mb-0">Try <button class="btn btn-link text-primary" id="search__again">searching for something else</button> 🙃</p>
+                </div>
+            `;
+
+            const searchAgainBtn = document.querySelector('#search__again');
+            searchAgainBtn.addEventListener('click', e => {
+                searchForm.reset();
+                searchInput.focus();
+            });
+        }
     });
 }
 
