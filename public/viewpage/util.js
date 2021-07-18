@@ -44,7 +44,7 @@ export function sleep(ms) {
 
 export function generateDateFromTimestamp(firebaseTimestamp) {
     const date = new Date(firebaseTimestamp.toDate());
-    const day = date.getDay();
+    const day = date.getDate();
     const month = date.toLocaleString('default', {
         month: 'short'
     });

@@ -58,6 +58,48 @@ export async function home_page() {
         averageProductReview(products[i]);
     }
 
+    // add pagination buttons
+    Element.root.innerHTML += `
+    <div class="py-5 text-center"
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#" id="page__prev">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#" id="page__next">Next</a></li>
+            </ul>
+        </nav>
+    </di>`;
+
+
+    // handle search product events
+    // handleSearchProductEvents();
+    const searchForm = document.querySelector('#search__product__form');
+    const searchInput = document.querySelector('#search__product__input');
+
+    searchForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const data = await FirebaseController.searchProduct(e.target.search.value);
+        if (data.length > 0) {
+            await updateProductView(data);
+        } else {
+            const productContainer = document.querySelector('#product-container');
+            productContainer.innerHTML = `
+                <div class="alert alert-secondary text-center w-50 mx-auto mt-5">
+                    <p>No 😢 search result found for <strong>${e.target.search.value}</strong></p>
+                    <p class="mb-0">Try <button class="btn btn-link text-primary" id="search__again">searching for something else</button> 🙃</p>
+                </div>
+            `;
+
+            const searchAgainBtn = document.querySelector('#search__again');
+            searchAgainBtn.addEventListener('click', e => {
+                searchForm.reset();
+                searchInput.focus();
+            });
+        }
+    });
+
+    // handle pagination event listeners
+    handlePaginationEventListeners();
+
     // handle effect when user click on product details
     handleProductDetailEvents(products);
 
