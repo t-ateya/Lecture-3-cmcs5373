@@ -152,3 +152,20 @@ export async function uploadProfilePhoto(photoFile, imageName) {
     const photoURL = await taskSnapShot.ref.getDownloadURL();
     return photoURL;
 }
+
+export async function searchProduct(nameQuery) {
+    console.log('query: ', nameQuery);
+    const snapShots = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
+        .orderBy('name')
+        .get();
+    const products = [];
+    snapShots.forEach((doc) => {
+        const p = new Product(doc.data());
+        p.docId = doc.id;
+        products.push(p);
+    });
+
+    const searchResult = products.filter(product => product.name.includes(nameQuery));
+
+    return searchResult;
+}

@@ -24,7 +24,17 @@ export let cart;
 
 export async function home_page() {
     Util.toggleMenuLinks();
-    let html = '<h1> Enjoy Shopping! </h1>';
+    let html = `
+    <div class="d-flex align-items-center justify-content-between">
+        <h3 class="mb-4"> Enjoy Shopping! </h3>
+        <form class="form form-inline" id="search__product__form">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="search" id="search__product__input" placeholder="search product" aria-label="search product" aria-describedby="search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+    `;
     html += `<div class="row" id="product-container"></di>`;
 
     // initShoppingCart();
@@ -67,6 +77,40 @@ export async function home_page() {
             </ul>
         </nav>
     </di>`;
+
+
+    // handle search product events
+    // handleSearchProductEvents();
+    const searchForm = document.querySelector('#search__product__form');
+    const searchInput = document.querySelector('#search__product__input');
+
+    // searchInput.addEventListener('keydown', async e => {
+    //     const data = await FirebaseController.searchProduct(e.target.value);
+    //     if (data.length > 0) {
+    //         await updateProductView(data);
+    //     }
+    // });
+    searchForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const data = await FirebaseController.searchProduct(e.target.search.value);
+        if (data.length > 0) {
+            await updateProductView(data);
+        } else {
+            const productContainer = document.querySelector('#product-container');
+            productContainer.innerHTML = `
+                <div class="alert alert-secondary text-center w-50 mx-auto mt-5">
+                    <p>No 😢 search result found for <strong>${e.target.search.value}</strong></p>
+                    <p class="mb-0">Try <button class="btn btn-link text-primary" id="search__again">searching for something else</button> 🙃</p>
+                </div>
+            `;
+
+            const searchAgainBtn = document.querySelector('#search__again');
+            searchAgainBtn.addEventListener('click', e => {
+                searchForm.reset();
+                searchInput.focus();
+            });
+        }
+    });
 
     // handle pagination event listeners
     handlePaginationEventListeners();
@@ -205,6 +249,16 @@ async function buildProductView(product, index) {
             </div>
         <!-- card end-->
     `;
+}
+
+function handleSearchProductEvents() {
+    const searchForm = document.querySelector('#search__product__form');
+    console.log('form: ', searchForm);
+    searchForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const data = await FirebaseController.searchProduct(e.target.search.value.trim());
+        console.log('data: ', data);
+    });
 }
 
 function averageProductReview(product) {

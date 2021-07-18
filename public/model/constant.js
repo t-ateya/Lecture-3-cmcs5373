@@ -5,6 +5,7 @@ export const collectionNames = {
     PURCHASE_HISTORY: 'purchase_history',
     ACCOUNT_INFO: 'account_info',
     REVIEWS: 'reviews',
+    SEARCH_BANK: 'search_bank'
 };
 
 export const storageFolderNames = {
