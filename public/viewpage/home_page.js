@@ -83,20 +83,6 @@ export async function home_page() {
     const searchForm = document.querySelector('#search__product__form');
     const searchInput = document.querySelector('#search__product__input');
 
-    <<
-    <<
-    << < HEAD
-    // searchInput.addEventListener('keydown', async e => {
-    //     const data = await FirebaseController.searchProduct(e.target.value);
-    //     if (data.length > 0) {
-    //         await updateProductView(data);
-    //     }
-    // });
-        ===
-        ===
-        = >>>
-        >>>
-        > reviews
     searchForm.addEventListener('submit', async e => {
         e.preventDefault();
         const data = await FirebaseController.searchProduct(e.target.search.value);
@@ -125,12 +111,17 @@ export async function home_page() {
     // handle effect when user click on product details
     handleProductDetailEvents(products);
 
+    // handle events when user clicks on + or - button on product card
+    handleProductSelectEvents(products);
+}
+
+function handleProductSelectEvents(products) {
     const decForms = document.getElementsByClassName('form-dec-qty');
     for (let i = 0; i < decForms.length; i++) {
         decForms[i].addEventListener('submit', e => {
             e.preventDefault();
             const p = products[e.target.index.value];
-            console.log('product: ', p);
+
             //dec(remove) p to shoppingcart
             cart.removeItem(p);
             document.getElementById('qty-' + p.docId).innerHTML =
@@ -174,6 +165,15 @@ function handlePaginationEventListeners() {
             // enable prev button
             prevPage.parentElement.classList.remove('disabled');
         }
+
+        // handle pagination event listeners
+        handlePaginationEventListeners();
+
+        // handle effect when user click on product details
+        handleProductDetailEvents(products);
+
+        // handle events when user clicks on + or - button on product card
+        handleProductSelectEvents(products);
     });
 
     prevPage.addEventListener('click', async e => {
@@ -285,80 +285,80 @@ function averageProductReview(product) {
     ).catch(e => console.log('error: ', e));
 }
 
-async function build(product, container) {
-    // set qty to 0 of this product
-    product.qty = 0;
-    const productCard = Element.templateProductCard.cloneNode(true).content;
+// async function build(product, container) {
+//     // set qty to 0 of this product
+//     product.qty = 0;
+//     const productCard = Element.templateProductCard.cloneNode(true).content;
 
-    productCard.querySelector('.product__price').textContent = Util.currency(product.price);
-    productCard.querySelector('.product__name').textContent = product.name;
-    productCard.querySelector('.product-image').src = product.imageURL;
-    productCard.querySelector('.extra__detail').dataset.productId = product.docId;
-    productCard.querySelector('.counter__value').id = `qty-${product.docId}`;
-    const counterForm = productCard.querySelector('.extra__counter');
+//     productCard.querySelector('.product__price').textContent = Util.currency(product.price);
+//     productCard.querySelector('.product__name').textContent = product.name;
+//     productCard.querySelector('.product-image').src = product.imageURL;
+//     productCard.querySelector('.extra__detail').dataset.productId = product.docId;
+//     productCard.querySelector('.counter__value').id = `qty-${product.docId}`;
+//     const counterForm = productCard.querySelector('.extra__counter');
 
-    const minusProductForm = productCard.querySelector('.form-dec-qty');
-    const addProductForm = productCard.querySelector('.form-inc-qty');
+//     const minusProductForm = productCard.querySelector('.form-dec-qty');
+//     const addProductForm = productCard.querySelector('.form-inc-qty');
 
-    minusProductForm.addEventListener('submit', e => {
-        e.preventDefault();
+//     minusProductForm.addEventListener('submit', e => {
+//         e.preventDefault();
 
-        // subtract product qty
-        product.qty -= 1;
-        // e.target.index.value;
-        //dec(remove) p to shoppingcart
-        cart.removeItem(product);
-        e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
-            (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
+//         // subtract product qty
+//         product.qty -= 1;
+//         // e.target.index.value;
+//         //dec(remove) p to shoppingcart
+//         cart.removeItem(product);
+//         e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
+//             (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
 
-        Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-    });
+//         Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+//     });
 
-    addProductForm.addEventListener('submit', e => {
-        e.preventDefault();
-        // subtract product qty
-        product.qty += 1;
-        // e.target.index.value;
-        //dec(remove) p to shoppingcart
-        cart.addItem(product);
-        e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
-            (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
+//     addProductForm.addEventListener('submit', e => {
+//         e.preventDefault();
+//         // subtract product qty
+//         product.qty += 1;
+//         // e.target.index.value;
+//         //dec(remove) p to shoppingcart
+//         cart.addItem(product);
+//         e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
+//             (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
 
-        Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-    });
+//         Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+//     });
 
-    if (Auth.currentUser) {
-        counterForm.classList.remove('d-none');
-    } else {
-        counterForm.classList.add('d-none');
-    }
+//     if (Auth.currentUser) {
+//         counterForm.classList.remove('d-none');
+//     } else {
+//         counterForm.classList.add('d-none');
+//     }
 
-    if (product.discount > 0) {
-        productCard
-            .querySelector('.product__discount')
-            .classList.remove('d-none');
-        productCard
-            .querySelector('.product__discount_text')
-            .textContent = product.discount;
-    } else {
-        productCard
-            .querySelector('.product__discount')
-            .classList.add('d-none');
-    }
+//     if (product.discount > 0) {
+//         productCard
+//             .querySelector('.product__discount')
+//             .classList.remove('d-none');
+//         productCard
+//             .querySelector('.product__discount_text')
+//             .textContent = product.discount;
+//     } else {
+//         productCard
+//             .querySelector('.product__discount')
+//             .classList.add('d-none');
+//     }
 
-    const reviewList = await ReviewsController.getReviewList();
-    const averageStarRating = ReviewsController.getAverageRating(reviewList, product);
-    const productReviewList = ReviewsController.getProductReviewList(reviewList, product);
-    productCard.querySelector('.review__count').textContent = `${productReviewList.length} reviews`;
-    // highlight average star rating
-    // average__star__rating
-    const stars = Array.from(document.querySelectorAll('.product__average__review .bxs-star'));
-    stars.filter((_star, index) => index < averageStarRating)
-        .map(star => star.classList.add('text-warning'));
+//     const reviewList = await ReviewsController.getReviewList();
+//     const averageStarRating = ReviewsController.getAverageRating(reviewList, product);
+//     const productReviewList = ReviewsController.getProductReviewList(reviewList, product);
+//     productCard.querySelector('.review__count').textContent = `${productReviewList.length} reviews`;
+//     // highlight average star rating
+//     // average__star__rating
+//     const stars = Array.from(document.querySelectorAll('.product__average__review .bxs-star'));
+//     stars.filter((_star, index) => index < averageStarRating)
+//         .map(star => star.classList.add('text-warning'));
 
-    container.append(productCard);
-    // productContainer.appendChild(cardContainer);
-}
+//     container.append(productCard);
+//     // productContainer.appendChild(cardContainer);
+// }
 
 function handleProductDetailEvents(products) {
     const detailLinks = document.querySelectorAll(".extra__detail");

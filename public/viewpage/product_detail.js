@@ -119,6 +119,8 @@ async function showProductReviews() {
     document.querySelector(".review-list").innerHTML = '';
     if (reviewList && reviewList.length > 0) {
         const currentProductReviews = reviewList.filter(review => review.product === selectedProduct.docId);
+        console.log('product reviews: ', currentProductReviews);
+
         if (currentProductReviews.length > 0) {
             /* loop through reviews */
             currentProductReviews.forEach((item) => {
