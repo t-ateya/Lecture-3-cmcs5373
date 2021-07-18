@@ -108,15 +108,51 @@ function handlePaginationEventListeners() {
 
     nextPage.addEventListener('click', async e => {
         e.preventDefault();
-        const nextProducts = await FirebaseController.nextPage();
-        console.log('next products: ', nextProducts);
+        const products = await FirebaseController.nextPage();
+
+        if (products) {
+            const label = Util.disableButton(e.target);
+            await updateProductView(products);
+            Util.enableButton(e.target, label);
+            // enable prev button
+            prevPage.parentElement.classList.remove('disabled');
+        } else {
+            // disable next button
+            nextPage.parentElement.classList.add('disabled');
+
+            // enable prev button
+            prevPage.parentElement.classList.remove('disabled');
+        }
     });
 
     prevPage.addEventListener('click', async e => {
         e.preventDefault();
-        const prevProducts = await FirebaseController.nextPage();
-        console.log('prev products: ', prevProducts);
+        const products = await FirebaseController.prevPage();
+
+        if (products) {
+            const label = Util.disableButton(e.target);
+            await updateProductView(products);
+            Util.enableButton(e.target, label);
+            // disable next button
+            nextPage.parentElement.classList.remove('disabled');
+        } else {
+            // disable next button
+            nextPage.parentElement.classList.remove('disabled');
+
+            // enable prev button
+            prevPage.parentElement.classList.add('disabled');
+        }
     });
+}
+
+async function updateProductView(products) {
+    const productContainer = document.querySelector('#product-container');
+    productContainer.innerHTML = '';
+
+    for (let i = 0; i < products.length; i++) {
+        productContainer.innerHTML += await buildProductView(products[i], i);
+        averageProductReview(products[i]);
+    }
 }
 
 async function buildProductView(product, index) {

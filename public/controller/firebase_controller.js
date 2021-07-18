@@ -19,54 +19,63 @@ export async function signOut() {
 
 export async function nextPage() {
     const {
-        page,
         lastProduct
     } = JSON.parse(localStorage.getItem('pagination'));
-    const cursorPosition = (page * 8) + 1;
+    // const cursorPosition = (page * 8) + 1;
     const products = [];
     const snapShots = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
         .orderBy('name')
-        .startAt(lastProduct.name)
+        .startAfter(lastProduct.name)
         .limit(8)
         .get();
+    let last;
+    if (snapShots.docs.length > 0) {
+        snapShots.forEach(doc => {
+            const p = new Product(doc.data());
+            p.docId = doc.id;
+            products.push(p);
+            last = doc.data();
+        });
+        localStorage.setItem('pagination', JSON.stringify({
+            firstProduct: products[0],
+            lastProduct: last
+        }));
 
-    snapShots.forEach(doc => {
-        const p = new Product(doc.data());
-        p.docId = doc.id;
-        products.push(p);
-    });
+        return products;
+    }
 
-    localStorage.setItem('pagination', JSON.stringify({
-        page: page + 1
-    }));
+    return null;
 
-    return products;
 }
 
 export async function prevPage() {
     const {
-        page,
-        lastProduct
+        firstProduct,
     } = JSON.parse(localStorage.getItem('pagination'));
-    const cursorPosition = (page * 8) - 1;
+    // const cursorPosition = (page * 8) - 1;
     const products = [];
     const snapShots = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
         .orderBy('name')
-        .endAt(lastProduct.name)
-        .limit(8)
+        .endBefore(firstProduct.name)
+        .limitToLast(8)
         .get();
+    let last;
+    if (snapShots.docs.length > 0) {
+        snapShots.forEach(doc => {
+            const p = new Product(doc.data());
+            p.docId = doc.id;
+            products.push(p);
+            last = doc.data();
+        });
+        localStorage.setItem('pagination', JSON.stringify({
+            firstProduct: products[0],
+            lastProduct: last,
+        }));
 
-    snapShots.forEach(doc => {
-        const p = new Product(doc.data());
-        p.docId = doc.id;
-        products.push(p);
-    });
+        return products;
+    }
+    return null;
 
-    localStorage.setItem('pagination', JSON.stringify({
-        page: page - 1
-    }));
-
-    return products;
 }
 
 export async function getProductList() {
@@ -84,7 +93,7 @@ export async function getProductList() {
     });
 
     localStorage.setItem('pagination', JSON.stringify({
-        page: 1,
+        firstProduct: products[0],
         lastProduct: lastProduct
     }));
     return products;
