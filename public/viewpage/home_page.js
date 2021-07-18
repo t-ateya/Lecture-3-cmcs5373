@@ -66,7 +66,6 @@ export async function home_page() {
         averageProductReview(products[i]);
     }
 
-
     // add pagination buttons
     Element.root.innerHTML += `
     <div class="py-5 text-center"
@@ -84,12 +83,20 @@ export async function home_page() {
     const searchForm = document.querySelector('#search__product__form');
     const searchInput = document.querySelector('#search__product__input');
 
+    <<
+    <<
+    << < HEAD
     // searchInput.addEventListener('keydown', async e => {
     //     const data = await FirebaseController.searchProduct(e.target.value);
     //     if (data.length > 0) {
     //         await updateProductView(data);
     //     }
     // });
+        ===
+        ===
+        = >>>
+        >>>
+        > reviews
     searchForm.addEventListener('submit', async e => {
         e.preventDefault();
         const data = await FirebaseController.searchProduct(e.target.search.value);
