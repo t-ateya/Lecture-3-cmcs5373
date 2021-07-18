@@ -379,6 +379,12 @@ function getUserReviews() {
 }
 
 function buildAccordion(purchaseSummary, index) {
+    const {
+        day,
+        month,
+        year
+    } = Util.generateDateFromTimestamp(purchaseSummary.timestamp);
+    const reviewDate = `${month} ${day}, ${year}`;
     return `
         <div class="accordion-item">
             <h2 class="accordion-header bg-light" id="flush-heading-${index}}">
@@ -390,7 +396,7 @@ function buildAccordion(purchaseSummary, index) {
                 aria-controls = "flush-collapseOne">
                     <div>
                         <p class="mb-0">${purchaseSummary.items.length} items purchased</p>
-                        <p class="small text-muted mb-0">May 19, 2021</p>
+                        <p class="small text-muted mb-0">${reviewDate}</p>
                     </div>
                 </button>
             </h2>
