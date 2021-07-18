@@ -17,36 +17,77 @@ export async function signOut() {
     await firebase.auth().signOut();
 }
 
+export async function nextPage() {
+    const {
+        page,
+        lastProduct
+    } = JSON.parse(localStorage.getItem('pagination'));
+    const cursorPosition = (page * 8) + 1;
+    const products = [];
+    const snapShots = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
+        .orderBy('name')
+        .startAt(lastProduct.name)
+        .limit(8)
+        .get();
+
+    snapShots.forEach(doc => {
+        const p = new Product(doc.data());
+        p.docId = doc.id;
+        products.push(p);
+    });
+
+    localStorage.setItem('pagination', JSON.stringify({
+        page: page + 1
+    }));
+
+    return products;
+}
+
+export async function prevPage() {
+    const {
+        page,
+        lastProduct
+    } = JSON.parse(localStorage.getItem('pagination'));
+    const cursorPosition = (page * 8) - 1;
+    const products = [];
+    const snapShots = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
+        .orderBy('name')
+        .endAt(lastProduct.name)
+        .limit(8)
+        .get();
+
+    snapShots.forEach(doc => {
+        const p = new Product(doc.data());
+        p.docId = doc.id;
+        products.push(p);
+    });
+
+    localStorage.setItem('pagination', JSON.stringify({
+        page: page - 1
+    }));
+
+    return products;
+}
+
 export async function getProductList() {
     const products = []; //create array of product objects
     const first = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
         .orderBy('name')
         .limit(8)
         .get();
-
-    // get the last cursor position
-    let last, next;
-
-    first.forEach(doc => {
+    let lastProduct;
+    first.forEach((doc, index = 1) => {
         const p = new Product(doc.data());
         p.docId = doc.id;
         products.push(p);
-
-        // set cursor position
-        last = doc.docs[doc.docs.length - 1];
-
-        // Construct a new query starting at this document,
-        // get the next 25 cities.
-        next = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
-            .orderBy('name')
-            .startAfter(last)
-            .limit(8)
-            .get();
-
+        lastProduct = doc.data();
     });
 
+    localStorage.setItem('pagination', JSON.stringify({
+        page: 1,
+        lastProduct: lastProduct
+    }));
     return products;
-
 }
 
 export async function checkOut(cart) {

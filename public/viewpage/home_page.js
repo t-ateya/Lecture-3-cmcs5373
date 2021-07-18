@@ -56,6 +56,21 @@ export async function home_page() {
         averageProductReview(products[i]);
     }
 
+
+    // add pagination buttons
+    Element.root.innerHTML += `
+    <div class="py-5 text-center"
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#" id="page__prev">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#" id="page__next">Next</a></li>
+            </ul>
+        </nav>
+    </di>`;
+
+    // handle pagination event listeners
+    handlePaginationEventListeners();
+
     // handle effect when user click on product details
     handleProductDetailEvents(products);
 
@@ -85,6 +100,23 @@ export async function home_page() {
             Element.shoppingCartCount.innerHTML = cart.getTotalQty();
         });
     }
+}
+
+function handlePaginationEventListeners() {
+    const nextPage = document.querySelector('#page__next');
+    const prevPage = document.querySelector('#page__prev');
+
+    nextPage.addEventListener('click', async e => {
+        e.preventDefault();
+        const nextProducts = await FirebaseController.nextPage();
+        console.log('next products: ', nextProducts);
+    });
+
+    prevPage.addEventListener('click', async e => {
+        e.preventDefault();
+        const prevProducts = await FirebaseController.nextPage();
+        console.log('prev products: ', prevProducts);
+    });
 }
 
 async function buildProductView(product, index) {
