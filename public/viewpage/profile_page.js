@@ -379,11 +379,12 @@ function getUserReviews() {
 }
 
 function buildAccordion(purchaseSummary, index) {
-    const {
-        day,
-        month,
-        year
-    } = Util.generateDateFromTimestamp(purchaseSummary.timestamp);
+    const date = new Date(purchaseSummary.timestamp);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', {
+        month: 'short'
+    });
+    const year = date.getFullYear();
     const reviewDate = `${month} ${day}, ${year}`;
     return `
         <div class="accordion-item">
