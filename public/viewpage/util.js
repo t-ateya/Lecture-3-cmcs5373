@@ -79,10 +79,12 @@ export function toggleMenuLinks() {
             // show the dashboard link
             adminLinks.forEach(link => link.classList.remove('d-none'));
             Element.adminUserDashboard.addEventListener('click', async e => {
+                Element.root.innerHTML = 'loading...';
                 try {
-                    history.pushState(null, null, Route.routePathnames.DASHBOARD);
                     Element.root.innerHTML = '<h3>Loading content. Please wait...</h3>';
                     await dashboard_page();
+                    // history.pushState(null, null, Route.routePathnames.DASHBOARD);
+                    // Route.routing(Route.routePathnames.DASHBOARD, window.location.hash);
                 } catch (error) {
                     console.log('error: ', error);
                 }

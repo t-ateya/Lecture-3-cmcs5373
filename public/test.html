@@ -130,12 +130,58 @@
 
     <main class="container pt-5 mt-5">
         <div class="row" id="root">
+            <div class="pb-4">
+                <h3><strong>Hello,</strong> welcome back</h3>
+            </div>
+            <hr class="bg-secondary">
 
+            <div class="mt-5 row">
+                <div class="col-6">
+                    <h4><strong class="text-primary">Stats summary</strong>, for your fireshop</h4>
+                    <p class="text-secondary">Make better decisions by the data you get<br />from your application.</p>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-4 border rounded shadow card border-light">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <p class="mb-0 text-secondary"><strong>Total<br />products</strong></p>
+                                    <span class="text-white bg-success font-weight-bold summary__value total__product">119</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-4 border rounded shadow card border-light">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <p class="mb-0 text-secondary"><strong>Total available<br />stock</strong></p>
+                                    <span class="text-white bg-primary font-weight-bold summary__value total__stock">59</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-4 border rounded shadow card border-light">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <p class="mb-0 text-secondary"><strong>Total app<br />users</strong></p>
+                                    <span class="text-white bg-danger font-weight-bold summary__value total__users">59</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-4 border rounded shadow card border-light">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <p class="mb-0 text-secondary"><strong>Total product<br />reviews</strong></p>
+                                    <span class="text-dark bg-warning font-weight-bold summary__value total__reviews">59</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- product details -->
-        <div class="mt-5 row profile-detail">
-            <div class="col-md-3 text-center">
+        <div class="mt-5 row profile-detail d-none">
+            <div class="text-center col-md-3">
                 <div>
                     <img src="https://picsum.photos/200" alt="product" class="rounded rounded-circle img-fluid product__detail__image">
                 </div>
@@ -214,12 +260,12 @@
         </p>
     </div>
 
-    <form action="">
+    <form action="" class="d-none">
         <input type="file" name="file-input" id="file-input" style="visibility: hidden;">
         <label for="file-input" class="btn btn-sm btn-primary" role="button">Upload a file</label>
     </form>
 
-    <div class="row container">
+    <div class="container row d-none">
         <div class="col-md-4">
 
         </div>
@@ -230,7 +276,7 @@
                         <button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                             <div>
                                 <p class="mb-0">08 items purchased</p>
-                                <p class="small text-muted mb-0">May 19, 2021</p>
+                                <p class="mb-0 small text-muted">May 19, 2021</p>
                             </div>
                         </button>
                     </h2>
@@ -245,24 +291,24 @@
     </div>
 
     <!-- product purchased -->
-    <div class="row">
+    <div class="row d-none">
         <div class="col-md-3">
             <img src="https://picsum.photos/120/100" alt="product purchased" class="img-fluid">
         </div>
         <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-start">
                 <ul class="list-unstyled">
-                    <li class="d-flex align-items-center mb-2 ">
+                    <li class="mb-2 d-flex align-items-center ">
                         <p class="mb-0 " style="width: 8rem ">Name: </p>
                         <p class="mb-0 ">product name</p>
                     </li>
-                    <li class="d-flex align-items-center mb-2 ">
+                    <li class="mb-2 d-flex align-items-center ">
                         <p class="mb-0 " style="width: 8rem ">Qty</p>
                         <p class="mb-0 ">10</p>
                     </li>
                 </ul>
                 <div class="right text-secondary">
-                    <p class="fone-weight-bold text-uppercase mb-0">TOTAL</p>
+                    <p class="mb-0 fone-weight-bold text-uppercase">TOTAL</p>
                     <p>$250</p>
                 </div>
             </div>

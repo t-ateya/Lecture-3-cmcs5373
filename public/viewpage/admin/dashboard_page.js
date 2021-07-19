@@ -10,13 +10,13 @@ import {
 } from "./products_page.js";
 
 export function dashboard_page() {
-
     // show dashboard nav
     showDashboardNav();
-    // Element.root.classList.add("container", "bg-white", "mx-auto");
-    Element.root.innerHTML = `<h4 class="mb-4 text-dark">Hello <span class="text-primary font-weight-bold">Ateya,</span> welcome back!<h4>`;
 
-    showStats();
+    // self-invocking function
+    (async() => {
+        Element.root.innerHTML = await showStats();
+    })();
 
     // handle event listeners
     dashboardEventListeners();
@@ -34,12 +34,61 @@ function showUserNav() {
     Element.adminNavbar.classList.add('d-none');
 }
 
-function showStats() {
-    // clone stats template
-    const statsTemplate = document.querySelector('#admin-stats');
-    const statsContent = statsTemplate.cloneNode(true);
-    // @ts-ignore
-    Element.root.appendChild(statsContent.content);
+async function showStats() {
+    const {
+        totalProducts,
+        totalReviews,
+        totalStock,
+        totalUsers
+    } = await FirebaseController.getDashboardStats();
+
+    return `
+    <div class="pb-4">
+    <h3><strong>Hello,</strong> welcome back</h3>
+</div>
+<hr class="bg-secondary">
+
+<div class="mt-5 row">
+    <div class="col-6">
+        <h4><strong class="text-primary">Stats summary</strong>, for your fireshop</h4>
+        <p class="text-secondary">Make better decisions by the data you get<br />from your application.</p>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-4 border rounded shadow card border-light">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <p class="mb-0 text-secondary"><strong>Total<br />products</strong></p>
+                        <span class="text-white bg-success font-weight-bold summary__value total__product">${totalProducts}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 d-none">
+                <div class="mb-4 border rounded shadow card border-light">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <p class="mb-0 text-secondary"><strong>Total available<br />stock</strong></p>
+                        <span class="text-white bg-primary font-weight-bold summary__value total__stock">${totalStock}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="mb-4 border rounded shadow card border-light">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <p class="mb-0 text-secondary"><strong>Total app<br />users</strong></p>
+                        <span class="text-white bg-danger font-weight-bold summary__value total__users">${totalUsers}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="mb-4 border rounded shadow card border-light">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <p class="mb-0 text-secondary"><strong>Total product<br />reviews</strong></p>
+                        <span class="text-dark bg-warning font-weight-bold summary__value total__reviews">${totalReviews}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
 }
 
 function dashboardEventListeners() {

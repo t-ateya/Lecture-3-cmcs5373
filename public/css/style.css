@@ -162,3 +162,17 @@ i {
     left: 17rem;
     z-index: 999999;
 }
+
+
+/* dashboard styling */
+
+.summary__value {
+    --size: 4rem;
+    width: var(--size);
+    height: var(--size);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+}

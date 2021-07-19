@@ -8,6 +8,12 @@ import {
 import {
     ShoppingCart
 } from '../model/ShoppingCart.js';
+import {
+    getUserList
+} from './admin/users_controller.js';
+import {
+    getReviewList
+} from './reviews_controller.js';
 
 export async function signIn(email, password) {
     await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -154,7 +160,6 @@ export async function uploadProfilePhoto(photoFile, imageName) {
 }
 
 export async function searchProduct(nameQuery) {
-    console.log('query: ', nameQuery);
     const snapShots = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS)
         .orderBy('name')
         .get();
@@ -168,4 +173,44 @@ export async function searchProduct(nameQuery) {
     const searchResult = products.filter(product => product.name.includes(nameQuery));
 
     return searchResult;
+}
+
+export async function getDashboardStats() {
+    // get all products
+    const snapShots = await firebase.firestore()
+        .collection(Constant.collectionNames.PRODUCTS)
+        .get();
+
+    const products = [];
+
+    snapShots.forEach((doc) => {
+        const p = new Product(doc.data());
+        p.docId = doc.id;
+        products.push(p);
+    });
+
+    // total products
+    const totalProducts = products.length;
+
+
+    // total comments or reviews
+    const reviews = await getReviewList();
+    const totalReviews = reviews.length;
+
+    // total users
+    const users = await getUserList();
+    const totalUsers = users.length;
+
+    // total product stock
+    const totalStock = products
+        .reduce((sum, product) => product.stock + sum, 0);
+    console.log(products);
+    console.log('total stock: ', totalStock);
+
+    return {
+        totalProducts,
+        totalStock,
+        totalReviews,
+        totalUsers
+    };
 }

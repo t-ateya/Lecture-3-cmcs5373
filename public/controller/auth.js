@@ -29,7 +29,6 @@ export function addEventListeners() {
             Util.info('Sign In Error', JSON.stringify(e), Element.modalSignIn);
         }
         Util.enableButton(button, label);
-
     });
 
     Element.menuSignOut.addEventListener('click', async() => {

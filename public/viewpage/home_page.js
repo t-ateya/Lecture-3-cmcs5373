@@ -279,81 +279,6 @@ function averageProductReview(product) {
     ).catch(e => console.log('error: ', e));
 }
 
-// async function build(product, container) {
-//     // set qty to 0 of this product
-//     product.qty = 0;
-//     const productCard = Element.templateProductCard.cloneNode(true).content;
-
-//     productCard.querySelector('.product__price').textContent = Util.currency(product.price);
-//     productCard.querySelector('.product__name').textContent = product.name;
-//     productCard.querySelector('.product-image').src = product.imageURL;
-//     productCard.querySelector('.extra__detail').dataset.productId = product.docId;
-//     productCard.querySelector('.counter__value').id = `qty-${product.docId}`;
-//     const counterForm = productCard.querySelector('.extra__counter');
-
-//     const minusProductForm = productCard.querySelector('.form-dec-qty');
-//     const addProductForm = productCard.querySelector('.form-inc-qty');
-
-//     minusProductForm.addEventListener('submit', e => {
-//         e.preventDefault();
-
-//         // subtract product qty
-//         product.qty -= 1;
-//         // e.target.index.value;
-//         //dec(remove) p to shoppingcart
-//         cart.removeItem(product);
-//         e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
-//             (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
-
-//         Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-//     });
-
-//     addProductForm.addEventListener('submit', e => {
-//         e.preventDefault();
-//         // subtract product qty
-//         product.qty += 1;
-//         // e.target.index.value;
-//         //dec(remove) p to shoppingcart
-//         cart.addItem(product);
-//         e.target.closest('.extra__counter').querySelector('.counter__value').textContent =
-//             (product.qty == null || product.qty == 0) ? 'Add' : product.qty;
-
-//         Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-//     });
-
-//     if (Auth.currentUser) {
-//         counterForm.classList.remove('d-none');
-//     } else {
-//         counterForm.classList.add('d-none');
-//     }
-
-//     if (product.discount > 0) {
-//         productCard
-//             .querySelector('.product__discount')
-//             .classList.remove('d-none');
-//         productCard
-//             .querySelector('.product__discount_text')
-//             .textContent = product.discount;
-//     } else {
-//         productCard
-//             .querySelector('.product__discount')
-//             .classList.add('d-none');
-//     }
-
-//     const reviewList = await ReviewsController.getReviewList();
-//     const averageStarRating = ReviewsController.getAverageRating(reviewList, product);
-//     const productReviewList = ReviewsController.getProductReviewList(reviewList, product);
-//     productCard.querySelector('.review__count').textContent = `${productReviewList.length} reviews`;
-//     // highlight average star rating
-//     // average__star__rating
-//     const stars = Array.from(document.querySelectorAll('.product__average__review .bxs-star'));
-//     stars.filter((_star, index) => index < averageStarRating)
-//         .map(star => star.classList.add('text-warning'));
-
-//     container.append(productCard);
-//     // productContainer.appendChild(cardContainer);
-// }
-
 function handleProductDetailEvents(products) {
     const detailLinks = document.querySelectorAll(".extra__detail");
     detailLinks.forEach(link => link.addEventListener('click', e => {
@@ -374,8 +299,6 @@ export async function product_details() {
     const product = JSON.parse(productData);
     ProductDetails.showProductDetail(product);
 }
-
-
 
 export function initShoppingCart() {
     const cartString = window.localStorage.getItem('cart-' + Auth.currentUser.uid);
