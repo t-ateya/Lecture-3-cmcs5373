@@ -10,6 +10,7 @@ import {
 } from "./products_page.js";
 
 export function dashboard_page() {
+    const label = Util.disableButton(Element.adminDashboard);
     // show dashboard nav
     showDashboardNav();
 
@@ -18,8 +19,18 @@ export function dashboard_page() {
         Element.root.innerHTML = await showStats();
     })();
 
+    Util.enableButton(Element.adminDashboard, label);
+
     // handle event listeners
+    removeDashboardListeners();
     dashboardEventListeners();
+}
+
+function removeDashboardListeners() {
+    Element.adminDashboard.removeEventListener('click', () => null);
+    Element.adminProducts.removeEventListener('click', () => null);
+    Element.adminUsers.removeEventListener('click', () => null);
+    Element.adminVisitSite.removeEventListener('click', () => null);
 }
 
 function showDashboardNav() {
@@ -144,12 +155,12 @@ function handleDashboard() {
 }
 
 function handleProducts() {
-    Element.adminProducts.addEventListener('click', e => {
+    Element.adminProducts.addEventListener('click', async e => {
         e.preventDefault();
         Util.setActiveNav(e.target);
         const label = Util.disableButton(e.target);
         history.pushState(null, null, Route.routePathnames.PRODUCTS);
-        products_page();
+        await products_page();
         Util.enableButton(e.target, label);
     });
 }

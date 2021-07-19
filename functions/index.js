@@ -273,8 +273,7 @@ async function getProductList(data, context) {
             .firestore()
             .collection(Constant.collectionNames.PRODUCT)
             .orderBy("name")
-            .limit(8);
-        // .get();
+            .get();
 
         snapShot.forEach((doc) => {
             const {

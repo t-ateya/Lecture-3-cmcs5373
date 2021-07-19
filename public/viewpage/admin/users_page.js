@@ -207,7 +207,7 @@ function buildUserRow(user) {
 				<td>${user.phoneNumber || 'not provided'}</td>
 				<td id="user-status-${user.uid}">${user.disabled ? "<span class='badge bg-danger'>disabled</span>" : "<span class='badge bg-success'>active</span>"}</td>
 				<td>
-                    <button class="view__profile btn btn-sm btn-secondary" id="view__profile__${user.uid}" data-user-uid="${user.uid}">View profile</button>
+                    <button class="view__profile btn btn-sm btn-secondary d-none" id="view__profile__${user.uid}" data-user-uid="${user.uid}">View profile</button>
 					<form class="form-toggle-user" method="post" style="display: inline-block">
 						<input type="hidden" name="uid" value="${user.uid}" />
 						<input type="hidden" name="disabled" value="${user.disabled}"/>

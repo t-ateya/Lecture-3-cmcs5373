@@ -34,19 +34,6 @@ export async function getProductList() {
     const products = [];
     const result = await cf_getProductList(); //result.data
 
-    // get the total number of product in database
-    // const totalProducts = result.length;
-
-    // calculate number of pages based on the pagination config
-    // const pages = Number.parseInt(Number.parseInt(totalProducts) / 8);
-
-    // << prev and next >>
-    // 1 - 8, 9 - 
-    // current page (1, 2, 3, ... n)
-    // current cursor position ( page * items = page * 8)
-    // next page: curPos = (curPos + 1 - [(page + 1) * 8])
-    // next page: curPos = (curPos - 1 - [(page + 1) * 8])
-
     result.data.forEach((data) => {
         const p = new Product(data);
         p.docId = data.docId;
