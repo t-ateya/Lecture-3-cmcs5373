@@ -1,4 +1,3 @@
-//this class creates product object and stores it in the firebase database
 export class Product {
     constructor(data) {
         this.name = data.name.toLowerCase();

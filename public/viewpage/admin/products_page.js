@@ -15,7 +15,6 @@ export async function products_page() {
     if (!Auth.currentUser) {
         return;
     }
-    console.log('Current user: ', Auth.currentUser.email);
     // new product and filter product list form
     let html = `
         <div class="d-flex justify-content-between align-items-center">

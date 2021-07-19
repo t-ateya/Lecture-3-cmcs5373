@@ -1,6 +1,6 @@
 import {
     Product
-} from "../../model/product.js";
+} from "../../model/Product.js";
 import * as Constant from "../../model/constant.js";
 
 // @ts-nocheck
