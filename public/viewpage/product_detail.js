@@ -156,8 +156,7 @@ function handleReviewFormEvents(product) {
             if (Element.reviewForm.dataset.mode === 'create') {
                 await ReviewsController.addReview(review.serialize());
             } else {
-                const ref = await ReviewsController.editReview(review.serializeForUpdate());
-                console.log('Update successful: ', ref);
+                await ReviewsController.editReview(review.serializeForUpdate());
             }
 
             await showProductReviews();
@@ -205,20 +204,6 @@ async function showProductReviews() {
             currentProductReviews.forEach((item) => {
 
                 reviewListContainer.innerHTML += buildReviewListItem(item);
-                const li = document.createElement("li");
-                li.classList.add("review__item");
-
-                const reviewItem = Element.templateReviewItem.cloneNode(true).content;
-                reviewItem.querySelector(".review__item__name").textContent = item.author; // user email
-                const {
-                    time,
-                    day,
-                    month,
-                    year
-                } = Util.generateDateFromTimestamp(item.timestamp);
-                const reviewDate = `${month} ${day}, ${year} at ${time}`;
-                reviewItem.querySelector(".review__item__date").textContent = reviewDate;
-                reviewItem.querySelector(".review__item__text").textContent = item.comment;
 
                 // hightlight stars based on star rating on review
                 const starList = Array.from(document.querySelectorAll(`review__${item.timestamp.seconds} .bxs-star`));
@@ -233,23 +218,24 @@ async function showProductReviews() {
                     (Auth.currentUser.email === item.author ||
                         Constant.adminEmails.includes(Auth.currentUser.email))
                 ) {
-                    document.querySelector(`review__${item.timestamp.seconds} .review__buttons`).classList.remove('d-none');
+                    document.querySelector(`#review__${item.timestamp.seconds} .review__buttons`).classList.remove('d-none');
 
                     if (Constant.adminEmails.includes(Auth.currentUser.email)) {
-                        document.querySelector(`review__${item.timestamp.seconds} .edit__review`).classList.add('d-none');
+                        document.querySelector(`#review__${item.timestamp.seconds} .edit__review`).classList.add('d-none');
                     }
 
                     if (Constant.adminEmails.includes(item.author)) {
-                        document.querySelector(`review__${item.timestamp.seconds} .edit__review`).classList.remove('d-none');
+                        document.querySelector(`#review__${item.timestamp.seconds} .edit__review`).classList.remove('d-none');
                     }
                     // save this review to local storage
                     localStorage.setItem('review', JSON.stringify(item));
                 } else {
-                    document.querySelector(`review__${item.timestamp.seconds} .review__buttons`).classList.add('d-none');
+                    document.querySelector(`#review__${item.timestamp.seconds} .review__buttons`).classList.add('d-none');
                 }
 
                 // add delete event listener
-                document.querySelector(`review__${item.timestamp.seconds} .delete__review`).addEventListener("click", async() => {
+                const deleteReviewButton = document.querySelector(`#review__${item.timestamp.seconds} .delete__review`);
+                deleteReviewButton.addEventListener("click", async() => {
                     const ok = confirm("Are you sure you want to delete this review?");
                     if (ok) {
                         await ReviewsController.deleteReview(item.docId);
@@ -259,7 +245,7 @@ async function showProductReviews() {
                 });
 
                 // edit delete event listener
-                document.querySelector(`review__${item.timestamp.seconds} .edit__review`).addEventListener("click", () => {
+                document.querySelector(`#review__${item.timestamp.seconds} .edit__review`).addEventListener("click", () => {
                     Element.modalReview.show();
                     setFormMode(Element.reviewForm, 'edit');
                     // add star rating event listener
