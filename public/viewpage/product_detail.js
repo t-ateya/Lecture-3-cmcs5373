@@ -200,10 +200,11 @@ async function showProductReviews() {
 
         // check if product has any reviews
         if (currentProductReviews.length > 0) {
+            const reviewListContainer = document.querySelector('.review-list');
             /* loop through reviews */
             currentProductReviews.forEach((item) => {
 
-                Element.root.innerHTML = buildReviewListItem(item);
+                reviewListContainer.innerHTML += buildReviewListItem(item);
                 const li = document.createElement("li");
                 li.classList.add("review__item");
 
@@ -232,7 +233,7 @@ async function showProductReviews() {
                     (Auth.currentUser.email === item.author ||
                         Constant.adminEmails.includes(Auth.currentUser.email))
                 ) {
-                    document.querySelector(`review__${item.timestamp.seconds}.review__buttons`).classList.remove('d-none');
+                    document.querySelector(`review__${item.timestamp.seconds} .review__buttons`).classList.remove('d-none');
 
                     if (Constant.adminEmails.includes(Auth.currentUser.email)) {
                         document.querySelector(`review__${item.timestamp.seconds} .edit__review`).classList.add('d-none');
