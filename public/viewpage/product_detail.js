@@ -130,11 +130,12 @@ async function showProductReviews() {
                 const reviewItem = Element.templateReviewItem.cloneNode(true).content;
                 reviewItem.querySelector(".review__item__name").textContent = item.author; // user email
                 const {
+                    time,
                     day,
                     month,
                     year
                 } = Util.generateDateFromTimestamp(item.timestamp);
-                const reviewDate = `${month} ${day}, ${year}`;
+                const reviewDate = `${month} ${day}, ${year} at ${time}`;
                 reviewItem.querySelector(".review__item__date").textContent = reviewDate;
                 reviewItem.querySelector(".review__item__text").textContent = item.comment;
 

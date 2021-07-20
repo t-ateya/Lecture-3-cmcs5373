@@ -44,16 +44,33 @@ export function sleep(ms) {
 
 export function generateDateFromTimestamp(firebaseTimestamp) {
     const date = new Date(firebaseTimestamp.toDate());
+    const time = generateTime(date.getTime());
     const day = date.getDate();
     const month = date.toLocaleString('default', {
         month: 'short'
     });
     const year = date.getFullYear();
     return {
+        time,
         day,
         month,
         year
     };
+}
+
+function generateTime(unixTimestamp) {
+    // the time into milliseconds by multiplying it by 1000.
+    let date = new Date(unixTimestamp * 1000);
+    // Hours part from the timestamp
+    let hours = date.getHours();
+    // Minutes part from the timestamp
+    let minutes = "0" + date.getMinutes();
+    // Seconds part from the timestamp
+    let seconds = "0" + date.getSeconds();
+    // Will display time in 11:10:22 format
+    let formatTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+    return formatTime;
 }
 
 export function setActiveNav(navLink) {
