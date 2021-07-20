@@ -201,15 +201,8 @@ export async function getDashboardStats() {
     const users = await getUserList();
     const totalUsers = users.length;
 
-    // total product stock
-    const totalStock = products
-        .reduce((sum, product) => product.stock + sum, 0);
-    console.log(products);
-    console.log('total stock: ', totalStock);
-
     return {
         totalProducts,
-        totalStock,
         totalReviews,
         totalUsers
     };

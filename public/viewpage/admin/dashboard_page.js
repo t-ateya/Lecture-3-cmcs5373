@@ -49,7 +49,6 @@ async function showStats() {
     const {
         totalProducts,
         totalReviews,
-        totalStock,
         totalUsers
     } = await FirebaseController.getDashboardStats();
 
@@ -71,14 +70,6 @@ async function showStats() {
                     <div class="card-body d-flex align-items-center justify-content-between">
                         <p class="mb-0 text-secondary"><strong>Total<br />products</strong></p>
                         <span class="text-white bg-success font-weight-bold summary__value total__product">${totalProducts}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 d-none">
-                <div class="mb-4 border rounded shadow card border-light">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <p class="mb-0 text-secondary"><strong>Total available<br />stock</strong></p>
-                        <span class="text-white bg-primary font-weight-bold summary__value total__stock">${totalStock}</span>
                     </div>
                 </div>
             </div>

@@ -31,17 +31,6 @@ export async function showProductDetail(product) {
         product.summary;
     pageBody.querySelector(".product__detail__image").src = product.imageURL;
 
-    // hide delete product if user is not admin
-    if (Auth.currentUser && Constant.adminEmails.includes(Auth.currentUser.email)) {
-        pageBody.querySelector('.delete__product__button').classList.remove('d-none');
-        // Todo: handle product delete functionality by admin
-        // Todo: When deleting, remove all comments and reviews
-        pageBody.querySelector('.delete__product__button').addEventListener('click', deleteProduct);
-    } else {
-        pageBody.querySelector('.delete__product__button').classList.add('d-none');
-    }
-
-
     // show page header and page content (product details)
     Element.root.append(pageHeader, pageBody);
 
@@ -119,7 +108,6 @@ async function showProductReviews() {
     document.querySelector(".review-list").innerHTML = '';
     if (reviewList && reviewList.length > 0) {
         const currentProductReviews = reviewList.filter(review => review.product === selectedProduct.docId);
-        console.log('product reviews: ', currentProductReviews);
 
         if (currentProductReviews.length > 0) {
             /* loop through reviews */
@@ -155,7 +143,6 @@ async function showProductReviews() {
                     reviewItem.querySelector('.review__buttons').classList.remove('d-none');
 
                     if (Constant.adminEmails.includes(Auth.currentUser.email)) {
-                        console.log('admin user');
                         reviewItem.querySelector('.edit__review').classList.add('d-none');
                     }
 

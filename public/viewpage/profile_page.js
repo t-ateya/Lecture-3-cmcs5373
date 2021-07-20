@@ -347,11 +347,6 @@ function buildProfileDetail(accountInfo) {
                             <p class="mb-0 font-weight-bold text-dark">Reviews</p>
                             <p class="review__count">${getUserReviews()} reviews</p>
                         </li>
-                        <li class="delete">
-                            <a href="#" class="px-0 btn btn-link text-danger delete__account__button">
-                                delete account
-                            </a>
-                        </li>
                     </ul>
                 </div>
 
