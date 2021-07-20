@@ -121,7 +121,6 @@ export async function showProductDetail(product) {
 
     const addReviewBtn = document.querySelector('.add__review__button');
 
-
     // listen to add review event
     addReviewBtn.addEventListener('click', e => {
         Element.modalReview.show();
@@ -129,8 +128,6 @@ export async function showProductDetail(product) {
         setFormMode(Element.reviewForm, 'create');
         handleStarRating();
     });
-
-
 
     await showProductReviews();
 
@@ -158,8 +155,19 @@ function handleReviewFormEvents(product) {
             } else {
                 await ReviewsController.editReview(review.serializeForUpdate());
             }
+            // update the averate star rating of the product
+            const reviewList = await ReviewsController.getReviewList();
+            const selectedProduct = JSON.parse(localStorage.getItem('product'));
+            const {
+                stars,
+                averageRating
+            } = setUpProductstarRating(reviewList, selectedProduct);
+            highLightStars(stars, averageRating - 1);
 
+            // refresh the product review list
             await showProductReviews();
+
+            // reset form
             e.target.reset();
             Util.enableButton(submitReviewBtn, label);
             // reset form stars
@@ -206,7 +214,8 @@ async function showProductReviews() {
                 reviewListContainer.innerHTML += buildReviewListItem(item);
 
                 // hightlight stars based on star rating on review
-                const starList = Array.from(document.querySelectorAll(`review__${item.timestamp.seconds} .bxs-star`));
+                const reviewListStars = document.querySelectorAll(`#review__${item.timestamp.seconds} .bxs-star`);
+                const starList = Array.from(reviewListStars);
                 starList.map(
                     (star, index) => index < item.stars ?
                     star.classList.add('text-warning') :
@@ -248,6 +257,7 @@ async function showProductReviews() {
                 document.querySelector(`#review__${item.timestamp.seconds} .edit__review`).addEventListener("click", () => {
                     Element.modalReview.show();
                     setFormMode(Element.reviewForm, 'edit');
+
                     // add star rating event listener
                     handleStarRating();
                     const currentUserReview = JSON.parse(localStorage.getItem('review'));
@@ -259,9 +269,6 @@ async function showProductReviews() {
                     const reviewFormStarList = Array.from(Element.reviewForm.querySelectorAll('.bxs-star'));
                     highLightStars(reviewFormStarList, currentUserReview.stars - 1);
                 });
-
-                // li.removeEventListener('click', handleEditReview);
-                // li.addEventListener('click', handleEditReview);
             });
 
             // check if review include current user email
@@ -341,29 +348,12 @@ function setUpProductstarRating(reviewList, selectedProduct) {
     const stars = Array.from(document.querySelectorAll('.average__star__rating .bxs-star'));
     stars.filter((_, index) => index < averageRating)
         .map(star => star.classList.add('text-warning'));
+    return {
+        stars,
+        averageRating
+    };
 }
 
-async function deleteProduct(event, product) {
-    event.preventDefault();
-
-}
-
-function handleEditReview() {
-    () => {
-        Element.modalReview.show();
-        setFormMode(Element.reviewForm, 'edit');
-        // add star rating event listener
-        handleStarRating();
-        const currentUserReview = JSON.parse(localStorage.getItem('review'));
-
-        // set the modal form to the value of the current review
-        Element.reviewForm.starRating.value = currentUserReview.stars;
-        Element.reviewForm.comment.value = currentUserReview.comment;
-        Element.reviewForm.querySelector('.review__start__rating').textContent = currentUserReview.stars;
-        const reviewFormStarList = Array.from(Element.reviewForm.querySelectorAll('.bxs-star'));
-        highLightStars(reviewFormStarList, currentUserReview.stars);
-    }
-}
 
 function showNoReviews() {
     const template = document.querySelector('.template-no-reviews').cloneNode(true).content;
@@ -385,7 +375,7 @@ function handleStarRating() {
 
 function highLightStars(starList, currentStarIndex) {
     starList.map(star => star.classList.remove('text-warning'));
-    const rating = starList.filter((star, index) => index <= currentStarIndex)
+    const rating = starList.filter((_, index) => index <= currentStarIndex)
         .map(star => star.classList.add('text-warning')).length;
     document.querySelector('.review__start__rating').textContent = rating;
     Element.reviewForm.starRating.value = rating;
