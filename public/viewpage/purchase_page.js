@@ -17,17 +17,17 @@ export function addEventListeners() {
 
 export async function purchase_page() {
     if (!Auth.currentUser) {
-        Element.root.innerHTML = "<h1> Protected Page </h1>";
+        Element.root.innerHTML = "<h1>Protected Page</h1>";
         return;
     }
 
-    let html = "<h1> Purchases Page </h1>";
+    let html = "<h1>Purchases Page</h1>";
 
     let carts;
     try {
         carts = await FirebaseController.getPurchaseHistory(Auth.currentUser.uid);
         if (carts.length == 0) {
-            html += "<h2> No purchase History found! </h2>";
+            html += "<h2>No purchase History found!</h2>";
             Element.root.innerHTML = html;
             return;
         }
