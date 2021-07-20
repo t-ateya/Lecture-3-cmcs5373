@@ -109,11 +109,6 @@ export async function showProductDetail(product) {
 
     Element.root.innerHTML += buildPageHeader();
 
-    // handle back home button click event
-    document.querySelector("#back__home").addEventListener("click", (event) => {
-        Util.disableButton(event.target);
-        window.history.back();
-    });
 
     // clone the page body
     const pageBody = buildProductDetails(product);
@@ -128,6 +123,14 @@ export async function showProductDetail(product) {
         setFormMode(Element.reviewForm, 'create');
         handleStarRating();
     });
+
+    // handle back home button click event
+    const backButton = document.querySelector("#back__home");
+    backButton.addEventListener("click", (event) => {
+        Util.disableButton(event.target);
+        window.history.back();
+    });
+
 
     await showProductReviews();
 
